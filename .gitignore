@@ -243,6 +243,7 @@ artifacts/
 
 # Raw data folders (anchored to repo root, so web/src/data/ is NOT hit)
 /data/
+/signals/data/
 /signal/data/
 /hazard/data/
 /optimize/data/
