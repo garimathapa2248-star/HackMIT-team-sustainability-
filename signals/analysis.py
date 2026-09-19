@@ -107,12 +107,18 @@ def trend(annual_by_year: dict[int, float]) -> dict[str, float]:
     return {"metric": "annual_max_1day_precip_mm", "slope_mm_per_decade": round(float(result.slope) * 10, 3), "p_value": round(float(result.pvalue), 5)}
 
 
-def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999, late_start: int = 2000, bootstrap_draws: int = 500) -> dict[str, object]:
+def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999, late_start: int = 2000, bootstrap_draws: int = 500,
+               landslide_events: list[dict[str, object]] | None = None,
+               station_coords: dict[str, tuple[float, float]] | None = None,
+               lake_series: list[dict[str, object]] | None = None) -> dict[str, object]:
     """Fit stationary GEVs by era and produce the integration-contract payload.
 
     This reports a change in fitted recurrence, not a causal attribution.  It
     fails closed when there is insufficient coverage to support the headline.
+    Pass ``landslide_events`` + ``station_coords`` to fill the trigger fit, and
+    ``lake_series`` to fill lake growth; all three default to the null payload.
     """
+    from . import lakes, landslide
     annual = annual_maxima(rows)
     years = sorted(annual)
     early = [annual[y] for y in years if y <= early_end]
@@ -138,6 +144,11 @@ def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999
         headline = {"statement": "Insufficient annual-maxima coverage for an early-versus-late recurrence comparison.", "old_return_period_yrs": 100, "new_return_period_yrs": None, "threshold_mm": levels["100"]}
     station_years = len({(str(r.get("station_id")), str(r.get("date"))[:4]) for r in rows if r.get("station_id") and r.get("date")})
     stations = len({str(r.get("station_id")) for r in rows if r.get("station_id")})
+    if landslide_events and station_coords:
+        trigger = landslide.fit_trigger(landslide_events, rows, station_coords)
+    else:
+        trigger = {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None}
+    growth = lakes.summarize_lake_growth(lake_series) if lake_series else []
     return {
         "region": region,
         "stations_processed": stations,
@@ -146,7 +157,7 @@ def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999
         "return_levels_ci95": bootstrap_return_levels(all_values, periods, draws=bootstrap_draws),
         "headline": headline,
         "trend": trend(annual),
-        "landslide_trigger": {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None},
-        "lake_growth": [],
+        "landslide_trigger": trigger,
+        "lake_growth": growth,
         "provenance": {"datasets": ["NOAA Integrated Surface Database / Global Hourly"], "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"), "data_status": "model output — GEV fit to cleaned station observations", "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap"}
     }

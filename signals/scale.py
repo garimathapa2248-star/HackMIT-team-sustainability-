@@ -22,6 +22,8 @@ from pathlib import Path
 
 from .analysis import fit_signal
 from .ingest import load_noaa_global_hourly, write_tidy_csv
+from .lakes import load_lake_series_csv
+from .landslide import load_events_csv
 from .stations import BBOXES, select_stations, station_year_pairs
 
 # Per-worker state, set once by the pool initializer (avoids re-creating an S3
@@ -154,7 +156,14 @@ def run(args: argparse.Namespace) -> None:
     if args.tidy_output:
         write_tidy_csv(sorted(rows, key=lambda r: (r["station_id"], r["date"])), args.tidy_output)
         print(f"wrote tidy master {args.tidy_output}", flush=True)
-    signal = fit_signal(rows, args.region, bootstrap_draws=args.bootstrap_draws)
+    events = load_events_csv(args.events_csv) if args.events_csv else None
+    coords = None
+    if args.stations_json:
+        coords = {str(s.get("station", s.get("station_id"))): (float(s["lat"]), float(s["lon"]))
+                  for s in stations}
+    series = load_lake_series_csv(args.lakes_csv) if args.lakes_csv else None
+    signal = fit_signal(rows, args.region, bootstrap_draws=args.bootstrap_draws,
+                        landslide_events=events, station_coords=coords, lake_series=series)
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(signal, indent=2) + "\n")
@@ -188,6 +197,8 @@ def main() -> None:
     run_grp.add_argument("--region", default="koshi_nepal")
     run_grp.add_argument("--bootstrap-draws", type=int, default=500)
     run_grp.add_argument("--tidy-output", help="Optional merged tidy CSV path")
+    run_grp.add_argument("--events-csv", help="NASA COOLR/GLC landslide events CSV")
+    run_grp.add_argument("--lakes-csv", help="Annual lake areas CSV (lake_id,name,year,area_km2)")
     run_grp.add_argument("--output", default="artifacts/signal.json")
     run(parser.parse_args())
 
