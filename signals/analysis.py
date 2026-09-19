@@ -147,7 +147,10 @@ def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999
     if landslide_events and station_coords:
         trigger = landslide.fit_trigger(landslide_events, rows, station_coords)
     else:
-        trigger = {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None}
+        trigger = {
+            "form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None,
+            **landslide._HONESTY,
+        }
     growth = lakes.summarize_lake_growth(lake_series) if lake_series else []
     datasets = ["NOAA Integrated Surface Database / Global Hourly"]
     if trigger.get("a") is not None:

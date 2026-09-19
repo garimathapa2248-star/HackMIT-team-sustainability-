@@ -62,12 +62,8 @@ def load_inputs(root: Path | str = ".") -> tuple[list[dict], dict[str, dict], di
     Prefers generated ``artifacts/`` files and falls back to
     ``contracts/fixtures/`` so the optimizer runs before real data lands.
     """
-    root = Path(root)
-    art, fix = root / "artifacts", root / "contracts" / "fixtures"
-
-    cand_path = _first_existing(art / "candidates.json", fix / "candidates.json")
-    haz_path = _first_existing(art / "hazard.geojson", fix / "hazard.geojson")
-    sig_path = _first_existing(art / "signal.json", fix / "signal.json")
+    paths = resolve_input_paths(root)
+    cand_path, haz_path, sig_path = paths["candidates"], paths["hazard"], paths["signal"]
     if not cand_path or not haz_path:
         raise FileNotFoundError("Need candidates.json and hazard.geojson in artifacts/ or contracts/fixtures/.")
 
@@ -76,6 +72,17 @@ def load_inputs(root: Path | str = ".") -> tuple[list[dict], dict[str, dict], di
     signal = json.loads(sig_path.read_text()) if sig_path else {}
     economics.validate_candidates(candidates)
     return candidates, hazard, signal
+
+
+def resolve_input_paths(root: Path | str = ".") -> dict[str, Path | None]:
+    """Locate candidate / hazard / signal files (artifacts first, then fixtures)."""
+    root = Path(root)
+    art, fix = root / "artifacts", root / "contracts" / "fixtures"
+    return {
+        "candidates": _first_existing(art / "candidates.json", fix / "candidates.json"),
+        "hazard": _first_existing(art / "hazard.geojson", fix / "hazard.geojson"),
+        "signal": _first_existing(art / "signal.json", fix / "signal.json"),
+    }
 
 
 def _index_hazard(geojson: dict) -> dict[str, dict]:
@@ -312,7 +319,40 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
                 "price_co2_per_t_usd": PRICE_CO2_PER_T,
                 "income_value_years": INCOME_VALUE_YEARS,
             },
+            **_candidates_note(root, candidates, totals, float(budget)),
         },
+    }
+
+
+def _rel(root: Path | str, path: Path | None) -> str | None:
+    if path is None:
+        return None
+    root = Path(root)
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return str(path)
+
+
+def _candidates_note(root, candidates, totals, budget) -> dict:
+    paths = resolve_input_paths(root)
+    source = _rel(root, paths["candidates"]) or "unknown"
+    n = len(candidates)
+    spent = float(totals["cost_usd"])
+    fixture = "fixtures" in source.replace("\\", "/")
+    thin = n <= 2 or spent < 0.05 * budget
+    note = None
+    if fixture or thin:
+        note = (
+            f"Universe is {n} parcel(s) from {source}. "
+            f"Spend ${spent:,.0f} of ${budget:,.0f} is the solver exhausting that universe, "
+            "not a $2M allocation. Re-run when Subodh ships real artifacts/candidates.json."
+        )
+    return {
+        "candidates_source": source,
+        "hazard_source": _rel(root, paths["hazard"]),
+        "signal_source": _rel(root, paths["signal"]),
+        "candidates_note": note,
     }
 
 

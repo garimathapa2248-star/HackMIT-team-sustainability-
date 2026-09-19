@@ -1,9 +1,10 @@
 """Rainfall intensity-duration landslide trigger from labeled events + station rain.
 
 Joins each NASA COOLR/GLC landslide event to antecedent rainfall at the nearest
-NOAA station, then fits the classic power-law trigger ``I = a * D^b`` (I in
-mm/h, D in hours) in log space.  A held-out *temporal* split gives the AUC, so
-nothing is tuned on what is reported.
+NOAA station, then fits a power-law ``I = a * D^b`` (I in mm/h, D in hours) in
+log space.  A held-out *temporal* split gives the AUC.  Present the result as a
+rainfall classifier (out-of-sample AUC), not as a Caine-style threshold: the
+fitted exponent is often the inverse of classic Caine.
 
 Fails closed: fewer than ``min_events`` usable events (or too few on either
 side of the temporal split) returns the contract's null payload, never a fit.
@@ -23,6 +24,19 @@ WET_DAY_MM = 1.0
 MAX_SPELL_DAYS = 7
 MAX_STATION_KM = 50.0
 MIN_EVENTS = 10
+
+# Honesty labels: the fitted power law often has *positive* b, which is the
+# inverse of the classic Caine I–D threshold (b < 0).  The defensible claim is
+# the held-out rainfall classifier AUC, not a physical threshold curve.
+_HONESTY = {
+    "kind": "rainfall_classifier",
+    "presentation": "rainfall classifier, AUC out-of-sample — not a Caine-style I–D threshold",
+    "note": (
+        "Fitted exponent b can be positive (inverse of classic Caine I = a·D^b with b<0). "
+        "Do not present the power law as a physical intensity–duration threshold; "
+        "the claim that survives scrutiny is the held-out rainfall-classifier AUC."
+    ),
+}
 
 
 def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -105,7 +119,7 @@ def fit_trigger(events: list[dict[str, object]],
                 max_km: float = MAX_STATION_KM,
                 min_events: int = MIN_EVENTS) -> dict[str, object]:
     """Fit ``I = a * D^b`` and report held-out AUC in the contract shape."""
-    null = {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None}
+    null = {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None, **_HONESTY}
     daily = _daily_index(tidy_rows)
     usable = [s for s in station_coords if s in daily]
     if not usable or not events:
@@ -190,4 +204,5 @@ def fit_trigger(events: list[dict[str, object]],
         "skipped_far_from_station": skipped_far,
         "skipped_data_gap": skipped_gap,
         "max_station_km": max_km,
+        **_HONESTY,
     }

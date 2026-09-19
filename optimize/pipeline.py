@@ -25,6 +25,9 @@ def main() -> None:
     print(f"plan.json written: {len(plan['selected'])} parcels, "
           f"${t['cost_usd']:,.0f}, {t['people_protected']:.1f} people-risk avoided, "
           f"{t['co2_t_10yr']:,.0f} tCO2, ${t['income_usd_yr']:,.0f}/yr income.")
+    note = (plan.get("provenance") or {}).get("candidates_note")
+    if note:
+        print(note)
 
 
 if __name__ == "__main__":
