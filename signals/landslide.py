@@ -154,7 +154,10 @@ def fit_trigger(events: list[dict[str, object]],
         return {**null, "n_events": len(points),
                 "note": "trigger durations lack spread (all events in one window); no fit emitted"}
     slope, intercept = (float(v) for v in np.polyfit(d, i, 1))
-    a, b = round(10 ** intercept, 3), round(slope, 3)
+    # ``a`` can be very small (steep power law), so keep 4 significant figures
+    # instead of 3 decimals — otherwise it rounds to 0.0 and the printed law
+    # ``I = a * D^b`` reads as broken.
+    a, b = float(f"{10 ** intercept:.4g}"), round(slope, 3)
 
     auc = None
     if test:

@@ -149,6 +149,11 @@ def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999
     else:
         trigger = {"form": "I = a * D^b", "a": None, "b": None, "n_events": 0, "auc": None}
     growth = lakes.summarize_lake_growth(lake_series) if lake_series else []
+    datasets = ["NOAA Integrated Surface Database / Global Hourly"]
+    if trigger.get("a") is not None:
+        datasets.append("NASA Global Landslide Catalog / COOLR")
+    if growth:
+        datasets.append("ICIMOD glacial-lake inventory (annual areas)")
     return {
         "region": region,
         "stations_processed": stations,
@@ -159,5 +164,5 @@ def fit_signal(rows: list[dict[str, object]], region: str, early_end: int = 1999
         "trend": trend(annual),
         "landslide_trigger": trigger,
         "lake_growth": growth,
-        "provenance": {"datasets": ["NOAA Integrated Surface Database / Global Hourly"], "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"), "data_status": "model output — GEV fit to cleaned station observations", "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap"}
+        "provenance": {"datasets": datasets, "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"), "data_status": "model output — GEV fit to cleaned station observations", "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap"}
     }
