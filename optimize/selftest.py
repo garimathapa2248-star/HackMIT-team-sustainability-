@@ -12,7 +12,7 @@ import random
 import tempfile
 from pathlib import Path
 
-from . import knapsack, portfolio
+from . import counterfactual, knapsack, portfolio
 
 
 def _synth(root: Path, n_cells: int = 200, n_parcels: int = 500, seed: int = 7) -> None:
@@ -22,7 +22,8 @@ def _synth(root: Path, n_cells: int = 200, n_parcels: int = 500, seed: int = 7) 
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [86.4 + i * 1e-3, 27.8 + i * 1e-3]},
         "properties": {"cell_id": f"c_{i:05d}", "eal_people": round(rng.uniform(0.5, 20.0), 2),
-                       "eal_usd": round(rng.uniform(2000, 60000), 0), "population": rng.randint(20, 800)},
+                       "eal_usd": round(rng.uniform(2000, 60000), 0), "population": rng.randint(20, 800),
+                       "observed_flood_frac": round(rng.uniform(0.0, 0.7), 3)},
     } for i in range(n_cells)]
     (root / "artifacts" / "hazard.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": features}))
     types = list(portfolio.economics.FACTORS)
@@ -35,6 +36,11 @@ def _synth(root: Path, n_cells: int = 200, n_parcels: int = 500, seed: int = 7) 
     (root / "artifacts" / "candidates.json").write_text(json.dumps(candidates))
     (root / "artifacts" / "signal.json").write_text(json.dumps(
         {"return_levels_mm": {"100": 175.6}, "return_levels_ci95": {"100": [148.2, 209.7]}}))
+    (root / "artifacts" / "backtest.json").write_text(json.dumps({
+        "event_date": "synthetic",
+        "counterfactual": {"people_exposed_baseline": None},
+        "provenance": {"data_status": "synthetic fixture"},
+    }))
 
 
 def main() -> None:
@@ -48,6 +54,14 @@ def main() -> None:
         assert t["cost_usd"] <= budget + 1e-6, "budget exceeded"
         ids = [s["parcel_id"] for s in plan["selected"]]
         assert len(ids) == len(set(ids)), "duplicate parcel selected"
+        assert plan["totals"]["households_benefiting"] is None, "unsupported household count emitted"
+        assert plan["robustness"]["selected_count"] == len(ids), "robustness count mismatch"
+        assert all("selected_in_both_objectives" in s for s in plan["selected"])
+        counterfactual.apply(root, plan)
+        assert (root / "artifacts" / "risk_before.geojson").exists()
+        assert (root / "artifacts" / "risk_with_plan.geojson").exists()
+        after = json.loads((root / "artifacts" / "risk_with_plan.geojson").read_text())
+        assert after["features"][0]["properties"]["scenario"] == "with_preventive_measures"
 
         budgets = [f["budget_usd"] for f in plan["frontier"]]
         people = [f["people_protected"] for f in plan["frontier"]]
@@ -68,7 +82,8 @@ def main() -> None:
 
         print(f"expected: {len(ids)} parcels | ${t['cost_usd']:,.0f} | "
               f"{t['people_protected']:.0f} people-risk avoided | {t['exposure_reduction_pct']:.1f}% | "
-              f"{t['co2_t_10yr']:,.0f} tCO2 | ${t['income_usd_yr']:,.0f}/yr | {t['households_benefiting']} households")
+              f"{t['co2_t_10yr']:,.0f} tCO2 | ${t['income_usd_yr']:,.0f}/yr | "
+              f"{plan['robustness']['overlap_pct']:.1f}% expected/CVaR overlap")
         print(f"cvar:     tail {cvar['cvar']['tail_people_protected']:.0f} vs mean {cvar['totals']['people_protected']:.0f}")
         print(f"knapsack: greedy within {gap['gap_pct']:.2f}% of exact independent-value bound")
         print("ALL CHECKS PASSED")

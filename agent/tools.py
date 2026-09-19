@@ -6,6 +6,14 @@ from optimize.economics import eal_reduction_frac, parcel_cost
 from optimize.portfolio import optimize as run_opt
 
 
+def _evidence_field(row: dict, *names: str):
+    for name in names:
+        value = row.get(name)
+        if value not in (None, "", [], {}):
+            return value
+    return None
+
+
 def get_signal() -> dict:
     return loader.load("signal") or {}
 
@@ -46,15 +54,56 @@ def explain_parcel(parcel_id: str) -> dict:
     parcel = cands.get(parcel_id)
     if not parcel:
         return {"parcel_id": parcel_id, "error": "not in candidates"}
+    selected_row = selected.get(parcel_id)
     return {
         "parcel_id": parcel_id,
-        "in_plan": parcel_id in selected,
+        "in_plan": selected_row is not None,
         "type": parcel.get("type"),
         "area_ha": parcel.get("area_ha"),
+        "centroid": parcel.get("centroid"),
+        "slope_deg": parcel.get("slope_deg"),
+        "landcover": parcel.get("landcover"),
         "cost_usd": parcel_cost(parcel),
         "eal_reduction_frac": eal_reduction_frac(parcel),
         "cell_ids": parcel.get("cell_ids"),
-        "selected_row": selected.get(parcel_id),
+        "suitability": _evidence_field(
+            parcel,
+            "suitability",
+            "suitability_evidence",
+            "suitability_reason",
+            "suitability_reasons",
+            "suitability_score",
+            "selection_reason",
+            "rationale",
+            "why_suitable",
+        ),
+        "suitability_score": parcel.get("suitability_score"),
+        "suitability_evidence": parcel.get("suitability_evidence"),
+        "rationale": parcel.get("rationale"),
+        "risk_driver": _evidence_field(
+            parcel,
+            "risk_driver",
+            "risk_drivers",
+            "triggering_hazard",
+            "primary_hazard",
+            "hazard_driver",
+        ),
+        "triggering_hazard": parcel.get("triggering_hazard"),
+        "evidence": _evidence_field(
+            parcel,
+            "evidence",
+            "evidence_source",
+            "evidence_sources",
+            "data_sources",
+            "source",
+            "provenance",
+            "verification",
+            "required_verification",
+        ),
+        "data_status": parcel.get("data_status"),
+        "provenance": parcel.get("provenance"),
+        "verification": parcel.get("verification", parcel.get("required_verification")),
+        "selected_row": selected_row,
     }
 
 
@@ -86,7 +135,7 @@ SCHEMAS = [
     {"name": "get_signal", "description": "Return the EVT signal artifact.", "input_schema": {"type": "object", "properties": {}}},
     {"name": "get_hazard_summary", "description": "Summarise hazard cells.", "input_schema": {"type": "object", "properties": {}}},
     {"name": "rank_cells", "description": "Rank hazard cells by a numeric property.", "input_schema": {"type": "object", "properties": {"metric": {"type": "string"}, "n": {"type": "integer"}}}},
-    {"name": "explain_parcel", "description": "Explain a candidate parcel from artifacts.", "input_schema": {"type": "object", "properties": {"parcel_id": {"type": "string"}}, "required": ["parcel_id"]}},
+    {"name": "explain_parcel", "description": "Explain a candidate parcel using its suitability, risk-driver, coordinates, and evidence fields when available.", "input_schema": {"type": "object", "properties": {"parcel_id": {"type": "string"}}, "required": ["parcel_id"]}},
     {"name": "run_optimize", "description": "Re-run the portfolio optimizer.", "input_schema": {"type": "object", "properties": {"budget": {"type": "number"}, "mode": {"type": "string"}}}},
     {"name": "get_backtest", "description": "Return UNOSAT CSI backtest numbers.", "input_schema": {"type": "object", "properties": {}}},
 ]

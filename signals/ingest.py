@@ -1,9 +1,11 @@
 """Convert NOAA Global Hourly precipitation observations into daily station data.
 
 The NOAA Global Hourly CSV exposes AA1--AA4 as comma-delimited period/depth/
-condition/quality fields.  This module accepts AA1's common representation and
-also supports an already-tidy input (`station_id,date,precip_mm`) for test and
-cloud workflows.  It never silently turns NOAA's 9999 sentinel into rainfall.
+condition/quality fields.  This module evaluates all four AA fields, then uses
+the shortest non-overlapping windows so alternate accumulations do not
+double-count the same rain.  It also supports an already-tidy input
+(`station_id,date,precip_mm`) for test and cloud workflows.  It never silently
+turns NOAA's 9999 sentinel into rainfall.
 """
 from __future__ import annotations
 
@@ -83,11 +85,15 @@ def load_noaa_global_hourly(path: str | Path) -> list[dict[str, object]]:
                 timestamp = _parse_timestamp(row.get("DATE", ""))
                 if not station or timestamp is None:
                     continue
-                # AA1 is the canonical field. Additional AA fields are usually
-                # alternate accumulations and would double-count the same rain.
-                parsed = parse_aa(row.get("AA1", ""))
-                if parsed:
-                    observations[station].append((timestamp, *parsed))
+                # AA1–AA4 can contain alternate accumulation windows. Collect
+                # every valid field; _daily_from_accumulations keeps the
+                # shortest windows first and rejects overlaps.
+                seen_at_timestamp: set[tuple[int, float]] = set()
+                for field in ("AA1", "AA2", "AA3", "AA4"):
+                    parsed = parse_aa(row.get(field, ""))
+                    if parsed and parsed not in seen_at_timestamp:
+                        observations[station].append((timestamp, *parsed))
+                        seen_at_timestamp.add(parsed)
     output: list[dict[str, object]] = []
     for station, values in observations.items():
         for date, precip_mm in _daily_from_accumulations(values).items():

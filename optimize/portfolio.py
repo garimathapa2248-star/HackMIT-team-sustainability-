@@ -1,14 +1,14 @@
-"""Portfolio optimisation over nature-based intervention candidates.
+"""Portfolio optimisation over nature-based preventive-measure candidates.
 
-The optimizer takes Subodh's hazard cells and candidate parcels plus Jeevith's
-EVT signal, then chooses the set of parcels that maximises a **triple return**
+The optimizer takes Subodh's hazard cells and deterministic candidate measures
+plus Jeevith's EVT signal, then chooses the set that maximises a **triple return**
 (annual expected people-risk avoided + CO2 sequestered + household income) per
 dollar, subject to a budget.
 
 Two design choices make it defensible rather than a black box:
 
 1. **No double-counting.**  A marginal greedy tracks how much expected loss is
-   still capturable in each hazard cell.  Two parcels covering the same cell
+   still capturable in each hazard cell.  Two measures covering the same cell
    cannot both claim the full reduction.
 
 2. **The uncertainty is the point (the Voloridge angle).**  Avoided loss is
@@ -166,6 +166,7 @@ def prepare(candidates: list[dict], cell_index: dict[str, int]) -> list[dict]:
             "co2": economics.parcel_co2_10yr(parcel),
             "income": economics.parcel_income_yr(parcel),
             "rows": rows,
+            "candidate": parcel,
         })
     return prepared
 
@@ -228,10 +229,21 @@ def _greedy(prepared: list[dict], n_cells: int, cell_expected, scenario_cell,
         spent += cost
         selected.append({
             "parcel_id": best["parcel_id"],
+            "type": best["candidate"].get("type"),
+            "centroid": best["candidate"].get("centroid"),
+            "area_ha": best["candidate"].get("area_ha"),
+            "risk_driver": best["candidate"].get("risk_driver"),
+            "suitability_score": best["candidate"].get("suitability_score"),
+            "suitability_evidence": best["candidate"].get("suitability_evidence"),
+            "rationale": best["candidate"].get("rationale"),
+            "assumptions": best["candidate"].get("assumptions"),
+            "verification": best["candidate"].get("verification"),
+            "data_status": best["candidate"].get("data_status"),
             "cost_usd": round(cost, 2),
             "avoided_eal_people": round(float(expected_marginal), 4),
             "co2_t_10yr": round(best["co2"], 2),
             "income_usd_yr": round(best["income"], 2),
+            "effect_fraction_assumed": round(float(best["effect"]), 3),
         })
         pool.remove(best)
 
@@ -273,15 +285,18 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
     portfolio = result["portfolio"]
     selected = result["selected"]
 
+    alternate_mode = "cvar" if mode == "expected" else "expected"
+    alternate = _greedy(
+        prepared, n_cells, cell_expected, scenario_cell, float(budget), alternate_mode, np
+    )
+    alternate_ids = {row["parcel_id"] for row in alternate["selected"]}
+    for rank, row in enumerate(selected, start=1):
+        row["priority_rank"] = rank
+        row["selected_in_both_objectives"] = row["parcel_id"] in alternate_ids
+    overlap_count = sum(1 for row in selected if row["selected_in_both_objectives"])
+
     people_protected = float(portfolio.mean()) if portfolio.size else 0.0
     tail_people = _tail_mean(np, portfolio) if portfolio.size else 0.0
-
-    # Households benefiting: protected population share across covered cells.
-    protected_pop = 0.0
-    for cid, i in cell_index.items():
-        captured = 1.0 - float(result["remaining_frac"][i])
-        protected_pop += hazard[cid]["population"] * captured
-    households = int(round(protected_pop / economics.PEOPLE_PER_HOUSEHOLD)) if protected_pop else 0
 
     totals = {
         "cost_usd": round(result["spent"], 2),
@@ -289,7 +304,11 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
         "exposure_reduction_pct": round(100 * people_protected / baseline_expected, 2) if baseline_expected else 0.0,
         "co2_t_10yr": round(sum(s["co2_t_10yr"] for s in selected), 2),
         "income_usd_yr": round(sum(s["income_usd_yr"] for s in selected), 2),
-        "households_benefiting": households,
+        "households_benefiting": None,
+        "households_note": (
+            "Unavailable: intervention-area livelihood beneficiaries require a field-tested "
+            "employment/adoption model; exposed cell population is not a household count."
+        ),
     }
 
     frontier = _build_frontier(prepared, n_cells, cell_expected, scenario_cell, float(budget),
@@ -306,8 +325,21 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
             "tail_people_protected": round(tail_people, 3),
             "alpha": CVAR_ALPHA,
         },
+        "robustness": {
+            "comparison_mode": alternate_mode,
+            "selected_in_both_count": overlap_count,
+            "selected_count": len(selected),
+            "overlap_pct": round(100.0 * overlap_count / len(selected), 1) if selected else 0.0,
+            "interpretation": (
+                "Measures selected by both expected-value and CVaR objectives are robust to "
+                "the choice of portfolio objective under the stated Monte-Carlo scenarios."
+            ),
+        },
         "provenance": {
-            "data_status": "model output — screening-grade optimisation, not an investment recommendation",
+            "data_status": (
+                "counterfactual simulation — deterministic candidate suitability plus "
+                "literature-based intervention effects; field verification required"
+            ),
             "method": (
                 f"marginal greedy triple-return/$ with per-cell EAL capping over {draws} "
                 f"Monte-Carlo hazard scenarios; climate multiplier sigma={round(sigma, 3)} "

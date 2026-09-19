@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 
-type Parcel = { parcel_id: string; centroid: [number, number]; type: string; area_ha?: number };
+type CandidateSite = {
+  parcel_id: string;
+  centroid: [number, number];
+  type: string;
+  area_ha?: number;
+};
 
 type Props = {
   hazard: GeoJSON.FeatureCollection | null;
-  candidates: Parcel[];
+  candidates: CandidateSite[];
   selectedIds: Set<string>;
   onSelect: (id: string | null) => void;
   observed?: GeoJSON.FeatureCollection | null;
@@ -13,7 +18,7 @@ type Props = {
   overlay: "none" | "observed" | "modeled" | "both";
 };
 
-type Basemap = "satellite" | "terrain" | "dark";
+type Basemap = "satellite" | "terrain" | "data";
 
 // One colour per nature-based intervention type.
 const TYPE_COLOR: Record<string, string> = {
@@ -100,7 +105,9 @@ export default function HazardMap({
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const popupRef = useRef<maplibregl.Popup | null>(null);
-  const [basemap, setBasemap] = useState<Basemap>("satellite");
+  const [basemap, setBasemap] = useState<Basemap>(() =>
+    typeof navigator !== "undefined" && !navigator.onLine ? "data" : "satellite"
+  );
 
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
@@ -118,6 +125,18 @@ export default function HazardMap({
     const ro = new ResizeObserver(() => map.resize());
     ro.observe(ref.current);
     map.on("load", () => map.resize());
+    map.on("error", (event) => {
+      const detail = event as { sourceId?: string; error?: Error };
+      const message = detail.error?.message || "";
+      if (
+        detail.sourceId === "sat" ||
+        detail.sourceId === "labels" ||
+        detail.sourceId === "terrain" ||
+        /arcgis|opentopomap|raster tile/i.test(message)
+      ) {
+        setBasemap("data");
+      }
+    });
     return () => {
       ro.disconnect();
       map.remove();
@@ -144,7 +163,13 @@ export default function HazardMap({
     if (!map || !hazard) return;
 
     const maxEal = Math.max(
-      ...hazard.features.map((f) => Number((f.properties as { eal_people?: number })?.eal_people || 0)),
+      ...hazard.features.map((f) => {
+        const properties = f.properties as {
+          people_risk_eal?: number;
+          eal_people?: number;
+        };
+        return Number(properties?.people_risk_eal ?? properties?.eal_people ?? 0);
+      }),
       1
     );
     const colored: GeoJSON.FeatureCollection = {
@@ -153,7 +178,15 @@ export default function HazardMap({
         ...f,
         properties: {
           ...f.properties,
-          fill: ealColor(Number((f.properties as { eal_people?: number })?.eal_people || 0), maxEal),
+          fill: ealColor(
+            Number(
+              (f.properties as { people_risk_eal?: number; eal_people?: number })
+                ?.people_risk_eal ??
+                (f.properties as { eal_people?: number })?.eal_people ??
+                0
+            ),
+            maxEal
+          ),
         },
       })),
     };
@@ -199,7 +232,13 @@ export default function HazardMap({
 
         map.on("mousemove", "hazard-fill", (e) => {
           const p = e.features?.[0]?.properties as
-            | { population?: number; eal_people?: number; landslide_prob?: number }
+            | {
+                population?: number;
+                people_risk_eal?: number;
+                eal_people?: number;
+                landslide_prob?: number;
+                scenario?: string;
+              }
             | undefined;
           if (!p) return;
           map.getCanvas().style.cursor = "pointer";
@@ -208,9 +247,11 @@ export default function HazardMap({
             .setHTML(
               `<div class="pop"><b>Grid cell</b><br/>Population ${Math.round(
                 Number(p.population || 0)
-              ).toLocaleString()}<br/>People-risk/yr ${Number(p.eal_people || 0).toFixed(
-                2
-              )}<br/>Landslide prob ${(Number(p.landslide_prob || 0) * 100).toFixed(0)}%</div>`
+              ).toLocaleString()}<br/>People-risk/yr ${Number(
+                p.people_risk_eal ?? p.eal_people ?? 0
+              ).toFixed(2)}<br/>Scenario ${p.scenario || "current_risk_model"}<br/>Landslide prob ${(
+                Number(p.landslide_prob || 0) * 100
+              ).toFixed(0)}%</div>`
             )
             .addTo(map);
         });
@@ -291,7 +332,7 @@ export default function HazardMap({
               ?.setLngLat((e.features?.[0]?.geometry as GeoJSON.Point).coordinates as [number, number])
               .setHTML(
                 `<div class="pop"><b>${p.label}</b><br/>${p.id}<br/>${Number(p.area || 0).toFixed(1)} ha ${
-                  p.selected ? "· in plan" : "· candidate"
+                  p.selected ? "· selected preventive measure" : "· candidate intervention site"
                 }</div>`
               )
               .addTo(map);
@@ -330,15 +371,18 @@ export default function HazardMap({
     <div id="map-root">
       <div id="map" ref={ref} />
       <div className="basemap-switch">
-        {(["satellite", "terrain", "dark"] as Basemap[]).map((b) => (
+        {(["satellite", "terrain", "data"] as Basemap[]).map((b) => (
           <button key={b} className={basemap === b ? "on" : ""} onClick={() => setBasemap(b)}>
-            {b}
+            {b === "data" ? "data only" : b}
           </button>
         ))}
       </div>
+      {basemap === "data" && (
+        <div className="map-status">Data-only map · no network tiles required</div>
+      )}
       {usedTypes.length > 0 && (
         <div className="parcel-legend">
-          <div className="pl-title">Planted defenses</div>
+          <div className="pl-title">Selected preventive measures</div>
           {usedTypes.map((t) => (
             <div key={t} className="pl-row">
               <span className="pl-dot" style={{ background: TYPE_COLOR[t] || "#9fb2cc" }} />

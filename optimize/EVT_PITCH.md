@@ -27,8 +27,8 @@ the optimizer. Same tail-risk discipline you use on a book, applied to a watersh
   **on purpose** — that width *is* the Monte-Carlo sigma (σ ≈ 0.252) the optimizer samples over 200 draws.
   We feed the optimizer the uncertainty, not a point forecast.
 - **Cross-check:** POT/GPD (95th-pct, 3-day decluster of regional daily max) run alongside the GEV as a
-  tail sanity check — a *different sample* (regional max vs station median-of-maxima), so it is a
-  cross-check, not a replacement headline.
+  sensitivity analysis. It is a *different sample* (regional max vs station median-of-maxima) and its
+  100-year estimate is much larger, so it does not corroborate or replace the GEV headline.
 - **Landslide:** do **not** sell `I = a·D^b` as a Caine threshold (our exponent is positive). Sell it as a
   **rainfall classifier, AUC 0.934 out-of-sample** (train 2008–15, test 2016–17, n=138; 176 events dropped
   for distance, 450 for data gaps — we show the skip counts).
@@ -36,18 +36,22 @@ the optimizer. Same tail-risk discipline you use on a book, applied to a watersh
 
 ## The plan the tail feeds (current numbers)
 
-- **127 parcels** selected, spend **$1.99M of $2M**, greedy marginal triple-return/$ with per-cell EAL
-  capping over 200 Monte-Carlo hazard draws. **CVaR toggle** optimizes the worst-10% climate draws.
-- **Annual expected people-risk avoided ≈ 67,944/yr** — this is **half** of the map's total EAL
-  (134,368/yr over a ~8.0M-person Koshi/Madhesh region). Always say **"annual expected people-risk
-  avoided," never "lives."**
-- **17,554 tCO₂ / 10 yr · $226k/yr household income.** Factors + sources live in `optimize/economics.py`
-  (vetiver, bamboo, floodplain, wetland, afforestation, riverbank bio) — answer cost/CO₂/income questions
-  from that table, not from memory.
+- **55 deterministic preventive measures** selected, spend **$1.76M of a $2M cap**, greedy marginal
+  triple-return/$ with per-cell EAL capping over 500 Monte-Carlo hazard draws. The optimizer does not
+  spend the remaining $240k after exhausting the evidence-supported candidate universe.
+- **Annual expected people-risk avoided ≈ 16,058/yr** — always say **"annual expected people-risk
+  avoided," never "lives."** Expected-value and CVaR select the same 55 measures under the current
+  scenario model.
+- **7,700 tCO₂ / 10 yr · $66k/yr livelihood income.** The mapped Koshi/Madhesh plains support
+  floodplain restoration; the engine also contains vetiver, bamboo, wetland, afforestation, and
+  riverbank rules, but it does not force those types into unsupported cells.
+- Candidate geometry is the source 8 km hazard cell, not a surveyed parcel boundary. Type and area are
+  deterministic screening assumptions with explicit field-verification requirements.
 
 ## The proof (don't hide the low CSI)
 
 UNOSAT Sentinel-1, 27 Sep 2024 Koshi flood. Local-min HAND proxy on Copernicus GLO-30, stage calibrated on
 this event: **CSI 0.086, POD 0.211, FAR 0.873.** We will not round it up. FAR is high because HAND
-over-inundates flats; the model's *use* is relative parcel ranking, not a legal flood zone. Counterfactual:
-the plan removes ~**38%** of observed-flood-weighted exposure.
+over-inundates flats; the model's *use* is relative preventive-measure ranking, not a legal flood zone.
+Counterfactual simulation: literature effect sizes reduce observed-flood-weighted exposure by **29.24%**;
+this is not an observed intervention trial.

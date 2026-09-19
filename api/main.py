@@ -89,7 +89,23 @@ def get_backtest():
 
 @app.get("/attribution")
 def get_attribution():
-    return _payload("attribution")
+    data = loader.load("attribution")
+    if data is None:
+        return JSONResponse({"error": "attribution not found", "data_status": "missing"}, status_code=200)
+    # Older cached artifacts contain synthetic causal percentages. Suppress them
+    # at the API boundary without mutating the source artifact.
+    for key in ("government_pct", "community_pct", "household_pct", "driver_shares"):
+        data[key] = None
+    data["quantified_responsibility_split_available"] = False
+    for key in ("government_levers", "community_levers", "household_levers"):
+        for row in data.get(key) or []:
+            if isinstance(row, dict):
+                row["risk_share_pct"] = None
+    provenance = data.setdefault("provenance", {})
+    provenance["api_note"] = (
+        "Synthetic responsibility percentages suppressed; implementation roles are planning assumptions."
+    )
+    return data
 
 
 @app.get("/plan")
@@ -105,6 +121,16 @@ def get_flood_observed():
 @app.get("/flood_modeled")
 def get_flood_modeled():
     return _payload("flood_modeled")
+
+
+@app.get("/risk_before")
+def get_risk_before():
+    return _payload("risk_before")
+
+
+@app.get("/risk_with_plan")
+def get_risk_with_plan():
+    return _payload("risk_with_plan")
 
 
 @app.get("/candidates")
@@ -136,19 +162,34 @@ def post_ask(body: AskBody):
     return agent_answer(body.question)
 
 
-@app.post("/conceptnote")
-def post_conceptnote():
-    return PlainTextResponse(conceptnote.render(), media_type="text/markdown")
+@app.post("/preventive-measures-plan")
+@app.post("/conceptnote")  # Backward-compatible alias.
+def post_preventive_measures_plan():
+    return PlainTextResponse(
+        conceptnote.render(),
+        media_type="text/markdown",
+        headers={"Content-Disposition": 'inline; filename="preventive-measures-plan.md"'},
+    )
 
 
-@app.get("/conceptnote")
-def get_conceptnote():
-    return PlainTextResponse(conceptnote.render(), media_type="text/markdown")
+@app.get("/preventive-measures-plan")
+@app.get("/conceptnote")  # Backward-compatible alias.
+def get_preventive_measures_plan():
+    return PlainTextResponse(
+        conceptnote.render(),
+        media_type="text/markdown",
+        headers={"Content-Disposition": 'inline; filename="preventive-measures-plan.md"'},
+    )
 
 
-@app.get("/conceptnote.pdf")
-def get_conceptnote_pdf():
-    return Response(content=conceptnote.render_pdf(), media_type="application/pdf")
+@app.get("/preventive-measures-plan.pdf")
+@app.get("/conceptnote.pdf")  # Backward-compatible alias.
+def get_preventive_measures_plan_pdf():
+    return Response(
+        content=conceptnote.render_pdf(),
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'inline; filename="preventive-measures-plan.pdf"'},
+    )
 
 
 @app.get("/scorecard")
@@ -163,7 +204,9 @@ def get_citizen_brief():
 
 @app.post("/sms")
 def post_sms():
-    return notify.send_demo("RootLedger demo: CSI and lives-saved are never invented. See the booth map.")
+    return notify.send_demo(
+        "RootLedger demo: observed data, model output, assumptions, and simulations stay labeled."
+    )
 
 
 def main() -> None:

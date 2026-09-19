@@ -1,4 +1,4 @@
-"""Government scorecard + citizen brief, filled only from artifacts."""
+"""Evidence-labeled delivery briefs filled only from artifacts."""
 from __future__ import annotations
 
 import json
@@ -18,6 +18,13 @@ def _n(v, spec=","):
         return str(v)
 
 
+def _all_levers(attr: dict) -> list[dict]:
+    rows = []
+    for key in ("government_levers", "community_levers", "household_levers"):
+        rows.extend(row for row in (attr.get(key) or []) if isinstance(row, dict))
+    return rows
+
+
 def government_scorecard() -> str:
     attr = loader.load("attribution") or {}
     plan = loader.load("plan") or {}
@@ -25,32 +32,41 @@ def government_scorecard() -> str:
     t = plan.get("totals") or {}
     levers = attr.get("government_levers") or []
     rows = "\n".join(
-        f"- **{x.get('lever')}** — {x.get('risk_share_pct')}% of modeled EAL, "
-        f"fix ${ _n(x.get('fix_cost_usd')) }, people-risk {_n(x.get('people_protected'), '.2f')} "
-        f"({x.get('source', '')})"
+        f"- **{x.get('lever')}** — modeled portfolio spend ${_n(x.get('plan_spend_usd', x.get('fix_cost_usd')))}, "
+        f"annual expected people-risk avoided {_n(x.get('annual_expected_people_risk_avoided', x.get('people_protected')), '.2f')}. "
+        f"Evidence: {x.get('source', 'not available')}"
         for x in levers
-    ) or "- No government lever in the selected set; flood/GLOF share is still assigned below."
+    ) or "- No public-sector delivery lever is available in the current artifact."
     csi = back.get("critical_success_index")
     region = (loader.load("signal") or {}).get("region") or "watershed"
-    return f"""# Government scorecard — {region} screening
+    hazard_method = (back.get("provenance") or {}).get("method") or (
+        "Copernicus GLO-30 local-min HAND proxy; stage calibrated on this event"
+    )
+    return f"""# Preventive Measures Delivery Scorecard — {region}
 
-**Status:** {(attr.get('provenance') or {}).get('data_status', 'model output')}
+**Portfolio status:** {(plan.get('provenance') or {}).get('data_status', 'model output')}
+**Evidence labels:** observed data · model output · literature assumption · counterfactual simulation
 
-## Responsibility share
-Government **{attr.get('government_pct')}%** of avoidable modeled EAL (flood + GLOF drivers).
-Community {attr.get('community_pct')}% · household {attr.get('household_pct')}%.
-This is a screening split from hazard + selected spend, not a legal assignment of blame.
+## Governance boundary
 
-## Levers
+No causal responsibility percentages are reported. The implementation-lead mapping is a planning assumption,
+not an empirical attribution, legal assignment, or allocation of blame.
+
+## Public-sector delivery levers
 {rows}
 
-## What the $2M plan does (not unique lives)
-Spend ${_n(t.get('cost_usd'))} · annual expected people-risk avoided {_n(t.get('people_protected'), '.1f')} ·
-{_n(t.get('co2_t_10yr'))} tCO₂ / 10 yr.
+## Modeled portfolio output
 
-## Proof
-CSI {csi if csi is not None else "null — not invented"} ({(back.get("provenance") or {}).get("data_status", "")}). Counterfactual
-{back.get('counterfactual')}.
+Spend ${_n(t.get('cost_usd'))} · annual expected people-risk avoided
+{_n(t.get('people_protected'), '.1f')} (not unique people or observed lives saved) ·
+{_n(t.get('co2_t_10yr'))} tCO₂ / 10 yr from literature factors.
+
+## Hazard evidence
+
+Observed UNOSAT Sentinel-1 extent is compared with a **local-min HAND proxy calibrated on this event**:
+{hazard_method}. Calibration-event CSI {csi if csi is not None else "unavailable"}; this is not independent validation.
+
+Counterfactual exposure is a simulation, not an observed outcome: {back.get('counterfactual')}.
 """
 
 
@@ -60,32 +76,37 @@ def citizen_brief() -> str:
     signal = loader.load("signal") or {}
     t = plan.get("totals") or {}
     h = signal.get("headline") or {}
-    hh = attr.get("household_levers") or []
-    com = attr.get("community_levers") or []
+    levers = _all_levers(attr)
+
     def bullets(items):
         return "\n".join(
-            f"- {x.get('lever')}: ${ _n(x.get('fix_cost_usd')) } in the current plan"
+            f"- **{x.get('lever')}** — provisional implementation lead: "
+            f"{x.get('implementation_lead', x.get('owner', 'to be agreed'))}; "
+            f"modeled spend ${_n(x.get('plan_spend_usd', x.get('fix_cost_usd')))}. "
+            f"Evidence: {x.get('source', 'not available')}"
             for x in items
         ) or "- None in the current selected set."
-    return f"""# Citizen brief — what this plan means on the ground
+    return f"""# Local Delivery Brief — preventive measures
 
 The 1-in-100-year daily rain of the earlier record now has a fitted recurrence of
-**{h.get('new_return_period_yrs')} years** in the late sample. That is a GEV fit, not a forecast.
+**{h.get('new_return_period_yrs')} years** in the late Nepal-adjacent sample.
+That is **model output from observed NOAA data**, not a forecast; the HMA-pooled fit did not show the same shift.
 
-## What households can grow
-{bullets(hh)}
+## Proposed measures
 
-Vetiver and bamboo are livelihood crops in this plan: the optimizer counts **${_n(t.get('income_usd_yr'))}/yr**
-and **{_n(t.get('households_benefiting'))} households** as co-benefits, not as a wage guarantee.
+{bullets(levers)}
 
-## What communities hold
-{bullets(com)}
+Implementation leads are governance assumptions that require consultation. This brief does not assign causal
+responsibility percentages to government, communities, or households.
 
-## What is not on you
-Government share is **{attr.get('government_pct')}%** (drainage, floodplain, GLOF outlet class of risk).
-The model does not dump systemic flood risk on households.
+## What the model estimates
 
-`people_protected` is annual expected people-risk avoided, not a count of unique lives.
+- Annual expected people-risk avoided: **{_n(t.get('people_protected'), '.1f')}** — model output, not unique people or observed lives saved.
+- Ten-year carbon: **{_n(t.get('co2_t_10yr'))} tCO₂** — model output from literature factors.
+- Annual livelihood-income potential: **${_n(t.get('income_usd_yr'))}** — model output from per-hectare assumptions, not measured income, wages, jobs, beneficiaries, or households reached.
+
+Before implementation, verify parcel boundaries, land tenure, measure suitability, delivery roles, safeguards,
+costs, and participant consent on the ground.
 """
 
 

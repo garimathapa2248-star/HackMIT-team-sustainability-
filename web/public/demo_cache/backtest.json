@@ -15,9 +15,13 @@
   },
   "counterfactual": {
     "people_exposed_baseline": 54993.4,
-    "people_exposed_with_plan": 26845.7,
-    "reduction_pct": 51.18,
-    "note": "Observed-flood-fraction \u00d7 population, reduced by greedy NbS capture. Not unique lives."
+    "people_exposed_with_plan": 38912.4,
+    "reduction_pct": 29.24,
+    "note": "Counterfactual simulation: observed-flood-fraction \u00d7 population, reduced by literature-based effects for the selected preventive measures. Not unique lives and not an observed intervention trial.",
+    "risk_layers": {
+      "before": "risk_before.geojson",
+      "with_plan": "risk_with_plan.geojson"
+    }
   },
   "provenance": {
     "data_status": "observed UNOSAT S-1 vs local-min HAND proxy; stage calibrated on this event",

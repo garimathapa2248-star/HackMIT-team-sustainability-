@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 mkdir -p "$ROOT/demo_cache" "$ROOT/web/public/demo_cache"
-for f in signal.json plan.json candidates.json hazard.geojson backtest.json attribution.json conceptnote.md conceptnote.pdf flood_observed.geojson flood_modeled.geojson government_scorecard.md citizen_brief.md; do
+for f in signal.json noise.json plan.json candidates.json hazard.geojson backtest.json attribution.json preventive_measures_plan.md preventive_measures_plan.pdf flood_observed.geojson flood_modeled.geojson risk_before.geojson risk_with_plan.geojson government_scorecard.md citizen_brief.md; do
   if [[ -f "$ROOT/artifacts/$f" ]]; then
     cp "$ROOT/artifacts/$f" "$ROOT/demo_cache/$f"
     cp "$ROOT/artifacts/$f" "$ROOT/web/public/demo_cache/$f"

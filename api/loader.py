@@ -32,6 +32,8 @@ NAMES = {
     "hazard": "hazard.geojson",
     "flood_observed": "flood_observed.geojson",
     "flood_modeled": "flood_modeled.geojson",
+    "risk_before": "risk_before.geojson",
+    "risk_with_plan": "risk_with_plan.geojson",
 }
 
 

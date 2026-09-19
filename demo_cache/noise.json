@@ -29,8 +29,8 @@
       "detail": "NOAA encodes missing depth as 9999. It is never coerced to 0 mm of rain."
     },
     {
-      "step": "Normalize AA1–AA4 accumulation periods",
-      "detail": "Precip is reported over 1/3/6/12/24-h windows; only valid periods are kept and normalized to a 24-h daily total."
+      "step": "Normalize NOAA accumulation windows",
+      "detail": "The frozen HMA run used canonical AA1 1/3/6/12/24-h windows. The current reproducible parser reads AA1–AA4, keeps shortest non-overlapping windows, and apportions them to UTC days."
     },
     {
       "step": "Drop invalid quality codes",

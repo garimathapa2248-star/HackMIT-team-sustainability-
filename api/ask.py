@@ -18,6 +18,125 @@ def _fmt(n) -> str:
     return str(n)
 
 
+def _first_field(row: dict, *names: str):
+    for name in names:
+        value = row.get(name)
+        if value not in (None, "", [], {}):
+            if isinstance(value, list):
+                shown = ", ".join(str(item) for item in value[:3])
+                return shown + (f" (+{len(value) - 3} more)" if len(value) > 3 else "")
+            if isinstance(value, dict):
+                items = list(value.items())
+                shown = "; ".join(f"{key}: {val}" for key, val in items[:5])
+                return shown + (f"; +{len(items) - 5} more fields" if len(items) > 5 else "")
+            return value
+    return None
+
+
+def _parcel_ids(question: str) -> list[str]:
+    ids = []
+    for match in re.finditer(r"\b(?:blr_p|p)_[a-z0-9_-]+\b", question, re.IGNORECASE):
+        pid = match.group(0).lower()
+        if pid not in ids:
+            ids.append(pid)
+    for match in re.finditer(r"\b(?:(blr)_)?p[_-]?(\d+)\b", question, re.IGNORECASE):
+        prefix, digits = match.groups()
+        pid = f"blr_p_{int(digits):04d}" if prefix else f"p_{int(digits):04d}"
+        if pid not in ids:
+            ids.append(pid)
+    for match in re.finditer(r"\bparcel\s+(?:p[_-]?)?(\d+)\b", question, re.IGNORECASE):
+        pid = f"p_{int(match.group(1)):04d}"
+        if pid not in ids:
+            ids.append(pid)
+    return ids
+
+
+def _parcel_evidence(parcel: dict, selected: dict | None = None) -> str:
+    selected = selected or {}
+    suitability_score = _first_field(
+        parcel,
+        "suitability_score",
+    ) or _first_field(selected, "suitability_score")
+    suitability_basis = _first_field(
+        parcel,
+        "suitability",
+        "suitability_evidence",
+        "suitability_reason",
+        "suitability_reasons",
+        "selection_reason",
+        "rationale",
+        "why_suitable",
+    ) or _first_field(
+        selected,
+        "suitability",
+        "suitability_evidence",
+        "suitability_reason",
+        "selection_reason",
+        "rationale",
+    )
+    if suitability_basis is None:
+        suitability_basis = (
+            f"candidate inputs slope={_fmt(parcel.get('slope_deg'))}°, "
+            f"landcover={parcel.get('landcover', 'not available')}"
+        )
+    suitability = (
+        f"score {suitability_score}; {suitability_basis}"
+        if suitability_score is not None
+        else str(suitability_basis)
+    )
+    risk_driver = _first_field(
+        parcel,
+        "risk_driver",
+        "risk_drivers",
+        "triggering_hazard",
+        "primary_hazard",
+        "hazard_driver",
+    ) or _first_field(
+        selected,
+        "risk_driver",
+        "risk_drivers",
+        "triggering_hazard",
+        "primary_hazard",
+    )
+    evidence = _first_field(
+        parcel,
+        "evidence",
+        "evidence_source",
+        "evidence_sources",
+        "data_sources",
+        "source",
+        "provenance",
+        "verification",
+        "required_verification",
+    ) or _first_field(
+        selected,
+        "evidence",
+        "evidence_source",
+        "evidence_sources",
+        "source",
+        "provenance",
+        "verification",
+        "required_verification",
+    )
+    verification = _first_field(
+        parcel,
+        "verification",
+        "required_verification",
+    ) or _first_field(selected, "verification", "required_verification")
+    centroid = parcel.get("centroid")
+    coordinates = (
+        f"{centroid[1]}, {centroid[0]} (lat, lon)"
+        if isinstance(centroid, list) and len(centroid) >= 2
+        else "not available"
+    )
+    return (
+        f"suitability={suitability}; risk driver={risk_driver or 'not available'}; "
+        f"evidence={evidence or 'not available'}; coordinates={coordinates}; "
+        f"cells={parcel.get('cell_ids', 'not available')}; "
+        f"verification={verification or 'not available'}"
+    )
+
+
 def answer(question: str) -> dict:
     q = (question or "").strip()
     low = q.lower()
@@ -69,34 +188,73 @@ def answer(question: str) -> dict:
             )
         return {"answer": "; ".join(bits) or "No lake_growth on the signal artifact.", "sources": used, "invented": False}
 
-    m = re.search(r"(blr_p_\d{4}|p[_-]?(\d{4,}))", low)
-    if m or "parcel" in low or "why plant" in low or "why this" in low:
+    parcel_ids = _parcel_ids(low)
+    if parcel_ids or "parcel" in low or "why plant" in low or "why this" in low:
         have("plan.json", "candidates.json")
-        raw = m.group(1) if m else None
-        pid = raw if raw and raw.startswith("blr_") else (f"p_{m.group(2)}" if m and m.group(2) else None)
-        selected = {s["parcel_id"]: s for s in plan.get("selected") or []}
-        cand = {c["parcel_id"]: c for c in candidates} if isinstance(candidates, list) else {}
-        if pid and pid in selected:
-            s, c = selected[pid], cand.get(pid) or {}
-            text = (
-                f"{pid} is in the selected plan because it clears the triple-return/$ greedy with "
-                f"no double-counted cell EAL. type={c.get('type', 'unknown')}, "
-                f"cost=${_fmt(s.get('cost_usd'))}, avoided people-risk={_fmt(s.get('avoided_eal_people'))}/yr, "
-                f"CO₂={_fmt(s.get('co2_t_10yr'))} t / 10yr, income=${_fmt(s.get('income_usd_yr'))}/yr. "
-                f"Cells: {c.get('cell_ids')}."
+        selected_rows = plan.get("selected") or []
+        selected = {
+            row.get("parcel_id"): row
+            for row in selected_rows
+            if isinstance(row, dict) and row.get("parcel_id")
+        }
+        ranks = {row.get("parcel_id"): rank for rank, row in enumerate(selected_rows, start=1)}
+        cand = {
+            row.get("parcel_id"): row
+            for row in candidates
+            if isinstance(row, dict) and row.get("parcel_id")
+        } if isinstance(candidates, list) else {}
+        if parcel_ids:
+            explanations = []
+            for pid in parcel_ids:
+                parcel = cand.get(pid)
+                selection = selected.get(pid)
+                if parcel is None:
+                    explanations.append(
+                        f"{pid}: not present in candidates; no reason can be inferred"
+                    )
+                    continue
+                if selection is None:
+                    status = (
+                        "not selected in the current plan; the artifacts do not provide "
+                        "a causal rejection reason"
+                    )
+                else:
+                    status = (
+                        f"selected at priority {ranks[pid]} by the optimizer; "
+                        f"cost=${_fmt(selection.get('cost_usd'))}, annual expected people-risk avoided="
+                        f"{_fmt(selection.get('avoided_eal_people'))}, CO₂={_fmt(selection.get('co2_t_10yr'))} "
+                        f"t/10yr, livelihood-income potential=${_fmt(selection.get('income_usd_yr'))}/yr"
+                    )
+                explanations.append(
+                    f"{pid}: {status}; type={parcel.get('type', 'not available')}; "
+                    f"area={_fmt(parcel.get('area_ha'))} ha; {_parcel_evidence(parcel, selection)}"
+                )
+            prefix = (
+                "The selected order is optimizer output, not observed causal proof. "
+                if any(pid in selected for pid in parcel_ids)
+                else ""
             )
-            return {"answer": text, "sources": used, "invented": False}
-        if pid:
             return {
-                "answer": f"{pid} is not in the current selected set. I will not invent a reason.",
+                "answer": prefix + " ".join(explanations),
                 "sources": used,
                 "invented": False,
             }
         top = (plan.get("selected") or [])[:3]
         if not top:
             return {"answer": "The current plan has no selected parcels.", "sources": used, "invented": False}
-        lines = [f"{s['parcel_id']}: ${s['cost_usd']:,.0f}, people-risk {s['avoided_eal_people']}" for s in top]
-        return {"answer": "Top selected parcels: " + "; ".join(lines), "sources": used, "invented": False}
+        lines = []
+        for rank, selection in enumerate(top, start=1):
+            pid = selection.get("parcel_id")
+            parcel = cand.get(pid) or {}
+            lines.append(
+                f"#{rank} {pid}: ${_fmt(selection.get('cost_usd'))}, annual expected people-risk "
+                f"{_fmt(selection.get('avoided_eal_people'))}; {_parcel_evidence(parcel, selection)}"
+            )
+        return {
+            "answer": "Top selected parcels (model output): " + "; ".join(lines),
+            "sources": used,
+            "invented": False,
+        }
 
     if any(w in low for w in ("csi", "backtest", "sentinel", "sar", "2024", "counterfactual")):
         have("backtest.json")
@@ -111,12 +269,15 @@ def answer(question: str) -> dict:
         else:
             text = (
                 f"Event {backtest.get('event_date')}: CSI={csi}, POD={backtest.get('hit_rate_pod')}, "
-                f"FAR={backtest.get('false_alarm_ratio')}."
+                f"FAR={backtest.get('false_alarm_ratio')}. "
+                "The flood method is a Copernicus GLO-30 local-min HAND proxy with stage calibrated "
+                "on this event, so these are calibration-event metrics, not independent validation."
             )
         if cf.get("people_exposed_baseline") is not None:
             text += (
-                f" Counterfactual exposure {cf.get('people_exposed_baseline')} → "
-                f"{cf.get('people_exposed_with_plan')} ({cf.get('reduction_pct')}% reduction)."
+                f" Counterfactual simulation exposure {cf.get('people_exposed_baseline')} → "
+                f"{cf.get('people_exposed_with_plan')} ({cf.get('reduction_pct')}% reduction); "
+                "this is not an observed outcome or unique lives."
             )
         return {"answer": text, "sources": used, "invented": False}
 
@@ -134,7 +295,7 @@ def answer(question: str) -> dict:
         "prevent", "interven", "measure", "wetland", "lake", "drain", "rajakaluve",
         "what can", "what should", "nature-based", "nbs", "plant", "defense", "defence",
     )):
-        have("plan.json", "candidates.json")
+        have("plan.json", "candidates.json", "backtest.json")
         selected = plan.get("selected") or []
         cand = {c["parcel_id"]: c for c in candidates} if isinstance(candidates, list) else {}
         mix: dict[str, dict] = {}
@@ -153,12 +314,16 @@ def answer(question: str) -> dict:
             for k, v in sorted(mix.items(), key=lambda kv: -kv[1]["people"])
         ]
         t = plan.get("totals") or {}
+        hazard_method = (backtest.get("provenance") or {}).get("method") or (
+            "Copernicus GLO-30 local-min HAND proxy; stage calibrated on this event"
+        )
         text = (
             f"Preventive NbS in the current ${ _fmt(plan.get('budget_usd')) } plan "
             f"({len(selected)} parcels, spend ${_fmt(t.get('cost_usd'))}): "
             + "; ".join(parts)
             + ". people_protected is annual expected people-risk avoided, not unique lives. "
-            "Types sit on OSM lakes/drains + HAND valleys; CSI for this city is not invented."
+            f"Hazard basis: {hazard_method}. This is a local-min HAND proxy calibrated on this event, "
+            "not Whitebox HAND or an independently validated hydrodynamic model."
         )
         return {"answer": text, "sources": used, "invented": False}
 
@@ -170,8 +335,9 @@ def answer(question: str) -> dict:
             f"{len(plan.get('selected') or [])} parcels, spend ${_fmt(t.get('cost_usd'))}, "
             f"annual expected people-risk avoided {_fmt(t.get('people_protected'))}, "
             f"{_fmt(t.get('co2_t_10yr'))} tCO₂ / 10yr, ${_fmt(t.get('income_usd_yr'))}/yr income, "
-            f"{_fmt(t.get('households_benefiting'))} households. "
-            "people_protected is expected people-risk avoided, not unique lives."
+            "with carbon and livelihood income computed from literature factors. "
+            "people_protected is expected people-risk avoided, not unique people or observed lives saved. "
+            "The artifacts do not support a households-reached claim."
         )
         note = (plan.get("provenance") or {}).get("candidates_note")
         if note:
@@ -180,10 +346,20 @@ def answer(question: str) -> dict:
 
     if "responsible" in low or "government" in low or "attribution" in low:
         have("attribution.json")
+        levers = []
+        for key in ("government_levers", "community_levers", "household_levers"):
+            for row in attribution.get(key) or []:
+                if not isinstance(row, dict):
+                    continue
+                levers.append(
+                    f"{row.get('lever')} (provisional lead "
+                    f"{row.get('implementation_lead', row.get('owner', 'not available'))})"
+                )
         text = (
-            f"Responsibility split: government {attribution.get('government_pct')}%, "
-            f"community {attribution.get('community_pct')}%, household {attribution.get('household_pct')}%. "
-            f"{(attribution.get('provenance') or {}).get('data_status', '')}"
+            "The artifacts do not support causal responsibility percentages, so none are reported. "
+            "Available implementation-role assumptions: "
+            + ("; ".join(levers) if levers else "none")
+            + ". These roles require local confirmation and are not an assignment of blame."
         )
         return {"answer": text, "sources": used, "invented": False}
 
@@ -193,6 +369,7 @@ def answer(question: str) -> dict:
     text = (
         f"I only state numbers from artifacts. Headline recurrence is {h} years; "
         f"current plan spends ${_fmt(t.get('cost_usd'))} of ${_fmt(plan.get('budget_usd'))}. "
-        "Ask about the signal, a parcel id (p_0007), the plan, landslides, lakes, or the backtest."
+        "Ask about the signal, a selected preventive-measure ID, the plan, landslides, lakes, "
+        "or the backtest."
     )
     return {"answer": text, "sources": used, "invented": False}

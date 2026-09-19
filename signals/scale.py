@@ -183,8 +183,14 @@ def run(args: argparse.Namespace) -> None:
                 )
                 h["headline_region"] = "nepal_adjacent"
                 signal["headline"] = h
+                signal["headline_region_return_levels_mm"] = nested.get("return_levels_mm")
+                signal["headline_region_return_levels_ci95"] = nested.get("return_levels_ci95")
+                signal["headline_region_trend"] = nested.get("trend")
+                signal["return_levels_region"] = args.region
                 signal["provenance"]["headline_note"] = (
-                    "HMA-pooled late GEV did not identify a recurrence shift; headline uses Nepal-adjacent subset."
+                    "HMA-pooled late GEV did not identify a recurrence shift; headline uses "
+                    "the Nepal-adjacent subset. Top-level return_levels_mm are HMA-pooled; "
+                    "headline_region_return_levels_mm contains the Nepal-adjacent curve."
                 )
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)

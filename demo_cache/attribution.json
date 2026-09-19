@@ -1,77 +1,40 @@
 {
-  "government_pct": 15,
-  "community_pct": 51,
-  "household_pct": 34,
+  "government_pct": null,
+  "community_pct": null,
+  "household_pct": null,
+  "quantified_responsibility_split_available": false,
   "government_levers": [
     {
-      "lever": "wetland_restore",
-      "owner": "government",
-      "risk_share_pct": 10.7,
-      "fix_cost_usd": 213120.0,
-      "people_protected": 8125.349,
-      "source": "Wetland attenuation of peak flows; high soil-carbon uptake (Ramsar / IPCC wetlands supplement)."
-    },
-    {
-      "lever": "riverbank_bio",
-      "owner": "government",
-      "risk_share_pct": 13.1,
-      "fix_cost_usd": 261300.0,
-      "people_protected": 7539.444,
-      "source": "Bioengineered riverbank protection (live crib walls, brush layering) per ICIMOD/DSCWM manuals."
-    },
-    {
       "lever": "floodplain_restore",
+      "implementation_lead": "government",
       "owner": "government",
-      "risk_share_pct": 10.6,
-      "fix_cost_usd": 212240.0,
-      "people_protected": 5628.834,
+      "risk_share_pct": null,
+      "plan_spend_usd": 1760000.0,
+      "fix_cost_usd": 1760000.0,
+      "annual_expected_people_risk_avoided": 16058.307,
+      "people_protected": 16058.307,
+      "risk_driver": "flood",
       "source": "NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue."
     },
     {
       "lever": "drainage_and_glof_outlet",
+      "implementation_lead": "government",
       "owner": "government",
-      "risk_share_pct": 7.1,
+      "risk_share_pct": null,
+      "plan_spend_usd": null,
       "fix_cost_usd": 0,
+      "annual_expected_people_risk_avoided": null,
       "people_protected": null,
-      "source": "Share of modeled EAL on flood + GLOF cells \u2014 zoning/drainage/outlet class, not a CSI."
+      "risk_driver": "flood and GLOF",
+      "source": "Planning role only: zoning, drainage, and outlet works normally require public authority. No causal share or plan benefit is quantified."
     }
   ],
-  "community_levers": [
-    {
-      "lever": "afforestation",
-      "owner": "community",
-      "risk_share_pct": 15.3,
-      "fix_cost_usd": 305190.0,
-      "people_protected": 17611.062,
-      "source": "Catchment afforestation for slope stability and infiltration; sequestration from IPCC AFOLU defaults."
-    },
-    {
-      "lever": "bamboo_slope",
-      "owner": "community",
-      "risk_share_pct": 23.4,
-      "fix_cost_usd": 467160.0,
-      "people_protected": 14621.225,
-      "source": "Bamboo root reinforcement for shallow landslides; bamboo is an established Nepali rural cash crop (INBAR)."
-    }
-  ],
-  "household_levers": [
-    {
-      "lever": "vetiver_slope",
-      "owner": "household",
-      "risk_share_pct": 27.0,
-      "fix_cost_usd": 539550.0,
-      "people_protected": 14418.266,
-      "source": "Vetiver hedgerows cut slope erosion >90% (Truong et al.); cost/income from ICIMOD bioengineering field costings."
-    }
-  ],
-  "driver_shares": {
-    "government": 7.1,
-    "community": 55.7,
-    "household": 37.1
-  },
+  "community_levers": [],
+  "household_levers": [],
+  "driver_shares": null,
   "provenance": {
-    "data_status": "model output \u2014 70% hazard-driver EAL + 30% selected spend; not a legal assignment of blame",
-    "method": "flood+GLOF EAL \u2192 government; landslide EAL \u2192 community/household; mix with plan spend",
-    "generated_utc": "2026-09-19T20:39:57Z"
+    "data_status": "planning assumptions plus model-output spend; no empirical causal attribution percentages",
+    "method": "intervention type mapped to a provisional implementation lead; roles require local confirmation",
+    "generated_utc": "2026-09-19T21:30:06Z"
   }
 }

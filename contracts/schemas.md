@@ -52,6 +52,11 @@ An array of feasible intervention parcels.  Required fields are `parcel_id`,
 `type` is one of `vetiver_slope`, `bamboo_slope`, `floodplain_restore`,
 `wetland_restore`, `afforestation`, or `riverbank_bio`.
 
+Generated candidates should also include `risk_driver`, `suitability_score`,
+`suitability_evidence`, `rationale`, `data_status`, and `verification`. Candidate
+type and area must follow deterministic terrain/hazard/land-cover rules; random
+assignment is permitted only inside explicitly synthetic test fixtures.
+
 ## `plan.json`
 
 **Required:** `budget_usd`, `mode`, `selected`, `totals`, `frontier`, `cvar`.
@@ -61,6 +66,11 @@ An array of feasible intervention parcels.  Required fields are `parcel_id`,
 the UI must label it “annual expected people-risk avoided”, not unique lives.
 `cvar.tail_people_protected` is the lower-tail (worst 10%) mean of the same
 metric under the optimizer's stated scenario model.
+
+`totals.households_benefiting` is nullable. It must remain `null` unless a
+documented intervention-area employment/adoption model exists; exposed hazard
+cell population must never be divided by average household size and presented
+as livelihood beneficiaries.
 
 ## `backtest.json` and `attribution.json`
 

@@ -1,14 +1,14 @@
-"""UNOSAT Sentinel-1 backtest + D8 HAND hazard for Koshi/Madhesh.
+"""UNOSAT Sentinel-1 backtest + screening HAND hazard for Koshi/Madhesh.
 
 Observed flood: UNITAR-UNOSAT FL20240928NPL, S-1 27 Sep 2024 Koshi/Madhesh.
-Model: Copernicus GLO-30 fill → D8 → accumulation → HAND; stage calibrated
-to maximise CSI on that event (screening-grade NumPy, not Whitebox).
+Model: Copernicus GLO-30 with Whitebox, D8, and local-min HAND candidates;
+the best stored result is explicitly named in provenance and its stage is
+calibrated to maximise CSI on that event.
 """
 from __future__ import annotations
 
 import argparse
 import json
-import random
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -20,7 +20,6 @@ from rasterio.transform import from_origin
 from shapely.geometry import mapping, shape
 from shapely.ops import unary_union
 
-from optimize.economics import FACTORS
 from .hand import glof_fill, hand
 from .osm import fetch_assets
 from .whitebox_hand import try_hand as whitebox_hand
@@ -175,7 +174,7 @@ def calibrate_flood(elev: np.ndarray, obs: np.ndarray, domain: np.ndarray,
     }
 
 
-def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lhasa_grid, rng: random.Random) -> list[dict]:
+def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lhasa_grid) -> list[dict]:
     h, w = elev.shape
     gy, gx = np.gradient(np.nan_to_num(elev, nan=np.nanmean(elev)))
     slope_deg = np.degrees(np.arctan(np.hypot(gy, gx) / max(abs(transform.a) * 111_320, 1e-3)))
@@ -202,20 +201,24 @@ def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lha
                 dens = float(np.nanmean(np.clip(pop_grid[r0:r0 + step, c0:c0 + step], 0, None)))
                 cell_km = step * abs(transform.a) * 111.32
                 pop = int(max(20, dens * cell_km * cell_km))
+                population_status = "WorldPop/GHSL raster aggregate"
             else:
-                pop = int(max(20, 120 + 900 * flooded + 40 * observed + rng.randint(0, 80)))
+                pop = int(max(20, round(120 + 900 * flooded + 40 * observed)))
+                population_status = "deterministic coarse fallback assumption; population raster unavailable"
             if cover is not None:
                 code = float(np.nanmedian(cover[r0:r0 + step, c0:c0 + step]))
                 lc = rasters.landcover_name(code)
+                landcover_status = "ESA WorldCover cell median"
             else:
-                lc = "cropland" if flooded > 0.35 else "shrub"
+                lc = "unknown"
+                landcover_status = "unavailable; field or raster verification required"
             slide = round(min(0.75, 0.03 + sl / 80 + (0.12 if lc in ("bare", "grass", "cropland") else 0.0)), 3)
             if lhasa_grid is not None:
                 sus = float(np.nanmean(lhasa_grid[r0:r0 + step, c0:c0 + step]))
                 if np.isfinite(sus):
                     # NASA LHASA susceptibility is 1–5 (very low–very high).
                     slide = round(min(0.85, 0.5 * slide + 0.5 * max(0.0, (sus - 1.0) / 4.0)), 3)
-            depth100 = round(max(0.05, 3.2 * flooded + 0.4 * glof_d + rng.uniform(0, 0.2)), 2)
+            depth100 = round(max(0.05, 3.2 * flooded + 0.4 * glof_d), 2)
             depth10 = round(max(0.0, 0.35 * depth100), 2)
             cell_assets = []
             for a in assets:
@@ -225,7 +228,8 @@ def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lha
                 "r0": r0, "c0": c0, "west": west, "east": east, "south": south, "north": north,
                 "flooded": flooded, "observed": observed, "z": z, "glof_d": glof_d, "sl": sl,
                 "pop": pop, "lc": lc, "slide": slide, "depth100": depth100, "depth10": depth10,
-                "cell_assets": cell_assets[:4],
+                "cell_assets": cell_assets[:4], "population_status": population_status,
+                "landcover_status": landcover_status,
             })
             pops_tmp.append(pop)
     p90 = sorted(pops_tmp)[int(0.7 * (len(pops_tmp) - 1))] if pops_tmp else 1
@@ -259,6 +263,11 @@ def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lha
                 "elev_m": round(b["z"], 1),
                 "slope_deg": round(b["sl"], 1),
                 "landcover": b["lc"],
+                "population_data_status": b["population_status"],
+                "landcover_data_status": b["landcover_status"],
+                "flood_depth_data_status": (
+                    "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+                ),
                 "low_income_score": round(low_income, 2),
                 "equity_weight": equity,
             },
@@ -267,47 +276,268 @@ def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lha
     return feats
 
 
-def _candidates(features: list[dict], rng: random.Random) -> list[dict]:
-    out = []
-    i = 7
-    types = list(FACTORS)
-    for feat in features:
-        p = feat["properties"]
-        flooded = p["modeled_flood_frac"]
-        slope = p.get("slope_deg") or (4 + 18 * p["landslide_prob"])
-        landcover = p.get("landcover") or ("cropland" if flooded > 0.35 else "shrub")
-        if flooded > 0.35:
-            ptype = rng.choice(["wetland_restore", "floodplain_restore", "riverbank_bio"])
-        elif slope > 8:
-            ptype = rng.choice(["afforestation", "bamboo_slope", "vetiver_slope"])
-        else:
-            ptype = rng.choice(["afforestation", "bamboo_slope", "vetiver_slope"])
-        ring = feat["geometry"]["coordinates"][0]
-        cx = sum(x for x, _ in ring[:-1]) / 4
-        cy = sum(y for _, y in ring[:-1]) / 4
-        out.append({
-            "parcel_id": f"p_{i:04d}",
-            "type": ptype,
-            "area_ha": round(rng.uniform(0.8, 6.0), 2),
-            "centroid": [round(cx, 5), round(cy, 5)],
-            "cell_ids": [p["cell_id"]],
+CANDIDATE_RULE_VERSION = "deterministic_cell_rules_v1"
+MAX_CANDIDATES = 280
+
+# These are deliberately coarse screening footprints, not inferred parcel areas.
+# The hazard grid is about 8 km across and cannot support sub-cell parcel sizing.
+SCREENING_AREA_HA = {
+    "vetiver_slope": 1.0,
+    "bamboo_slope": 2.0,
+    "afforestation": 3.0,
+    "floodplain_restore": 4.0,
+    "wetland_restore": 3.0,
+    "riverbank_bio": 1.0,
+}
+
+
+def _candidate_centroid(feature: dict) -> list[float]:
+    ring = feature["geometry"]["coordinates"][0]
+    points = ring[:-1] if len(ring) > 1 and ring[0] == ring[-1] else ring
+    return [
+        round(sum(float(point[0]) for point in points) / len(points), 5),
+        round(sum(float(point[1]) for point in points) / len(points), 5),
+    ]
+
+
+def _flood_candidate_rule(properties: dict) -> dict | None:
+    flooded = float(properties.get("modeled_flood_frac", 0.0) or 0.0)
+    observed = float(properties.get("observed_flood_frac", 0.0) or 0.0)
+    depths = properties.get("flood_depth_m") or {}
+    depth100 = float(depths.get("rp100", 0.0) or 0.0)
+    glof_depth = float(properties.get("glof_depth_m", 0.0) or 0.0)
+    landcover = str(properties.get("landcover") or "unknown")
+
+    # Historical observed flood is valid evidence for preventive siting, while
+    # modelled exposure extends the screen beyond that one event. Requiring one
+    # of those explicit signals avoids using the heuristic depth floor.
+    if flooded <= 0.0 and observed <= 0.0 and glof_depth < 0.25:
+        return None
+    if landcover in ("built", "tree"):
+        return None
+
+    if landcover == "wetland":
+        intervention = "wetland_restore"
+        rationale = (
+            "Existing wetland cover and modelled flood exposure support screening "
+            "for wetland restoration or reconnection."
+        )
+        cover_score = 1.0
+    elif landcover == "water":
+        intervention = "riverbank_bio"
+        rationale = (
+            "Cell-scale water cover is the only available channel proxy; screen "
+            "bioengineered bank protection after confirming an eroding bank."
+        )
+        cover_score = 0.8
+    else:
+        intervention = "floodplain_restore"
+        rationale = (
+            "Modelled inundation/depth supports floodplain restoration screening; "
+            "the coarse cell does not identify a parcel or prove connectivity."
+        )
+        cover_score = {
+            "cropland": 0.9,
+            "grass": 0.8,
+            "shrub": 0.7,
+            "bare": 0.6,
+            "unknown": 0.5,
+        }.get(landcover, 0.4)
+
+    flood_signal = max(
+        flooded,
+        observed,
+        min(glof_depth / 2.0, 1.0),
+    )
+    suitability = round(min(1.0, 0.75 * flood_signal + 0.25 * cover_score), 3)
+    triggering_hazard = "glof" if glof_depth >= max(0.25, depth100) else "flood"
+    verification = [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review.",
+    ]
+    if intervention == "riverbank_bio":
+        verification.insert(1, "Map channel distance and confirm active bank erosion.")
+
+    return {
+        "type": intervention,
+        "triggering_hazard": triggering_hazard,
+        "risk_driver": (
+            "modelled_glof_depth" if triggering_hazard == "glof"
+            else "modelled_flood_exposure_and_rp100_depth"
+        ),
+        "suitability_score": suitability,
+        "suitability_evidence": {
+            "modeled_flood_fraction": round(flooded, 3),
+            "observed_flood_fraction": round(observed, 3),
+            "flood_depth_rp100_m": round(depth100, 2),
+            "glof_depth_m": round(glof_depth, 2),
+            "landcover": landcover,
+            "channel_proximity": (
+                "cell-scale water-cover proxy only"
+                if landcover == "water"
+                else "not available at parcel scale"
+            ),
+        },
+        "rationale": rationale,
+        "verification": verification,
+    }
+
+
+def _landslide_candidate_rule(properties: dict) -> dict | None:
+    probability = float(properties.get("landslide_prob", 0.0) or 0.0)
+    slope = float(properties.get("slope_deg", 0.0) or 0.0)
+    landcover = str(properties.get("landcover") or "unknown")
+
+    if not ((slope >= 8.0 and probability >= 0.12) or probability >= 0.30):
+        return None
+    if landcover in ("built", "water", "wetland", "tree"):
+        return None
+
+    if landcover == "cropland" or slope >= 20.0:
+        intervention = "vetiver_slope"
+        rationale = (
+            "Elevated slope/landslide susceptibility and non-built cover support "
+            "screening shallow-root reinforcement with vetiver hedgerows."
+        )
+        cover_score = 0.9 if landcover == "cropland" else 0.75
+    elif landcover == "shrub":
+        intervention = "bamboo_slope"
+        rationale = (
+            "Elevated slope/landslide susceptibility with shrub cover supports "
+            "screening bamboo-based slope bioengineering."
+        )
+        cover_score = 0.8
+    else:
+        intervention = "afforestation"
+        rationale = (
+            "Elevated slope/landslide susceptibility with non-built, non-forest "
+            "cover supports screening catchment afforestation."
+        )
+        cover_score = {
+            "bare": 0.8,
+            "grass": 0.7,
+            "unknown": 0.5,
+        }.get(landcover, 0.5)
+
+    slope_signal = min(max(slope - 8.0, 0.0) / 22.0, 1.0)
+    susceptibility_signal = min(max(probability, 0.0), 1.0)
+    suitability = round(
+        min(1.0, 0.45 * susceptibility_signal + 0.35 * slope_signal + 0.20 * cover_score),
+        3,
+    )
+    verification = [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Verify slope angle, soil depth, drainage, and failure mechanism in the field.",
+        "Obtain geotechnical review before treating active or deep-seated landslides.",
+        "Confirm species choice and maintenance plan with the community.",
+    ]
+    return {
+        "type": intervention,
+        "triggering_hazard": "landslide",
+        "risk_driver": "landslide_susceptibility_and_slope",
+        "suitability_score": suitability,
+        "suitability_evidence": {
+            "landslide_probability_or_susceptibility": round(probability, 3),
             "slope_deg": round(slope, 1),
             "landcover": landcover,
-        })
-        i += 1
-        if p["eal_people"] > 3 and len(out) < 280:
+        },
+        "rationale": rationale,
+        "verification": verification,
+    }
+
+
+def _candidates(features: list[dict]) -> list[dict]:
+    """Build deterministic, screening-grade interventions from hazard cells.
+
+    Geometry is the source hazard-cell footprint and area is an explicit
+    type-level screening assumption. Neither should be interpreted as a
+    surveyed parcel.
+    """
+    out: list[dict] = []
+    ordered = sorted(features, key=lambda feature: str(feature["properties"]["cell_id"]))
+    for feature in ordered:
+        properties = feature["properties"]
+        cell_id = str(properties["cell_id"])
+        centroid = _candidate_centroid(feature)
+        landcover = str(properties.get("landcover") or "unknown")
+        slope = round(float(properties.get("slope_deg", 0.0) or 0.0), 1)
+        population = int(max(0, float(properties.get("population", 0) or 0)))
+        assets = sorted(str(asset) for asset in (properties.get("critical_assets") or []))
+
+        rules = [
+            rule for rule in (
+                _flood_candidate_rule(properties),
+                _landslide_candidate_rule(properties),
+            )
+            if rule is not None
+        ]
+        rules.sort(key=lambda rule: (-rule["suitability_score"], rule["type"]))
+        for rule in rules:
+            intervention = rule["type"]
+            area = SCREENING_AREA_HA[intervention]
+            verification = list(rule["verification"])
+            area_basis = (
+                f"{area:.1f} ha type-level screening footprint assumption; "
+                "not measured from raster or cadastral data"
+            )
+            parcel_id = f"p_{cell_id}_{intervention}"
+            evidence = {
+                **rule["suitability_evidence"],
+                "cell_population": population,
+                "critical_assets": assets,
+                "eal_people": round(float(properties.get("eal_people", 0.0) or 0.0), 3),
+                "eal_usd": round(float(properties.get("eal_usd", 0.0) or 0.0), 2),
+                "population_data_status": properties.get(
+                    "population_data_status", "not specified in source cell"
+                ),
+                "landcover_data_status": properties.get(
+                    "landcover_data_status", "not specified in source cell"
+                ),
+                "flood_depth_data_status": properties.get(
+                    "flood_depth_data_status", "not specified in source cell"
+                ),
+            }
             out.append({
-                "parcel_id": f"p_{i:04d}",
-                "type": rng.choice(types),
-                "area_ha": round(rng.uniform(1.0, 5.5), 2),
-                "centroid": [round(cx + 0.015, 5), round(cy, 5)],
-                "cell_ids": [p["cell_id"]],
-                "slope_deg": round(slope, 1),
+                "parcel_id": parcel_id,
+                "type": intervention,
+                "intervention_type": intervention,
+                "area_ha": area,
+                "centroid": centroid,
+                "geometry": feature["geometry"],
+                "geometry_scope": "source hazard-cell footprint; not a parcel boundary",
+                "cell_ids": [cell_id],
+                "slope_deg": slope,
                 "landcover": landcover,
+                "triggering_hazard": rule["triggering_hazard"],
+                "risk_driver": rule["risk_driver"],
+                "suitability_score": rule["suitability_score"],
+                "suitability_evidence": evidence,
+                "rationale": rule["rationale"],
+                "exposed_population": population,
+                "exposed_assets": assets,
+                "exposure_scope": "population/assets in source hazard cell; not parcel-level impact",
+                "data_status": (
+                    "screening-grade deterministic cell-level candidate; "
+                    "parcel location and feasible area require verification"
+                ),
+                "assumptions": [
+                    "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+                    area_basis,
+                    "Intervention effectiveness is applied later from the cited screening factor table.",
+                ],
+                "provenance": {
+                    "method": CANDIDATE_RULE_VERSION,
+                    "source_cell_id": cell_id,
+                    "source_fields": sorted(evidence),
+                    "geometry_basis": "hazard.geojson cell geometry",
+                    "area_basis": area_basis,
+                },
+                "verification": verification,
+                "required_verification": verification,
             })
-            i += 1
-        if len(out) >= 280:
-            break
+            if len(out) >= MAX_CANDIDATES:
+                return out
     return out
 
 
@@ -368,8 +598,7 @@ def run(root: Path) -> None:
     (art / "flood_modeled.geojson").write_text(json.dumps(modeled_gj))
     (art / "flood_observed.geojson").write_text(json.dumps(observed_gj))
 
-    rng = random.Random(20260919)
-    cells = _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lhasa_grid, rng)
+    cells = _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lhasa_grid)
     hazard = {
         "type": "FeatureCollection",
         "features": cells,
@@ -396,7 +625,7 @@ def run(root: Path) -> None:
         },
     }
     (art / "hazard.geojson").write_text(json.dumps(hazard))
-    cands = _candidates(cells, rng)
+    cands = _candidates(cells)
     (art / "candidates.json").write_text(json.dumps(cands))
 
     px_km2 = abs(transform.a * transform.e) * 111.32 * 111.32

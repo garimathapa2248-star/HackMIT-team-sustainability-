@@ -1,5 +1,6 @@
 {
   "region": "hma",
+  "return_levels_region": "hma",
   "stations_processed": 498,
   "station_years": 12066,
   "return_levels_mm": {

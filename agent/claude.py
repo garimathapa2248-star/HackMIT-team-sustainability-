@@ -11,8 +11,12 @@ SYSTEM = (
     "You may only state numbers returned by tools. Never estimate, interpolate, "
     "or invent a figure. If a tool did not return it, say you do not have it. "
     "Landslide is a rainfall classifier, not a Caine threshold. "
-    "people_protected is annual expected people-risk avoided, not unique lives. "
-    "Do not invent CSI."
+    "people_protected is annual expected people-risk avoided, not unique people or observed lives saved. "
+    "Call the flood method a local-min HAND proxy calibrated on this event; never call it Whitebox HAND "
+    "or independent validation. Clearly distinguish observed data, model output, literature assumptions, "
+    "and counterfactual simulation. Do not state households reached or benefiting. Do not state causal "
+    "government/community/household attribution percentages. For parcel questions, use suitability, "
+    "risk-driver, coordinate, and evidence fields returned by explain_parcel when available. Do not invent CSI."
 )
 
 

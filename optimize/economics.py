@@ -66,11 +66,6 @@ FACTORS: dict[str, dict[str, object]] = {
     },
 }
 
-# Fraction of a household's expected people-risk avoided that maps to one
-# benefiting household — used only to report a headline household count.
-PEOPLE_PER_HOUSEHOLD = 4.5
-
-
 def factor(parcel_type: str) -> dict[str, object]:
     """Return the economics factor row for ``parcel_type`` or raise for an unknown type."""
     try:

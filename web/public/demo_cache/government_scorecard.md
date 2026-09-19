@@ -1,22 +1,26 @@
-# Government scorecard — Koshi screening
+# Preventive Measures Delivery Scorecard — hma
 
-**Status:** model output — 70% hazard-driver EAL + 30% selected spend; not a legal assignment of blame
+**Portfolio status:** counterfactual simulation — deterministic candidate suitability plus literature-based intervention effects; field verification required
+**Evidence labels:** observed data · model output · literature assumption · counterfactual simulation
 
-## Responsibility share
-Government **15%** of avoidable modeled EAL (flood + GLOF drivers).
-Community 51% · household 34%.
-This is a screening split from hazard + selected spend, not a legal assignment of blame.
+## Governance boundary
 
-## Levers
-- **wetland_restore** — 10.7% of modeled EAL, fix $213,120, people-risk 8125.35 (Wetland attenuation of peak flows; high soil-carbon uptake (Ramsar / IPCC wetlands supplement).)
-- **riverbank_bio** — 13.1% of modeled EAL, fix $261,300, people-risk 7539.44 (Bioengineered riverbank protection (live crib walls, brush layering) per ICIMOD/DSCWM manuals.)
-- **floodplain_restore** — 10.6% of modeled EAL, fix $212,240, people-risk 5628.83 (NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue.)
-- **drainage_and_glof_outlet** — 7.1% of modeled EAL, fix $0, people-risk not available (Share of modeled EAL on flood + GLOF cells — zoning/drainage/outlet class, not a CSI.)
+No causal responsibility percentages are reported. The implementation-lead mapping is a planning assumption,
+not an empirical attribution, legal assignment, or allocation of blame.
 
-## What the $2M plan does (not unique lives)
-Spend $1,998,560 · annual expected people-risk avoided 67944.2 ·
-17,554 tCO₂ / 10 yr.
+## Public-sector delivery levers
+- **floodplain_restore** — modeled portfolio spend $1,760,000, annual expected people-risk avoided 16058.31. Evidence: NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue.
+- **drainage_and_glof_outlet** — modeled portfolio spend $not available, annual expected people-risk avoided not available. Evidence: Planning role only: zoning, drainage, and outlet works normally require public authority. No causal share or plan benefit is quantified.
 
-## Proof
-CSI 0.086 on UNOSAT S-1 27 Sep 2024 (calibrated on this event). Counterfactual
-{'people_exposed_baseline': 54993.4, 'people_exposed_with_plan': 26845.7, 'reduction_pct': 51.18, 'note': 'Observed-flood-fraction × population, reduced by greedy NbS capture. Not unique lives.'}.
+## Modeled portfolio output
+
+Spend $1,760,000 · annual expected people-risk avoided
+16058.3 (not unique people or observed lives saved) ·
+7,700 tCO₂ / 10 yr from literature factors.
+
+## Hazard evidence
+
+Observed UNOSAT Sentinel-1 extent is compared with a **local-min HAND proxy calibrated on this event**:
+Copernicus GLO-30; local-min HAND proxy; CSI maximised on 27 Sep 2024 scene. Calibration-event CSI 0.086; this is not independent validation.
+
+Counterfactual exposure is a simulation, not an observed outcome: {'people_exposed_baseline': 54993.4, 'people_exposed_with_plan': 38912.4, 'reduction_pct': 29.24, 'note': 'Counterfactual simulation: observed-flood-fraction × population, reduced by literature-based effects for the selected preventive measures. Not unique lives and not an observed intervention trial.', 'risk_layers': {'before': 'risk_before.geojson', 'with_plan': 'risk_with_plan.geojson'}}.
