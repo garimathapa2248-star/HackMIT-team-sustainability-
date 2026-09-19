@@ -1,0 +1,17 @@
+{
+  "region": "koshi_nepal_fixture",
+  "stations_processed": 128,
+  "station_years": 2946,
+  "return_levels_mm": {"2": 54.8, "5": 76.3, "10": 91.7, "25": 112.9, "50": 129.4, "100": 146.8},
+  "return_levels_ci95": {"2": [50.1, 60.6], "5": [67.2, 87.9], "10": [78.6, 108.1], "25": [93.4, 137.5], "50": [103.8, 163.2], "100": [113.1, 194.4]},
+  "headline": {
+    "statement": "SYNTHETIC FIXTURE — replace with a measured early-versus-late EVT comparison.",
+    "old_return_period_yrs": 100,
+    "new_return_period_yrs": null,
+    "threshold_mm": 146.8
+  },
+  "trend": {"metric": "annual_max_1day_precip_mm", "slope_mm_per_decade": null, "p_value": null},
+  "landslide_trigger": {"form": "I = a * D^b", "a": null, "b": null, "n_events": 0, "auc": null},
+  "lake_growth": [{"lake_id": "tsho_rolpa", "name": "Tsho Rolpa", "area_km2_first": null, "area_km2_last": null, "first_year": null, "last_year": null, "pct_growth": null}],
+  "provenance": {"datasets": ["synthetic integration fixture"], "generated_utc": "2026-09-19T00:00:00Z", "data_status": "synthetic fixture — not an observed result"}
+}

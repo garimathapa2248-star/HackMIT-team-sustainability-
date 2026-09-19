@@ -1,0 +1,5 @@
+{
+  "government_pct": 71, "community_pct": 19, "household_pct": 10,
+  "government_levers": [{"lever": "drainage_capacity", "risk_share_pct": 28, "fix_cost_usd": 640000, "people_protected": null}],
+  "provenance": {"data_status": "synthetic fixture — values require local validation"}
+}

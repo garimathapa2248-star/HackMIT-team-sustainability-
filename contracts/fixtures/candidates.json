@@ -1,0 +1,4 @@
+[
+  {"parcel_id": "p_0007", "type": "vetiver_slope", "area_ha": 3.2, "centroid": [86.4715, 27.8615], "cell_ids": ["c_00421", "c_00422"], "slope_deg": 22.5, "landcover": "bare"},
+  {"parcel_id": "p_0008", "type": "riverbank_bio", "area_ha": 1.6, "centroid": [86.4765, 27.8615], "cell_ids": ["c_00422"], "slope_deg": 7.2, "landcover": "cropland"}
+]
