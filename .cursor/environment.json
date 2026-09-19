@@ -2,6 +2,7 @@
   "name": "RootLedger",
   "user": "ubuntu",
   "install": "bash .cursor/install.sh",
+  "start": "test -x .venv/bin/python && test -d web/node_modules || bash .cursor/install.sh",
   "terminals": [
     {
       "name": "api",
