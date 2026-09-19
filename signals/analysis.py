@@ -45,7 +45,7 @@ def _scipy():
         from scipy.stats import genextreme, linregress
         return np, genextreme, linregress
     except ImportError as exc:  # pragma: no cover - environment-dependent
-        raise RuntimeError("Install signal/requirements.txt to run EVT analysis.") from exc
+        raise RuntimeError("Install signals/requirements.txt to run EVT analysis.") from exc
 
 
 def _gev_return_level(parameters: tuple[float, float, float], period: int) -> float:
