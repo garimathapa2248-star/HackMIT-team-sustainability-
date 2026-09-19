@@ -79,9 +79,9 @@ def resolve_input_paths(root: Path | str = ".") -> dict[str, Path | None]:
     root = Path(root)
     art, fix = root / "artifacts", root / "contracts" / "fixtures"
     return {
-        "candidates": _first_existing(art / "candidates.json", fix / "candidates.json"),
-        "hazard": _first_existing(art / "hazard.geojson", fix / "hazard.geojson"),
-        "signal": _first_existing(art / "signal.json", fix / "signal.json"),
+        "candidates": _first_existing(root / "candidates.json", art / "candidates.json", fix / "candidates.json"),
+        "hazard": _first_existing(root / "hazard.geojson", art / "hazard.geojson", fix / "hazard.geojson"),
+        "signal": _first_existing(root / "signal.json", art / "signal.json", fix / "signal.json"),
     }
 
 

@@ -164,6 +164,28 @@ def run(args: argparse.Namespace) -> None:
     series = load_lake_series_csv(args.lakes_csv) if args.lakes_csv else None
     signal = fit_signal(rows, args.region, bootstrap_draws=args.bootstrap_draws,
                         landslide_events=events, station_coords=coords, lake_series=series)
+    if signal.get("headline", {}).get("new_return_period_yrs") is None and coords:
+        from .stations import BBOXES
+        lon_min, lat_min, lon_max, lat_max = BBOXES["nepal_adjacent"]
+        keep = {sid for sid, (lat, lon) in coords.items()
+                if lon_min <= lon <= lon_max and lat_min <= lat <= lat_max}
+        subset = [r for r in rows if str(r.get("station_id")) in keep]
+        if subset:
+            nested = fit_signal(subset, "nepal_adjacent", bootstrap_draws=min(300, args.bootstrap_draws),
+                                landslide_events=events, station_coords=coords, lake_series=series)
+            # Keep HMA scale counts; borrow a identified early/late headline from Nepal.
+            if nested.get("headline", {}).get("new_return_period_yrs") is not None:
+                h = dict(nested["headline"])
+                h["statement"] = (
+                    f"Across High Mountain Asia NOAA ISD ({signal['stations_processed']} stations / "
+                    f"{signal['station_years']} station-years). Nepal-adjacent GEV: "
+                    + h["statement"]
+                )
+                h["headline_region"] = "nepal_adjacent"
+                signal["headline"] = h
+                signal["provenance"]["headline_note"] = (
+                    "HMA-pooled late GEV did not identify a recurrence shift; headline uses Nepal-adjacent subset."
+                )
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(signal, indent=2) + "\n")

@@ -21,6 +21,8 @@ BBOXES: dict[str, tuple[float, float, float, float]] = {
     "hma": (66.0, 24.0, 105.0, 41.0),
     # Koshi basin focus for the Tsho Rolpa case study.
     "koshi": (85.0, 26.0, 89.0, 29.0),
+    # Bengaluru Urban + immediate hinterland (lakes / Rajakaluve network).
+    "bangalore": (77.35, 12.75, 77.85, 13.20),
 }
 
 

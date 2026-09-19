@@ -1,1 +1,1 @@
-"""Screening-grade hazard / candidate synthesis until the DEM–HAND twin lands."""
+"""Hazard layer: D8 HAND, GLOF fill, OSM exposure, UNOSAT backtest."""

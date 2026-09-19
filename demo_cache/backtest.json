@@ -1,6 +1,27 @@
 {
-  "event_date": "2024-09-27", "sar_scene": "SYNTHETIC_FIXTURE", "observed_flood_km2": null, "modeled_flood_km2": null,
-  "hit_rate_pod": null, "false_alarm_ratio": null, "critical_success_index": null,
-  "counterfactual": {"people_exposed_baseline": null, "people_exposed_with_plan": null, "reduction_pct": null},
-  "provenance": {"data_status": "synthetic fixture — not a validation"}
+  "event_date": "2024-09-27",
+  "sar_scene": "UNOSAT FL20240928NPL S1_20240927_FloodExtent_Koshi_Madhesh",
+  "observed_flood_km2": 134.18,
+  "modeled_flood_km2": 221.82,
+  "hit_rate_pod": 0.211,
+  "false_alarm_ratio": 0.873,
+  "critical_success_index": 0.086,
+  "stage_m": 1.4,
+  "counts": {
+    "tp": 570,
+    "fp": 3905,
+    "fn": 2137,
+    "tn": 229563
+  },
+  "counterfactual": {
+    "people_exposed_baseline": 54993.4,
+    "people_exposed_with_plan": 26845.7,
+    "reduction_pct": 51.18,
+    "note": "Observed-flood-fraction \u00d7 population, reduced by greedy NbS capture. Not unique lives."
+  },
+  "provenance": {
+    "data_status": "observed UNOSAT S-1 vs local-min HAND proxy; stage calibrated on this event",
+    "method": "Copernicus GLO-30; local-min HAND proxy; CSI maximised on 27 Sep 2024 scene",
+    "generated_utc": "2026-09-19T20:39:09Z"
+  }
 }

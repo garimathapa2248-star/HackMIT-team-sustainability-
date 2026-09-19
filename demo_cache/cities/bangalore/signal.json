@@ -1,0 +1,101 @@
+{
+  "region": "bangalore",
+  "stations_processed": 1,
+  "station_years": 45,
+  "return_levels_mm": {
+    "2": 36.407,
+    "5": 53.87,
+    "10": 71.947,
+    "25": 106.451,
+    "50": 144.409,
+    "100": 197.22
+  },
+  "return_levels_ci95": {
+    "2": [
+      33.247,
+      40.912
+    ],
+    "5": [
+      44.305,
+      64.93
+    ],
+    "10": [
+      54.709,
+      96.766
+    ],
+    "25": [
+      69.342,
+      169.086
+    ],
+    "50": [
+      83.578,
+      287.942
+    ],
+    "100": [
+      96.386,
+      463.762
+    ]
+  },
+  "headline": {
+    "statement": "The early-period 1-in-100-year daily rainfall depth now has a fitted recurrence of 14.28 years in the late-period sample.",
+    "old_return_period_yrs": 100,
+    "new_return_period_yrs": 14.28,
+    "threshold_mm": 121.315,
+    "early_period": [
+      1980,
+      1999
+    ],
+    "late_period": [
+      2000,
+      2024
+    ]
+  },
+  "trend": {
+    "metric": "annual_max_1day_precip_mm",
+    "slope_mm_per_decade": 5.201,
+    "p_value": 0.04698
+  },
+  "landslide_trigger": {
+    "form": "I = a * D^b",
+    "a": null,
+    "b": null,
+    "n_events": 0,
+    "auc": null,
+    "kind": "rainfall_classifier",
+    "presentation": "rainfall classifier, AUC out-of-sample \u2014 not a Caine-style I\u2013D threshold",
+    "note": "Fitted exponent b can be positive (inverse of classic Caine I = a\u00b7D^b with b<0). Do not present the power law as a physical intensity\u2013duration threshold; the claim that survives scrutiny is the held-out rainfall-classifier AUC."
+  },
+  "lake_growth": [],
+  "pot_gpd": {
+    "threshold_mm": 12.8,
+    "n_excesses": 492,
+    "n_years": 45,
+    "shape": 0.1439,
+    "scale": 7.5688,
+    "return_levels_mm": {
+      "2": 42.192,
+      "5": 53.748,
+      "10": 63.56,
+      "25": 78.127,
+      "50": 90.495,
+      "100": 104.161
+    },
+    "method": "POT/GPD, 95th percentile, 3-day decluster of regional daily max",
+    "note": "Regional daily max is a different sample than GEV median-of-station-maxima; use as a tail cross-check, not a replacement headline."
+  },
+  "imerg": {
+    "available": false,
+    "reason": "GPM IMERG V07 is on NASA Earthdata (login). Not fused; headline is ISD GEV only."
+  },
+  "provenance": {
+    "datasets": [
+      "Open-Meteo archive ERA5-Land daily precipitation at Bengaluru (12.97N, 77.59E)",
+      "Copernicus GLO-30 DEM",
+      "OpenStreetMap lakes / drains / schools / clinics",
+      "WorldPop India 1km 2020 (if available)"
+    ],
+    "generated_utc": "2026-09-19T20:49:43Z",
+    "data_status": "model output \u2014 GEV on ERA5-Land daily precip at city centroid; not IMD gauge fusion",
+    "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap; POT/GPD on regional daily max"
+  }
+}

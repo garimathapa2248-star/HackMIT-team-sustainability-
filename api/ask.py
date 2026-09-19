@@ -31,7 +31,7 @@ def answer(question: str) -> dict:
     def have(*keys):
         used.extend(keys)
 
-    if any(w in low for w in ("100-year", "100 year", "return period", "evt", "gev", "rainfall", "storm", "signal", "tail")):
+    if any(w in low for w in ("100-year", "100 year", "return period", "evt", "gev", "rainfall", "storm", "signal", "tail", "station-year", "station year", "stations")):
         have("signal.json")
         h = signal.get("headline") or {}
         t = signal.get("trend") or {}
@@ -58,7 +58,8 @@ def answer(question: str) -> dict:
         )
         return {"answer": text.strip(), "sources": used, "invented": False}
 
-    if "lake" in low or "imja" in low or "rolpa" in low or "thulagi" in low:
+    glacial = "imja" in low or "rolpa" in low or "thulagi" in low
+    if glacial or ("lake" in low and signal.get("lake_growth")):
         have("signal.json")
         bits = []
         for lake in signal.get("lake_growth") or []:
@@ -68,10 +69,11 @@ def answer(question: str) -> dict:
             )
         return {"answer": "; ".join(bits) or "No lake_growth on the signal artifact.", "sources": used, "invented": False}
 
-    m = re.search(r"p[_-]?(\d{4,})", low)
+    m = re.search(r"(blr_p_\d{4}|p[_-]?(\d{4,}))", low)
     if m or "parcel" in low or "why plant" in low or "why this" in low:
         have("plan.json", "candidates.json")
-        pid = f"p_{m.group(1)}" if m else None
+        raw = m.group(1) if m else None
+        pid = raw if raw and raw.startswith("blr_") else (f"p_{m.group(2)}" if m and m.group(2) else None)
         selected = {s["parcel_id"]: s for s in plan.get("selected") or []}
         cand = {c["parcel_id"]: c for c in candidates} if isinstance(candidates, list) else {}
         if pid and pid in selected:
@@ -96,9 +98,10 @@ def answer(question: str) -> dict:
         lines = [f"{s['parcel_id']}: ${s['cost_usd']:,.0f}, people-risk {s['avoided_eal_people']}" for s in top]
         return {"answer": "Top selected parcels: " + "; ".join(lines), "sources": used, "invented": False}
 
-    if any(w in low for w in ("csi", "backtest", "sentinel", "sar", "2024")):
+    if any(w in low for w in ("csi", "backtest", "sentinel", "sar", "2024", "counterfactual")):
         have("backtest.json")
         csi = backtest.get("critical_success_index")
+        cf = backtest.get("counterfactual") or {}
         if csi is None:
             text = (
                 "Backtest CSI is not available. The artifact says "
@@ -110,6 +113,53 @@ def answer(question: str) -> dict:
                 f"Event {backtest.get('event_date')}: CSI={csi}, POD={backtest.get('hit_rate_pod')}, "
                 f"FAR={backtest.get('false_alarm_ratio')}."
             )
+        if cf.get("people_exposed_baseline") is not None:
+            text += (
+                f" Counterfactual exposure {cf.get('people_exposed_baseline')} → "
+                f"{cf.get('people_exposed_with_plan')} ({cf.get('reduction_pct')}% reduction)."
+            )
+        return {"answer": text, "sources": used, "invented": False}
+
+    if "pot" in low or "gpd" in low or "imerg" in low:
+        have("signal.json")
+        pot = signal.get("pot_gpd") or {}
+        imerg = signal.get("imerg") or {}
+        return {
+            "answer": f"POT/GPD: {pot}. IMERG: {imerg.get('reason') or imerg}.",
+            "sources": used,
+            "invented": False,
+        }
+
+    if any(w in low for w in (
+        "prevent", "interven", "measure", "wetland", "lake", "drain", "rajakaluve",
+        "what can", "what should", "nature-based", "nbs", "plant", "defense", "defence",
+    )):
+        have("plan.json", "candidates.json")
+        selected = plan.get("selected") or []
+        cand = {c["parcel_id"]: c for c in candidates} if isinstance(candidates, list) else {}
+        mix: dict[str, dict] = {}
+        for s in selected:
+            kind = (cand.get(s["parcel_id"]) or {}).get("type") or "unknown"
+            row = mix.setdefault(kind, {"n": 0, "cost": 0.0, "people": 0.0, "ha": 0.0})
+            row["n"] += 1
+            row["cost"] += float(s.get("cost_usd") or 0)
+            row["people"] += float(s.get("avoided_eal_people") or 0)
+            row["ha"] += float((cand.get(s["parcel_id"]) or {}).get("area_ha") or 0)
+        if not mix:
+            return {"answer": "The current city pack has no selected parcels.", "sources": used, "invented": False}
+        parts = [
+            f"{k}: {v['n']} parcels, {v['ha']:.1f} ha, ${v['cost']:,.0f}, "
+            f"people-risk avoided {v['people']:.1f}/yr"
+            for k, v in sorted(mix.items(), key=lambda kv: -kv[1]["people"])
+        ]
+        t = plan.get("totals") or {}
+        text = (
+            f"Preventive NbS in the current ${ _fmt(plan.get('budget_usd')) } plan "
+            f"({len(selected)} parcels, spend ${_fmt(t.get('cost_usd'))}): "
+            + "; ".join(parts)
+            + ". people_protected is annual expected people-risk avoided, not unique lives. "
+            "Types sit on OSM lakes/drains + HAND valleys; CSI for this city is not invented."
+        )
         return {"answer": text, "sources": used, "invented": False}
 
     if any(w in low for w in ("budget", "plan", "people", "carbon", "income", "protect", "2m", "$2")):

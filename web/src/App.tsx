@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ask, conceptNote, loadJson, optimize } from "./api";
+import { ask, conceptNote, listCities, loadJson, markdownDoc, optimize } from "./api";
 import HazardMap from "./HazardMap";
 
 type Signal = {
@@ -50,30 +50,73 @@ const money = (n: number) =>
   n >= 1_000_000 ? `$${(n / 1_000_000).toFixed(2)}M` : `$${Math.round(n).toLocaleString()}`;
 
 export default function App() {
-  const [tab, setTab] = useState<"signal" | "plan" | "ask" | "report">("signal");
+  const [tab, setTab] = useState<"signal" | "plan" | "backtest" | "ask" | "report">("signal");
   const [signal, setSignal] = useState<Signal | null>(null);
   const [hazard, setHazard] = useState<GeoJSON.FeatureCollection | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [candidates, setCandidates] = useState<Parcel[]>([]);
-  const [backtest, setBacktest] = useState<{ critical_success_index: number | null; provenance?: { data_status?: string } } | null>(null);
+  const [backtest, setBacktest] = useState<{
+    critical_success_index: number | null;
+    hit_rate_pod?: number | null;
+    false_alarm_ratio?: number | null;
+    observed_flood_km2?: number | null;
+    modeled_flood_km2?: number | null;
+    sar_scene?: string;
+    provenance?: { data_status?: string };
+    counterfactual?: {
+      people_exposed_baseline?: number | null;
+      people_exposed_with_plan?: number | null;
+      reduction_pct?: number | null;
+    };
+  } | null>(null);
+  const [mode, setMode] = useState<"expected" | "cvar">("expected");
+  const [overlay, setOverlay] = useState<"none" | "observed" | "modeled" | "both">("both");
+  const [observed, setObserved] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [modeled, setModeled] = useState<GeoJSON.FeatureCollection | null>(null);
   const [budget, setBudget] = useState(2_000_000);
   const [busy, setBusy] = useState(false);
   const [picked, setPicked] = useState<string | null>(null);
-  const [q, setQ] = useState("Why is the 100-year storm now a 7.75-year storm?");
+  const [q, setQ] = useState("What preventive measures does the $2M plan take?");
   const [a, setA] = useState("");
+  const [city, setCity] = useState("koshi");
+  const [cities, setCities] = useState<{ id: string; name: string; ready?: boolean }[]>([]);
   const [note, setNote] = useState("");
+  const [scorecard, setScorecard] = useState("");
+  const [brief, setBrief] = useState("");
 
   useEffect(() => {
-    loadJson("signal").then(setSignal);
-    loadJson("hazard").then(setHazard);
-    loadJson("plan").then((p: Plan) => {
-      setPlan(p);
-      if (p?.budget_usd) setBudget(p.budget_usd);
-    });
-    loadJson("candidates").then(setCandidates);
-    loadJson("backtest").then(setBacktest);
-    conceptNote().then(setNote);
+    listCities().then((r) => setCities(r.cities || []));
   }, []);
+
+  useEffect(() => {
+    setBusy(true);
+    Promise.all([
+      loadJson("signal", city).then(setSignal),
+      loadJson("hazard", city).then(setHazard),
+      loadJson("plan", city).then((p: Plan) => {
+        setPlan(p);
+        if (p?.budget_usd) setBudget(p.budget_usd);
+      }),
+      loadJson("candidates", city).then(setCandidates),
+      loadJson("backtest", city).then(setBacktest),
+      loadJson("flood_observed", city).then(setObserved),
+      loadJson("flood_modeled", city).then(setModeled),
+      conceptNote(city).then(setNote),
+      markdownDoc("scorecard", city).then(setScorecard),
+      markdownDoc("citizenbrief", city).then(setBrief),
+    ]).finally(() => setBusy(false));
+  }, [city]);
+
+  useEffect(() => {
+    setOverlay(city === "bangalore" ? "modeled" : "both");
+    setQ(
+      city === "bangalore"
+        ? "What preventive measures can be taken in Bangalore?"
+        : "Why is the 100-year storm now a 7.75-year storm?"
+    );
+    setA("");
+    setPicked(null);
+  }, [city]);
 
   const selectedIds = useMemo(() => new Set((plan?.selected || []).map((s) => s.parcel_id)), [plan]);
   const pickedRow = plan?.selected.find((s) => s.parcel_id === picked);
@@ -97,7 +140,7 @@ export default function App() {
   async function rerun(nextBudget: number) {
     setBusy(true);
     try {
-      const next = (await optimize(nextBudget, "expected")) as Plan;
+      const next = (await optimize(nextBudget, mode, city)) as Plan;
       setPlan(next);
     } finally {
       setBusy(false);
@@ -106,7 +149,7 @@ export default function App() {
 
   async function onAsk(e: React.FormEvent) {
     e.preventDefault();
-    const res = await ask(q);
+    const res = await ask(q, city);
     setA(res.answer);
   }
 
@@ -123,22 +166,49 @@ export default function App() {
   return (
     <div className="app">
       <div className="map-wrap">
-        <HazardMap hazard={hazard} candidates={candidates} selectedIds={selectedIds} onSelect={onSelect} />
+        <HazardMap
+          hazard={hazard}
+          candidates={candidates}
+          selectedIds={selectedIds}
+          onSelect={onSelect}
+          observed={observed}
+          modeled={modeled}
+          overlay={overlay}
+        />
         <div className="map-legend">
-          Cells: expected people-risk (darker = higher). Teal dots = selected parcels.
+          Cells: expected people-risk (darker = higher). Coloured dots = selected NbS parcels.
           <br />
-          Screening-grade grid — not DEM/HAND until the twin lands.
+          {city === "bangalore"
+            ? "Gold outline = HAND valley flood proxy. No SAR observed layer for Bengaluru."
+            : "Blue fill = UNOSAT observed. Gold outline = modeled flood."}
         </div>
       </div>
       <aside className="side">
-        <p className="brand">RootLedger · Koshi</p>
+        <p className="brand">RootLedger · {city === "bangalore" ? "Bengaluru" : "Koshi"}</p>
+        <label className="row">
+          <span>City pack</span>
+          <select value={city} onChange={(e) => setCity(e.target.value)}>
+            {(cities.length ? cities : [
+              { id: "koshi", name: "Koshi / Madhesh (Nepal)" },
+              { id: "bangalore", name: "Bengaluru (India)" },
+            ]).map((c) => (
+              <option key={c.id} value={c.id} disabled={c.ready === false}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <h1>{signal ? `100-yr rain now recurs every ${signal.headline.new_return_period_yrs} yr` : "Loading signal…"}</h1>
         <p className="lede">{signal?.headline.statement}</p>
         <div className="banner">
           <strong>Honesty.</strong> Landslide is a rainfall classifier
           {signal ? ` (AUC ${signal.landslide_trigger.auc}, n=${signal.landslide_trigger.n_events} OOS)` : ""},
-          not a Caine threshold. Hazard is a screening lattice. Backtest CSI is
-          {backtest?.critical_success_index == null ? " not available — we will not invent it." : ` ${backtest.critical_success_index}.`}
+          not a Caine threshold. {city === "bangalore"
+            ? "Bengaluru flood is a HAND valley proxy — SAR CSI is not available and will not be invented."
+            : "Hazard is HAND-calibrated on GLO-30 against UNOSAT S-1."} Backtest CSI is{" "}
+          {backtest?.critical_success_index == null
+            ? "not available — we will not invent it."
+            : `${backtest.critical_success_index} (POD ${backtest.hit_rate_pod}, FAR ${backtest.false_alarm_ratio}).`}
         </div>
         <div className="kpis">
           <div className="kpi">
@@ -159,7 +229,7 @@ export default function App() {
           </div>
         </div>
         <div className="tabs">
-          {(["signal", "plan", "ask", "report"] as const).map((id) => (
+          {(["signal", "plan", "backtest", "ask", "report"] as const).map((id) => (
             <button key={id} className={tab === id ? "on" : ""} onClick={() => setTab(id)}>
               {id}
             </button>
@@ -186,7 +256,7 @@ export default function App() {
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
-            <p className="detail">Return levels (mm) with bootstrap 95% CI band. EVT / GEV annual maxima.</p>
+            <p className="detail">Return levels (mm) with bootstrap 95% CI band. EVT / GEV annual maxima. POT/GPD is a cross-check on the same tidy daily series; IMERG is not fused (Earthdata login).</p>
           </>
         )}
 
@@ -194,7 +264,31 @@ export default function App() {
           <>
             <label className="row">
               <span>Budget {money(budget)} {busy ? "· optimizing…" : ""}</span>
-              <span>{plan.selected.length} parcels</span>
+              <span>{plan.selected.length} parcels · {plan.mode}</span>
+            </label>
+            <label className="row">
+              <span>Objective</span>
+              <select
+                value={mode}
+                onChange={(e) => {
+                  const next = e.target.value as "expected" | "cvar";
+                  setMode(next);
+                  setBusy(true);
+                  optimize(budget, next, city).then((p) => setPlan(p as Plan)).finally(() => setBusy(false));
+                }}
+              >
+                <option value="expected">Expected people-risk</option>
+                <option value="cvar">CVaR (worst 10% tail)</option>
+              </select>
+            </label>
+            <label className="row">
+              <span>Flood overlay</span>
+              <select value={overlay} onChange={(e) => setOverlay(e.target.value as typeof overlay)}>
+                <option value="none">cells only</option>
+                <option value="observed">UNOSAT observed</option>
+                <option value="modeled">modeled flood</option>
+                <option value="both">observed + modeled</option>
+              </select>
             </label>
             <input
               className="slider"
@@ -210,6 +304,28 @@ export default function App() {
             <p className="detail">
               Annual expected people-risk avoided, not unique lives. {plan.provenance?.data_status}
             </p>
+            <div className="mix">
+              {Object.entries(
+                (plan.selected || []).reduce<Record<string, { n: number; people: number; cost: number }>>((acc, s) => {
+                  const kind = candidates.find((c) => c.parcel_id === s.parcel_id)?.type || "unknown";
+                  const row = acc[kind] || { n: 0, people: 0, cost: 0 };
+                  row.n += 1;
+                  row.people += s.avoided_eal_people;
+                  row.cost += s.cost_usd;
+                  acc[kind] = row;
+                  return acc;
+                }, {})
+              )
+                .sort((a, b) => b[1].people - a[1].people)
+                .map(([kind, row]) => (
+                  <div className="mix-row" key={kind}>
+                    <b>{kind.replace(/_/g, " ")}</b>
+                    <span>
+                      {row.n} parcels · {money(row.cost)} · {row.people.toFixed(0)} people-risk/yr
+                    </span>
+                  </div>
+                ))}
+            </div>
             <div className="chart">
               <ResponsiveContainer>
                 <ComposedChart data={plan.frontier} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
@@ -230,6 +346,28 @@ export default function App() {
           </>
         )}
 
+        {tab === "backtest" && (
+          <p className="detail">
+            {city === "bangalore" ? (
+              <>
+                <b>Bengaluru has no SAR/UNOSAT scene in this pack.</b> Modeled flood extent{" "}
+                {backtest?.modeled_flood_km2 ?? "—"} km² is a HAND valley proxy. CSI is{" "}
+                <b>null</b> and will not be invented. {backtest?.provenance?.data_status}.
+              </>
+            ) : (
+              <>
+                <b>UNOSAT S-1 27 Sep 2024</b> Koshi/Madhesh ({backtest?.sar_scene}). Observed{" "}
+                {backtest?.observed_flood_km2 ?? "—"} km² vs modeled {backtest?.modeled_flood_km2 ?? "—"} km².
+                CSI <b>{backtest?.critical_success_index ?? "null"}</b>, POD {backtest?.hit_rate_pod ?? "—"}, FAR{" "}
+                {backtest?.false_alarm_ratio ?? "—"}. {backtest?.provenance?.data_status}.
+              </>
+            )}
+            {backtest?.counterfactual?.people_exposed_baseline != null
+              ? ` Counterfactual: ${backtest.counterfactual.people_exposed_baseline} → ${backtest.counterfactual.people_exposed_with_plan} (${backtest.counterfactual.reduction_pct}% reduction).`
+              : ""}
+          </p>
+        )}
+
         {tab === "ask" && (
           <div className="chat">
             <div className="msg">{a || "Ask only about numbers on the artifacts. The agent will not invent CSI or lives-saved counts."}</div>
@@ -245,7 +383,12 @@ export default function App() {
             <button className="dl" onClick={downloadNote}>
               Download concept note
             </button>
+            <a className="dl" href={`${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}/conceptnote.pdf?city=${city}`}>
+              Download PDF
+            </a>
             <pre className="report">{note}</pre>
+            <pre className="report">{scorecard}</pre>
+            <pre className="report">{brief}</pre>
           </>
         )}
       </aside>

@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 mkdir -p "$ROOT/demo_cache" "$ROOT/web/public/demo_cache"
-for f in signal.json plan.json candidates.json hazard.geojson backtest.json attribution.json conceptnote.md; do
+for f in signal.json plan.json candidates.json hazard.geojson backtest.json attribution.json conceptnote.md conceptnote.pdf flood_observed.geojson flood_modeled.geojson government_scorecard.md citizen_brief.md; do
   if [[ -f "$ROOT/artifacts/$f" ]]; then
     cp "$ROOT/artifacts/$f" "$ROOT/demo_cache/$f"
     cp "$ROOT/artifacts/$f" "$ROOT/web/public/demo_cache/$f"
@@ -15,5 +15,10 @@ if [[ -d "$ROOT/artifacts/charts" ]]; then
   mkdir -p "$ROOT/demo_cache/charts" "$ROOT/web/public/demo_cache/charts"
   cp -R "$ROOT/artifacts/charts/." "$ROOT/demo_cache/charts/"
   cp -R "$ROOT/artifacts/charts/." "$ROOT/web/public/demo_cache/charts/"
+fi
+if [[ -d "$ROOT/artifacts/cities" ]]; then
+  mkdir -p "$ROOT/demo_cache/cities" "$ROOT/web/public/demo_cache/cities"
+  cp -R "$ROOT/artifacts/cities/." "$ROOT/demo_cache/cities/"
+  cp -R "$ROOT/artifacts/cities/." "$ROOT/web/public/demo_cache/cities/"
 fi
 echo "synced artifacts -> demo_cache and web/public/demo_cache"

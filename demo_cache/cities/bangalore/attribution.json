@@ -1,0 +1,77 @@
+{
+  "government_pct": 86,
+  "community_pct": 10,
+  "household_pct": 4,
+  "government_levers": [
+    {
+      "lever": "floodplain_restore",
+      "owner": "government",
+      "risk_share_pct": 23.1,
+      "fix_cost_usd": 461280.0,
+      "people_protected": 13031.822,
+      "source": "NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue."
+    },
+    {
+      "lever": "wetland_restore",
+      "owner": "government",
+      "risk_share_pct": 38.7,
+      "fix_cost_usd": 772920.0,
+      "people_protected": 22590.488,
+      "source": "Wetland attenuation of peak flows; high soil-carbon uptake (Ramsar / IPCC wetlands supplement)."
+    },
+    {
+      "lever": "riverbank_bio",
+      "owner": "government",
+      "risk_share_pct": 17.1,
+      "fix_cost_usd": 341280.0,
+      "people_protected": 8527.395,
+      "source": "Bioengineered riverbank protection (live crib walls, brush layering) per ICIMOD/DSCWM manuals."
+    },
+    {
+      "lever": "drainage_and_glof_outlet",
+      "owner": "government",
+      "risk_share_pct": 89.6,
+      "fix_cost_usd": 0,
+      "people_protected": null,
+      "source": "Share of modeled EAL on flood + GLOF cells \u2014 zoning/drainage/outlet class, not a CSI."
+    }
+  ],
+  "community_levers": [
+    {
+      "lever": "afforestation",
+      "owner": "community",
+      "risk_share_pct": 7.7,
+      "fix_cost_usd": 154920.0,
+      "people_protected": 3043.594,
+      "source": "Catchment afforestation for slope stability and infiltration; sequestration from IPCC AFOLU defaults."
+    },
+    {
+      "lever": "bamboo_slope",
+      "owner": "community",
+      "risk_share_pct": 10.8,
+      "fix_cost_usd": 216440.0,
+      "people_protected": 4360.703,
+      "source": "Bamboo root reinforcement for shallow landslides; bamboo is an established Nepali rural cash crop (INBAR)."
+    }
+  ],
+  "household_levers": [
+    {
+      "lever": "vetiver_slope",
+      "owner": "household",
+      "risk_share_pct": 2.6,
+      "fix_cost_usd": 52900.0,
+      "people_protected": 1518.953,
+      "source": "Vetiver hedgerows cut slope erosion >90% (Truong et al.); cost/income from ICIMOD bioengineering field costings."
+    }
+  ],
+  "driver_shares": {
+    "government": 89.6,
+    "community": 6.2,
+    "household": 4.1
+  },
+  "provenance": {
+    "data_status": "model output \u2014 70% hazard-driver EAL + 30% selected spend; not a legal assignment of blame",
+    "method": "flood+GLOF EAL \u2192 government; landslide EAL \u2192 community/household; mix with plan spend",
+    "generated_utc": "2026-09-19T20:50:13Z"
+  }
+}

@@ -3,1244 +3,943 @@
   "mode": "expected",
   "selected": [
     {
-      "parcel_id": "p_0148",
-      "cost_usd": 3920.0,
-      "avoided_eal_people": 6.625,
-      "co2_t_10yr": 44.1,
-      "income_usd_yr": 833.0
-    },
-    {
-      "parcel_id": "p_0053",
-      "cost_usd": 4900.0,
-      "avoided_eal_people": 7.4625,
-      "co2_t_10yr": 11.76,
-      "income_usd_yr": 588.0
-    },
-    {
-      "parcel_id": "p_0186",
-      "cost_usd": 5350.0,
-      "avoided_eal_people": 6.5307,
-      "co2_t_10yr": 12.84,
-      "income_usd_yr": 642.0
-    },
-    {
-      "parcel_id": "p_0158",
-      "cost_usd": 4650.0,
-      "avoided_eal_people": 4.5432,
-      "co2_t_10yr": 124.0,
-      "income_usd_yr": 387.5
-    },
-    {
-      "parcel_id": "p_0232",
-      "cost_usd": 4880.0,
-      "avoided_eal_people": 3.8746,
-      "co2_t_10yr": 54.9,
-      "income_usd_yr": 1037.0
-    },
-    {
-      "parcel_id": "p_0065",
-      "cost_usd": 4520.0,
-      "avoided_eal_people": 3.4872,
-      "co2_t_10yr": 50.85,
-      "income_usd_yr": 960.5
-    },
-    {
-      "parcel_id": "p_0253",
-      "cost_usd": 2820.0,
-      "avoided_eal_people": 1.9969,
-      "co2_t_10yr": 75.2,
-      "income_usd_yr": 235.0
-    },
-    {
-      "parcel_id": "p_0222",
-      "cost_usd": 9520.0,
-      "avoided_eal_people": 5.6985,
-      "co2_t_10yr": 107.1,
-      "income_usd_yr": 2023.0
-    },
-    {
-      "parcel_id": "p_0204",
-      "cost_usd": 6630.0,
-      "avoided_eal_people": 4.6409,
-      "co2_t_10yr": 176.8,
-      "income_usd_yr": 552.5
-    },
-    {
-      "parcel_id": "p_0025",
-      "cost_usd": 5760.0,
-      "avoided_eal_people": 5.0712,
-      "co2_t_10yr": 19.2,
-      "income_usd_yr": 480.0
-    },
-    {
-      "parcel_id": "p_0112",
-      "cost_usd": 12000.0,
-      "avoided_eal_people": 6.4682,
-      "co2_t_10yr": 135.0,
-      "income_usd_yr": 2550.0
-    },
-    {
-      "parcel_id": "p_0137",
-      "cost_usd": 9640.0,
-      "avoided_eal_people": 5.1774,
-      "co2_t_10yr": 108.45,
-      "income_usd_yr": 2048.5
-    },
-    {
-      "parcel_id": "p_0205",
-      "cost_usd": 11680.0,
-      "avoided_eal_people": 6.1713,
-      "co2_t_10yr": 131.4,
-      "income_usd_yr": 2482.0
-    },
-    {
-      "parcel_id": "p_0235",
-      "cost_usd": 5560.0,
-      "avoided_eal_people": 2.8939,
-      "co2_t_10yr": 62.55,
-      "income_usd_yr": 1181.5
-    },
-    {
-      "parcel_id": "p_0228",
-      "cost_usd": 5670.0,
-      "avoided_eal_people": 3.4953,
-      "co2_t_10yr": 151.2,
-      "income_usd_yr": 472.5
-    },
-    {
-      "parcel_id": "p_0009",
-      "cost_usd": 8120.0,
-      "avoided_eal_people": 4.0783,
-      "co2_t_10yr": 91.35,
-      "income_usd_yr": 1725.5
-    },
-    {
-      "parcel_id": "p_0216",
-      "cost_usd": 4840.0,
-      "avoided_eal_people": 2.3025,
-      "co2_t_10yr": 54.45,
-      "income_usd_yr": 1028.5
-    },
-    {
-      "parcel_id": "p_0194",
-      "cost_usd": 12400.0,
-      "avoided_eal_people": 5.6471,
-      "co2_t_10yr": 139.5,
-      "income_usd_yr": 2635.0
-    },
-    {
-      "parcel_id": "p_0171",
-      "cost_usd": 9800.0,
-      "avoided_eal_people": 7.097,
-      "co2_t_10yr": 23.52,
-      "income_usd_yr": 1176.0
-    },
-    {
-      "parcel_id": "p_0031",
-      "cost_usd": 7380.0,
-      "avoided_eal_people": 3.9955,
-      "co2_t_10yr": 196.8,
-      "income_usd_yr": 615.0
-    },
-    {
-      "parcel_id": "p_0275",
-      "cost_usd": 5850.0,
-      "avoided_eal_people": 3.1625,
-      "co2_t_10yr": 156.0,
-      "income_usd_yr": 487.5
-    },
-    {
-      "parcel_id": "p_0076",
-      "cost_usd": 7230.0,
-      "avoided_eal_people": 3.8926,
-      "co2_t_10yr": 192.8,
-      "income_usd_yr": 602.5
-    },
-    {
-      "parcel_id": "p_0114",
-      "cost_usd": 14160.0,
-      "avoided_eal_people": 6.1394,
-      "co2_t_10yr": 159.3,
-      "income_usd_yr": 3009.0
-    },
-    {
-      "parcel_id": "p_0107",
-      "cost_usd": 8490.0,
-      "avoided_eal_people": 4.5432,
-      "co2_t_10yr": 226.4,
-      "income_usd_yr": 707.5
-    },
-    {
-      "parcel_id": "p_0146",
-      "cost_usd": 3360.0,
-      "avoided_eal_people": 1.706,
-      "co2_t_10yr": 89.6,
-      "income_usd_yr": 280.0
-    },
-    {
-      "parcel_id": "p_0063",
-      "cost_usd": 4900.0,
-      "avoided_eal_people": 3.277,
-      "co2_t_10yr": 11.76,
-      "income_usd_yr": 588.0
-    },
-    {
-      "parcel_id": "p_0231",
-      "cost_usd": 4080.0,
-      "avoided_eal_people": 2.0082,
-      "co2_t_10yr": 108.8,
-      "income_usd_yr": 340.0
-    },
-    {
-      "parcel_id": "p_0270",
-      "cost_usd": 9420.0,
-      "avoided_eal_people": 4.5565,
-      "co2_t_10yr": 251.2,
-      "income_usd_yr": 785.0
-    },
-    {
-      "parcel_id": "p_0247",
-      "cost_usd": 3150.0,
-      "avoided_eal_people": 1.4922,
-      "co2_t_10yr": 84.0,
-      "income_usd_yr": 262.5
-    },
-    {
-      "parcel_id": "p_0258",
-      "cost_usd": 6200.0,
-      "avoided_eal_people": 2.2393,
-      "co2_t_10yr": 69.75,
-      "income_usd_yr": 1317.5
-    },
-    {
-      "parcel_id": "p_0176",
-      "cost_usd": 7240.0,
-      "avoided_eal_people": 2.5851,
-      "co2_t_10yr": 81.45,
-      "income_usd_yr": 1538.5
-    },
-    {
-      "parcel_id": "p_0021",
-      "cost_usd": 10950.0,
-      "avoided_eal_people": 6.8784,
-      "co2_t_10yr": 26.28,
-      "income_usd_yr": 1314.0
-    },
-    {
-      "parcel_id": "p_0236",
-      "cost_usd": 9160.0,
-      "avoided_eal_people": 3.2073,
-      "co2_t_10yr": 103.05,
-      "income_usd_yr": 1946.5
-    },
-    {
-      "parcel_id": "p_0217",
-      "cost_usd": 6870.0,
-      "avoided_eal_people": 3.1105,
-      "co2_t_10yr": 183.2,
-      "income_usd_yr": 572.5
-    },
-    {
-      "parcel_id": "p_0183",
-      "cost_usd": 6760.0,
-      "avoided_eal_people": 2.3547,
-      "co2_t_10yr": 76.05,
-      "income_usd_yr": 1436.5
-    },
-    {
-      "parcel_id": "p_0237",
-      "cost_usd": 15480.0,
-      "avoided_eal_people": 5.3548,
-      "co2_t_10yr": 174.15,
-      "income_usd_yr": 3289.5
-    },
-    {
-      "parcel_id": "p_0144",
-      "cost_usd": 4920.0,
-      "avoided_eal_people": 1.6631,
-      "co2_t_10yr": 55.35,
-      "income_usd_yr": 1045.5
-    },
-    {
-      "parcel_id": "p_0103",
-      "cost_usd": 9780.0,
-      "avoided_eal_people": 4.1979,
-      "co2_t_10yr": 260.8,
-      "income_usd_yr": 815.0
-    },
-    {
-      "parcel_id": "p_0230",
-      "cost_usd": 4770.0,
-      "avoided_eal_people": 2.0082,
-      "co2_t_10yr": 127.2,
-      "income_usd_yr": 397.5
-    },
-    {
-      "parcel_id": "p_0241",
-      "cost_usd": 9680.0,
-      "avoided_eal_people": 3.0575,
-      "co2_t_10yr": 108.9,
-      "income_usd_yr": 2057.0
-    },
-    {
-      "parcel_id": "p_0045",
-      "cost_usd": 21960.0,
-      "avoided_eal_people": 6.8347,
-      "co2_t_10yr": 247.05,
-      "income_usd_yr": 4666.5
-    },
-    {
-      "parcel_id": "p_0245",
-      "cost_usd": 8820.0,
-      "avoided_eal_people": 3.6122,
-      "co2_t_10yr": 235.2,
-      "income_usd_yr": 735.0
-    },
-    {
-      "parcel_id": "p_0153",
-      "cost_usd": 3270.0,
-      "avoided_eal_people": 1.3279,
-      "co2_t_10yr": 87.2,
-      "income_usd_yr": 272.5
-    },
-    {
-      "parcel_id": "p_0210",
-      "cost_usd": 10800.0,
-      "avoided_eal_people": 4.1979,
-      "co2_t_10yr": 288.0,
-      "income_usd_yr": 900.0
-    },
-    {
-      "parcel_id": "p_0182",
-      "cost_usd": 9180.0,
-      "avoided_eal_people": 5.6956,
-      "co2_t_10yr": 30.6,
-      "income_usd_yr": 765.0
-    },
-    {
-      "parcel_id": "p_0087",
-      "cost_usd": 13650.0,
-      "avoided_eal_people": 7.5462,
-      "co2_t_10yr": 32.76,
-      "income_usd_yr": 1638.0
-    },
-    {
-      "parcel_id": "p_0248",
-      "cost_usd": 21320.0,
-      "avoided_eal_people": 5.8958,
-      "co2_t_10yr": 239.85,
-      "income_usd_yr": 4530.5
-    },
-    {
-      "parcel_id": "p_0052",
-      "cost_usd": 12210.0,
-      "avoided_eal_people": 4.6296,
-      "co2_t_10yr": 325.6,
-      "income_usd_yr": 1017.5
-    },
-    {
-      "parcel_id": "p_0169",
-      "cost_usd": 4410.0,
-      "avoided_eal_people": 1.6645,
-      "co2_t_10yr": 117.6,
-      "income_usd_yr": 367.5
-    },
-    {
-      "parcel_id": "p_0033",
-      "cost_usd": 20560.0,
-      "avoided_eal_people": 5.5529,
-      "co2_t_10yr": 231.3,
-      "income_usd_yr": 4369.0
-    },
-    {
-      "parcel_id": "p_0058",
-      "cost_usd": 14440.0,
-      "avoided_eal_people": 3.8746,
-      "co2_t_10yr": 162.45,
-      "income_usd_yr": 3068.5
-    },
-    {
-      "parcel_id": "p_0273",
-      "cost_usd": 8880.0,
-      "avoided_eal_people": 2.3502,
-      "co2_t_10yr": 99.9,
-      "income_usd_yr": 1887.0
-    },
-    {
-      "parcel_id": "p_0090",
-      "cost_usd": 11640.0,
-      "avoided_eal_people": 3.02,
-      "co2_t_10yr": 130.95,
-      "income_usd_yr": 2473.5
-    },
-    {
-      "parcel_id": "p_0117",
-      "cost_usd": 16440.0,
-      "avoided_eal_people": 4.2056,
-      "co2_t_10yr": 184.95,
-      "income_usd_yr": 3493.5
-    },
-    {
-      "parcel_id": "p_0168",
-      "cost_usd": 10350.0,
-      "avoided_eal_people": 5.4434,
-      "co2_t_10yr": 24.84,
-      "income_usd_yr": 1242.0
-    },
-    {
-      "parcel_id": "p_0166",
-      "cost_usd": 8440.0,
-      "avoided_eal_people": 2.1248,
-      "co2_t_10yr": 94.95,
-      "income_usd_yr": 1793.5
-    },
-    {
-      "parcel_id": "p_0022",
-      "cost_usd": 7000.0,
-      "avoided_eal_people": 3.5983,
-      "co2_t_10yr": 16.8,
-      "income_usd_yr": 840.0
-    },
-    {
-      "parcel_id": "p_0026",
-      "cost_usd": 17680.0,
-      "avoided_eal_people": 4.1509,
-      "co2_t_10yr": 198.9,
-      "income_usd_yr": 3757.0
-    },
-    {
-      "parcel_id": "p_0156",
-      "cost_usd": 11640.0,
-      "avoided_eal_people": 7.5541,
-      "co2_t_10yr": 58.2,
-      "income_usd_yr": 388.0
-    },
-    {
-      "parcel_id": "p_0284",
-      "cost_usd": 5200.0,
-      "avoided_eal_people": 2.5955,
-      "co2_t_10yr": 12.48,
-      "income_usd_yr": 624.0
-    },
-    {
-      "parcel_id": "p_0075",
-      "cost_usd": 13360.0,
-      "avoided_eal_people": 2.9959,
-      "co2_t_10yr": 150.3,
-      "income_usd_yr": 2839.0
+      "parcel_id": "p_0198",
+      "cost_usd": 3810.0,
+      "avoided_eal_people": 1708.3299,
+      "co2_t_10yr": 101.6,
+      "income_usd_yr": 317.5
     },
     {
       "parcel_id": "p_0173",
-      "cost_usd": 7020.0,
-      "avoided_eal_people": 2.2838,
-      "co2_t_10yr": 187.2,
-      "income_usd_yr": 585.0
-    },
-    {
-      "parcel_id": "p_0069",
-      "cost_usd": 19040.0,
-      "avoided_eal_people": 4.1199,
-      "co2_t_10yr": 214.2,
-      "income_usd_yr": 4046.0
-    },
-    {
-      "parcel_id": "p_0285",
-      "cost_usd": 9480.0,
-      "avoided_eal_people": 2.0478,
-      "co2_t_10yr": 106.65,
-      "income_usd_yr": 2014.5
-    },
-    {
-      "parcel_id": "p_0133",
-      "cost_usd": 14600.0,
-      "avoided_eal_people": 7.1209,
-      "co2_t_10yr": 35.04,
-      "income_usd_yr": 1752.0
-    },
-    {
-      "parcel_id": "p_0027",
-      "cost_usd": 11320.0,
-      "avoided_eal_people": 2.3502,
-      "co2_t_10yr": 127.35,
-      "income_usd_yr": 2405.5
-    },
-    {
-      "parcel_id": "p_0274",
-      "cost_usd": 15000.0,
-      "avoided_eal_people": 3.0843,
-      "co2_t_10yr": 168.75,
-      "income_usd_yr": 3187.5
-    },
-    {
-      "parcel_id": "p_0049",
-      "cost_usd": 14080.0,
-      "avoided_eal_people": 2.8939,
-      "co2_t_10yr": 158.4,
-      "income_usd_yr": 2992.0
-    },
-    {
-      "parcel_id": "p_0078",
-      "cost_usd": 12950.0,
-      "avoided_eal_people": 6.1168,
-      "co2_t_10yr": 31.08,
-      "income_usd_yr": 1554.0
-    },
-    {
-      "parcel_id": "p_0163",
-      "cost_usd": 15800.0,
-      "avoided_eal_people": 7.4625,
-      "co2_t_10yr": 37.92,
-      "income_usd_yr": 1896.0
-    },
-    {
-      "parcel_id": "p_0199",
-      "cost_usd": 6300.0,
-      "avoided_eal_people": 2.9609,
-      "co2_t_10yr": 15.12,
-      "income_usd_yr": 756.0
-    },
-    {
-      "parcel_id": "p_0271",
-      "cost_usd": 12440.0,
-      "avoided_eal_people": 2.4265,
-      "co2_t_10yr": 139.95,
-      "income_usd_yr": 2643.5
-    },
-    {
-      "parcel_id": "p_0209",
-      "cost_usd": 18640.0,
-      "avoided_eal_people": 3.5644,
-      "co2_t_10yr": 209.7,
-      "income_usd_yr": 3961.0
-    },
-    {
-      "parcel_id": "p_0096",
-      "cost_usd": 5370.0,
-      "avoided_eal_people": 1.5668,
-      "co2_t_10yr": 143.2,
-      "income_usd_yr": 447.5
-    },
-    {
-      "parcel_id": "p_0085",
-      "cost_usd": 5850.0,
-      "avoided_eal_people": 1.706,
-      "co2_t_10yr": 156.0,
-      "income_usd_yr": 487.5
-    },
-    {
-      "parcel_id": "p_0211",
-      "cost_usd": 13880.0,
-      "avoided_eal_people": 2.5851,
-      "co2_t_10yr": 156.15,
-      "income_usd_yr": 2949.5
-    },
-    {
-      "parcel_id": "p_0119",
-      "cost_usd": 16360.0,
-      "avoided_eal_people": 3.0123,
-      "co2_t_10yr": 184.05,
-      "income_usd_yr": 3476.5
-    },
-    {
-      "parcel_id": "p_0154",
-      "cost_usd": 16680.0,
-      "avoided_eal_people": 3.0704,
-      "co2_t_10yr": 187.65,
-      "income_usd_yr": 3544.5
+      "cost_usd": 8010.0,
+      "avoided_eal_people": 2107.1409,
+      "co2_t_10yr": 213.6,
+      "income_usd_yr": 667.5
     },
     {
       "parcel_id": "p_0167",
-      "cost_usd": 5400.0,
-      "avoided_eal_people": 1.5549,
-      "co2_t_10yr": 144.0,
-      "income_usd_yr": 450.0
+      "cost_usd": 6360.0,
+      "avoided_eal_people": 1508.4772,
+      "co2_t_10yr": 71.55,
+      "income_usd_yr": 1351.5
     },
     {
-      "parcel_id": "p_0020",
-      "cost_usd": 14250.0,
-      "avoided_eal_people": 4.093,
-      "co2_t_10yr": 380.0,
-      "income_usd_yr": 1187.5
+      "parcel_id": "p_0224",
+      "cost_usd": 6330.0,
+      "avoided_eal_people": 1227.5184,
+      "co2_t_10yr": 168.8,
+      "income_usd_yr": 527.5
     },
     {
-      "parcel_id": "p_0195",
-      "cost_usd": 5640.0,
-      "avoided_eal_people": 1.6041,
-      "co2_t_10yr": 150.4,
-      "income_usd_yr": 470.0
-    },
-    {
-      "parcel_id": "p_0177",
-      "cost_usd": 16200.0,
-      "avoided_eal_people": 2.897,
-      "co2_t_10yr": 182.25,
-      "income_usd_yr": 3442.5
-    },
-    {
-      "parcel_id": "p_0246",
-      "cost_usd": 15210.0,
-      "avoided_eal_people": 4.2826,
-      "co2_t_10yr": 405.6,
-      "income_usd_yr": 1267.5
-    },
-    {
-      "parcel_id": "p_0187",
-      "cost_usd": 15840.0,
-      "avoided_eal_people": 2.8017,
-      "co2_t_10yr": 178.2,
-      "income_usd_yr": 3366.0
-    },
-    {
-      "parcel_id": "p_0099",
-      "cost_usd": 6600.0,
-      "avoided_eal_people": 1.8498,
-      "co2_t_10yr": 176.0,
-      "income_usd_yr": 550.0
-    },
-    {
-      "parcel_id": "p_0038",
-      "cost_usd": 19120.0,
-      "avoided_eal_people": 3.2786,
-      "co2_t_10yr": 215.1,
-      "income_usd_yr": 4063.0
-    },
-    {
-      "parcel_id": "p_0219",
-      "cost_usd": 6720.0,
-      "avoided_eal_people": 1.8386,
-      "co2_t_10yr": 179.2,
-      "income_usd_yr": 560.0
-    },
-    {
-      "parcel_id": "p_0152",
-      "cost_usd": 18200.0,
-      "avoided_eal_people": 3.0568,
-      "co2_t_10yr": 204.75,
-      "income_usd_yr": 3867.5
-    },
-    {
-      "parcel_id": "p_0073",
-      "cost_usd": 17400.0,
-      "avoided_eal_people": 2.9061,
-      "co2_t_10yr": 195.75,
-      "income_usd_yr": 3697.5
-    },
-    {
-      "parcel_id": "p_0227",
-      "cost_usd": 15320.0,
-      "avoided_eal_people": 2.5379,
-      "co2_t_10yr": 172.35,
-      "income_usd_yr": 3255.5
-    },
-    {
-      "parcel_id": "p_0111",
-      "cost_usd": 14920.0,
-      "avoided_eal_people": 2.4508,
-      "co2_t_10yr": 167.85,
-      "income_usd_yr": 3170.5
-    },
-    {
-      "parcel_id": "p_0272",
-      "cost_usd": 6540.0,
-      "avoided_eal_people": 1.747,
-      "co2_t_10yr": 174.4,
-      "income_usd_yr": 545.0
-    },
-    {
-      "parcel_id": "p_0206",
-      "cost_usd": 18400.0,
-      "avoided_eal_people": 2.9959,
-      "co2_t_10yr": 207.0,
-      "income_usd_yr": 3910.0
-    },
-    {
-      "parcel_id": "p_0268",
+      "parcel_id": "p_0202",
       "cost_usd": 8610.0,
-      "avoided_eal_people": 2.2568,
+      "avoided_eal_people": 1569.6188,
       "co2_t_10yr": 229.6,
       "income_usd_yr": 717.5
     },
     {
-      "parcel_id": "p_0013",
-      "cost_usd": 21680.0,
-      "avoided_eal_people": 3.325,
-      "co2_t_10yr": 243.9,
-      "income_usd_yr": 4607.0
+      "parcel_id": "p_0203",
+      "cost_usd": 9360.0,
+      "avoided_eal_people": 1569.6188,
+      "co2_t_10yr": 249.6,
+      "income_usd_yr": 780.0
     },
     {
-      "parcel_id": "p_0011",
-      "cost_usd": 15540.0,
-      "avoided_eal_people": 3.9874,
-      "co2_t_10yr": 414.4,
-      "income_usd_yr": 1295.0
+      "parcel_id": "p_0139",
+      "cost_usd": 8130.0,
+      "avoided_eal_people": 1345.1388,
+      "co2_t_10yr": 216.8,
+      "income_usd_yr": 677.5
     },
     {
-      "parcel_id": "p_0014",
-      "cost_usd": 7620.0,
-      "avoided_eal_people": 1.9222,
-      "co2_t_10yr": 203.2,
-      "income_usd_yr": 635.0
-    },
-    {
-      "parcel_id": "p_0105",
-      "cost_usd": 16080.0,
-      "avoided_eal_people": 4.053,
-      "co2_t_10yr": 428.8,
-      "income_usd_yr": 1340.0
-    },
-    {
-      "parcel_id": "p_0214",
-      "cost_usd": 18080.0,
-      "avoided_eal_people": 2.559,
-      "co2_t_10yr": 203.4,
-      "income_usd_yr": 3842.0
-    },
-    {
-      "parcel_id": "p_0030",
-      "cost_usd": 18050.0,
-      "avoided_eal_people": 7.4647,
-      "co2_t_10yr": 43.32,
-      "income_usd_yr": 2166.0
-    },
-    {
-      "parcel_id": "p_0072",
-      "cost_usd": 21840.0,
-      "avoided_eal_people": 2.897,
-      "co2_t_10yr": 245.7,
-      "income_usd_yr": 4641.0
+      "parcel_id": "p_0174",
+      "cost_usd": 24960.0,
+      "avoided_eal_people": 3687.4966,
+      "co2_t_10yr": 124.8,
+      "income_usd_yr": 832.0
     },
     {
       "parcel_id": "p_0101",
-      "cost_usd": 5500.0,
-      "avoided_eal_people": 2.2205,
-      "co2_t_10yr": 13.2,
-      "income_usd_yr": 660.0
+      "cost_usd": 5280.0,
+      "avoided_eal_people": 697.219,
+      "co2_t_10yr": 59.4,
+      "income_usd_yr": 1122.0
     },
     {
-      "parcel_id": "p_0094",
-      "cost_usd": 7400.0,
-      "avoided_eal_people": 2.9609,
-      "co2_t_10yr": 17.76,
-      "income_usd_yr": 888.0
+      "parcel_id": "p_0226",
+      "cost_usd": 6330.0,
+      "avoided_eal_people": 818.3546,
+      "co2_t_10yr": 168.8,
+      "income_usd_yr": 527.5
     },
     {
-      "parcel_id": "p_0224",
-      "cost_usd": 8670.0,
-      "avoided_eal_people": 1.9999,
-      "co2_t_10yr": 231.2,
-      "income_usd_yr": 722.5
-    },
-    {
-      "parcel_id": "p_0131",
-      "cost_usd": 19960.0,
-      "avoided_eal_people": 2.5086,
-      "co2_t_10yr": 224.55,
-      "income_usd_yr": 4241.5
-    },
-    {
-      "parcel_id": "p_0261",
-      "cost_usd": 20160.0,
-      "avoided_eal_people": 2.4967,
-      "co2_t_10yr": 226.8,
-      "income_usd_yr": 4284.0
-    },
-    {
-      "parcel_id": "p_0279",
-      "cost_usd": 7450.0,
-      "avoided_eal_people": 2.9548,
-      "co2_t_10yr": 17.88,
-      "income_usd_yr": 894.0
-    },
-    {
-      "parcel_id": "p_0263",
-      "cost_usd": 14040.0,
-      "avoided_eal_people": 3.0963,
-      "co2_t_10yr": 374.4,
-      "income_usd_yr": 1170.0
-    },
-    {
-      "parcel_id": "p_0142",
-      "cost_usd": 16650.0,
-      "avoided_eal_people": 6.393,
-      "co2_t_10yr": 39.96,
-      "income_usd_yr": 1998.0
+      "parcel_id": "p_0199",
+      "cost_usd": 14550.0,
+      "avoided_eal_people": 1708.3299,
+      "co2_t_10yr": 388.0,
+      "income_usd_yr": 1212.5
     },
     {
       "parcel_id": "p_0225",
-      "cost_usd": 8460.0,
-      "avoided_eal_people": 1.8037,
-      "co2_t_10yr": 225.6,
-      "income_usd_yr": 705.0
+      "cost_usd": 13200.0,
+      "avoided_eal_people": 1534.398,
+      "co2_t_10yr": 44.0,
+      "income_usd_yr": 1100.0
+    },
+    {
+      "parcel_id": "p_0168",
+      "cost_usd": 13120.0,
+      "avoided_eal_people": 1508.4772,
+      "co2_t_10yr": 57.4,
+      "income_usd_yr": 492.0
+    },
+    {
+      "parcel_id": "p_0169",
+      "cost_usd": 16150.0,
+      "avoided_eal_people": 1673.3747,
+      "co2_t_10yr": 38.76,
+      "income_usd_yr": 1938.0
+    },
+    {
+      "parcel_id": "p_0140",
+      "cost_usd": 24150.0,
+      "avoided_eal_people": 2353.9929,
+      "co2_t_10yr": 57.96,
+      "income_usd_yr": 2898.0
+    },
+    {
+      "parcel_id": "p_0201",
+      "cost_usd": 13980.0,
+      "avoided_eal_people": 1300.3673,
+      "co2_t_10yr": 46.6,
+      "income_usd_yr": 1165.0
     },
     {
       "parcel_id": "p_0196",
-      "cost_usd": 12300.0,
-      "avoided_eal_people": 2.5536,
-      "co2_t_10yr": 328.0,
-      "income_usd_yr": 1025.0
+      "cost_usd": 5250.0,
+      "avoided_eal_people": 481.7789,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 437.5
     },
     {
-      "parcel_id": "p_0207",
-      "cost_usd": 7860.0,
-      "avoided_eal_people": 1.6276,
-      "co2_t_10yr": 209.6,
-      "income_usd_yr": 655.0
+      "parcel_id": "p_0072",
+      "cost_usd": 8680.0,
+      "avoided_eal_people": 700.6456,
+      "co2_t_10yr": 97.65,
+      "income_usd_yr": 1844.5
     },
     {
-      "parcel_id": "p_0254",
-      "cost_usd": 9000.0,
-      "avoided_eal_people": 3.3712,
-      "co2_t_10yr": 21.6,
-      "income_usd_yr": 1080.0
+      "parcel_id": "p_0228",
+      "cost_usd": 9800.0,
+      "avoided_eal_people": 785.4728,
+      "co2_t_10yr": 110.25,
+      "income_usd_yr": 2082.5
     },
     {
-      "parcel_id": "p_0104",
-      "cost_usd": 9810.0,
-      "avoided_eal_people": 2.0122,
-      "co2_t_10yr": 261.6,
-      "income_usd_yr": 817.5
+      "parcel_id": "p_0117",
+      "cost_usd": 8850.0,
+      "avoided_eal_people": 675.8031,
+      "co2_t_10yr": 21.24,
+      "income_usd_yr": 1062.0
     },
     {
-      "parcel_id": "p_0190",
-      "cost_usd": 12560.0,
-      "avoided_eal_people": 6.4943,
-      "co2_t_10yr": 54.95,
-      "income_usd_yr": 471.0
+      "parcel_id": "p_0171",
+      "cost_usd": 17680.0,
+      "avoided_eal_people": 1241.8325,
+      "co2_t_10yr": 198.9,
+      "income_usd_yr": 3757.0
     },
     {
-      "parcel_id": "p_0164",
-      "cost_usd": 18850.0,
-      "avoided_eal_people": 6.9922,
-      "co2_t_10yr": 45.24,
-      "income_usd_yr": 2262.0
+      "parcel_id": "p_0080",
+      "cost_usd": 6320.0,
+      "avoided_eal_people": 397.6312,
+      "co2_t_10yr": 71.1,
+      "income_usd_yr": 1343.0
+    },
+    {
+      "parcel_id": "p_0200",
+      "cost_usd": 29000.0,
+      "avoided_eal_people": 1820.5142,
+      "co2_t_10yr": 69.6,
+      "income_usd_yr": 3480.0
+    },
+    {
+      "parcel_id": "p_0141",
+      "cost_usd": 3640.0,
+      "avoided_eal_people": 221.0481,
+      "co2_t_10yr": 40.95,
+      "income_usd_yr": 773.5
+    },
+    {
+      "parcel_id": "p_0197",
+      "cost_usd": 12920.0,
+      "avoided_eal_people": 722.6684,
+      "co2_t_10yr": 145.35,
+      "income_usd_yr": 2745.5
+    },
+    {
+      "parcel_id": "p_0102",
+      "cost_usd": 12520.0,
+      "avoided_eal_people": 697.219,
+      "co2_t_10yr": 140.85,
+      "income_usd_yr": 2660.5
+    },
+    {
+      "parcel_id": "p_0137",
+      "cost_usd": 15870.0,
+      "avoided_eal_people": 881.7781,
+      "co2_t_10yr": 423.2,
+      "income_usd_yr": 1322.5
+    },
+    {
+      "parcel_id": "p_0116",
+      "cost_usd": 9350.0,
+      "avoided_eal_people": 510.118,
+      "co2_t_10yr": 22.44,
+      "income_usd_yr": 1122.0
+    },
+    {
+      "parcel_id": "p_0170",
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1673.3747,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0
+    },
+    {
+      "parcel_id": "p_0188",
+      "cost_usd": 6210.0,
+      "avoided_eal_people": 260.6125,
+      "co2_t_10yr": 165.6,
+      "income_usd_yr": 517.5
+    },
+    {
+      "parcel_id": "p_0114",
+      "cost_usd": 8520.0,
+      "avoided_eal_people": 356.3965,
+      "co2_t_10yr": 28.4,
+      "income_usd_yr": 710.0
+    },
+    {
+      "parcel_id": "p_0071",
+      "cost_usd": 19600.0,
+      "avoided_eal_people": 817.4199,
+      "co2_t_10yr": 47.04,
+      "income_usd_yr": 2352.0
+    },
+    {
+      "parcel_id": "p_0154",
+      "cost_usd": 6090.0,
+      "avoided_eal_people": 246.6415,
+      "co2_t_10yr": 162.4,
+      "income_usd_yr": 507.5
+    },
+    {
+      "parcel_id": "p_0152",
+      "cost_usd": 10250.0,
+      "avoided_eal_people": 407.6792,
+      "co2_t_10yr": 24.6,
+      "income_usd_yr": 1230.0
+    },
+    {
+      "parcel_id": "p_0070",
+      "cost_usd": 14200.0,
+      "avoided_eal_people": 529.9612,
+      "co2_t_10yr": 159.75,
+      "income_usd_yr": 3017.5
+    },
+    {
+      "parcel_id": "p_0191",
+      "cost_usd": 9800.0,
+      "avoided_eal_people": 366.1421,
+      "co2_t_10yr": 23.52,
+      "income_usd_yr": 1176.0
+    },
+    {
+      "parcel_id": "p_0081",
+      "cost_usd": 7680.0,
+      "avoided_eal_people": 284.8855,
+      "co2_t_10yr": 204.8,
+      "income_usd_yr": 640.0
+    },
+    {
+      "parcel_id": "p_0216",
+      "cost_usd": 6160.0,
+      "avoided_eal_people": 221.872,
+      "co2_t_10yr": 69.3,
+      "income_usd_yr": 1309.0
+    },
+    {
+      "parcel_id": "p_0229",
+      "cost_usd": 18540.0,
+      "avoided_eal_people": 654.5606,
+      "co2_t_10yr": 61.8,
+      "income_usd_yr": 1545.0
+    },
+    {
+      "parcel_id": "p_0138",
+      "cost_usd": 32460.0,
+      "avoided_eal_people": 1102.2226,
+      "co2_t_10yr": 108.2,
+      "income_usd_yr": 2705.0
+    },
+    {
+      "parcel_id": "p_0146",
+      "cost_usd": 12480.0,
+      "avoided_eal_people": 416.2045,
+      "co2_t_10yr": 140.4,
+      "income_usd_yr": 2652.0
+    },
+    {
+      "parcel_id": "p_0135",
+      "cost_usd": 15810.0,
+      "avoided_eal_people": 514.6968,
+      "co2_t_10yr": 421.6,
+      "income_usd_yr": 1317.5
+    },
+    {
+      "parcel_id": "p_0133",
+      "cost_usd": 14840.0,
+      "avoided_eal_people": 472.5803,
+      "co2_t_10yr": 166.95,
+      "income_usd_yr": 3153.5
+    },
+    {
+      "parcel_id": "p_0172",
+      "cost_usd": 39200.0,
+      "avoided_eal_people": 1241.8325,
+      "co2_t_10yr": 171.5,
+      "income_usd_yr": 1470.0
+    },
+    {
+      "parcel_id": "p_0115",
+      "cost_usd": 14360.0,
+      "avoided_eal_people": 437.244,
+      "co2_t_10yr": 161.55,
+      "income_usd_yr": 3051.5
+    },
+    {
+      "parcel_id": "p_0112",
+      "cost_usd": 11520.0,
+      "avoided_eal_people": 354.2677,
+      "co2_t_10yr": 50.4,
+      "income_usd_yr": 432.0
+    },
+    {
+      "parcel_id": "p_0147",
+      "cost_usd": 3600.0,
+      "avoided_eal_people": 106.9298,
+      "co2_t_10yr": 96.0,
+      "income_usd_yr": 300.0
+    },
+    {
+      "parcel_id": "p_0195",
+      "cost_usd": 19360.0,
+      "avoided_eal_people": 533.3445,
+      "co2_t_10yr": 84.7,
+      "income_usd_yr": 726.0
+    },
+    {
+      "parcel_id": "p_0136",
+      "cost_usd": 28080.0,
+      "avoided_eal_people": 772.0452,
+      "co2_t_10yr": 122.85,
+      "income_usd_yr": 1053.0
     },
     {
       "parcel_id": "p_0120",
-      "cost_usd": 10050.0,
-      "avoided_eal_people": 3.6642,
-      "co2_t_10yr": 24.12,
-      "income_usd_yr": 1206.0
+      "cost_usd": 9120.0,
+      "avoided_eal_people": 245.0896,
+      "co2_t_10yr": 30.4,
+      "income_usd_yr": 760.0
     },
     {
-      "parcel_id": "p_0132",
-      "cost_usd": 7200.0,
-      "avoided_eal_people": 2.6114,
-      "co2_t_10yr": 17.28,
-      "income_usd_yr": 864.0
+      "parcel_id": "p_0227",
+      "cost_usd": 54120.0,
+      "avoided_eal_people": 1432.1205,
+      "co2_t_10yr": 270.6,
+      "income_usd_yr": 1804.0
     },
     {
-      "parcel_id": "p_0124",
-      "cost_usd": 8050.0,
-      "avoided_eal_people": 2.8592,
-      "co2_t_10yr": 19.32,
-      "income_usd_yr": 966.0
+      "parcel_id": "p_0163",
+      "cost_usd": 5640.0,
+      "avoided_eal_people": 144.6164,
+      "co2_t_10yr": 150.4,
+      "income_usd_yr": 470.0
     },
     {
-      "parcel_id": "p_0059",
-      "cost_usd": 15360.0,
-      "avoided_eal_people": 2.8037,
-      "co2_t_10yr": 409.6,
-      "income_usd_yr": 1280.0
+      "parcel_id": "p_0085",
+      "cost_usd": 10250.0,
+      "avoided_eal_people": 262.8667,
+      "co2_t_10yr": 24.6,
+      "income_usd_yr": 1230.0
     },
     {
-      "parcel_id": "p_0127",
-      "cost_usd": 8760.0,
-      "avoided_eal_people": 1.5668,
-      "co2_t_10yr": 233.6,
-      "income_usd_yr": 730.0
+      "parcel_id": "p_0076",
+      "cost_usd": 13280.0,
+      "avoided_eal_people": 335.4313,
+      "co2_t_10yr": 149.4,
+      "income_usd_yr": 2822.0
     },
     {
-      "parcel_id": "p_0266",
-      "cost_usd": 21800.0,
-      "avoided_eal_people": 1.6205,
-      "co2_t_10yr": 245.25,
-      "income_usd_yr": 4632.5
+      "parcel_id": "p_0103",
+      "cost_usd": 2670.0,
+      "avoided_eal_people": 66.2878,
+      "co2_t_10yr": 71.2,
+      "income_usd_yr": 222.5
     },
     {
-      "parcel_id": "p_0160",
-      "cost_usd": 16140.0,
-      "avoided_eal_people": 2.7188,
-      "co2_t_10yr": 430.4,
-      "income_usd_yr": 1345.0
+      "parcel_id": "p_0110",
+      "cost_usd": 11840.0,
+      "avoided_eal_people": 289.5959,
+      "co2_t_10yr": 133.2,
+      "income_usd_yr": 2516.0
     },
     {
-      "parcel_id": "p_0095",
+      "parcel_id": "p_0118",
+      "cost_usd": 20040.0,
+      "avoided_eal_people": 482.7165,
+      "co2_t_10yr": 66.8,
+      "income_usd_yr": 1670.0
+    },
+    {
+      "parcel_id": "p_0041",
+      "cost_usd": 10320.0,
+      "avoided_eal_people": 244.8222,
+      "co2_t_10yr": 116.1,
+      "income_usd_yr": 2193.0
+    },
+    {
+      "parcel_id": "p_0069",
+      "cost_usd": 26150.0,
+      "avoided_eal_people": 618.2881,
+      "co2_t_10yr": 62.76,
+      "income_usd_yr": 3138.0
+    },
+    {
+      "parcel_id": "p_0156",
       "cost_usd": 9300.0,
-      "avoided_eal_people": 1.535,
+      "avoided_eal_people": 217.9526,
       "co2_t_10yr": 248.0,
       "income_usd_yr": 775.0
     },
     {
-      "parcel_id": "p_0280",
-      "cost_usd": 21480.0,
-      "avoided_eal_people": 1.2132,
-      "co2_t_10yr": 241.65,
-      "income_usd_yr": 4564.5
+      "parcel_id": "p_0193",
+      "cost_usd": 9200.0,
+      "avoided_eal_people": 213.7153,
+      "co2_t_10yr": 103.5,
+      "income_usd_yr": 1955.0
     },
     {
-      "parcel_id": "p_0051",
-      "cost_usd": 10600.0,
-      "avoided_eal_people": 3.4924,
-      "co2_t_10yr": 25.44,
-      "income_usd_yr": 1272.0
+      "parcel_id": "p_0187",
+      "cost_usd": 12240.0,
+      "avoided_eal_people": 279.1973,
+      "co2_t_10yr": 61.2,
+      "income_usd_yr": 408.0
     },
     {
-      "parcel_id": "p_0054",
-      "cost_usd": 11130.0,
-      "avoided_eal_people": 1.7153,
-      "co2_t_10yr": 296.8,
-      "income_usd_yr": 927.5
-    },
-    {
-      "parcel_id": "p_0071",
-      "cost_usd": 13440.0,
-      "avoided_eal_people": 0.648,
-      "co2_t_10yr": 151.2,
-      "income_usd_yr": 2856.0
-    },
-    {
-      "parcel_id": "p_0032",
-      "cost_usd": 12540.0,
-      "avoided_eal_people": 1.8678,
-      "co2_t_10yr": 334.4,
-      "income_usd_yr": 1045.0
-    },
-    {
-      "parcel_id": "p_0286",
-      "cost_usd": 9690.0,
-      "avoided_eal_people": 1.434,
-      "co2_t_10yr": 258.4,
-      "income_usd_yr": 807.5
-    },
-    {
-      "parcel_id": "p_0086",
-      "cost_usd": 14280.0,
-      "avoided_eal_people": 2.0993,
-      "co2_t_10yr": 380.8,
-      "income_usd_yr": 1190.0
-    },
-    {
-      "parcel_id": "p_0159",
-      "cost_usd": 10950.0,
-      "avoided_eal_people": 3.4526,
-      "co2_t_10yr": 26.28,
-      "income_usd_yr": 1314.0
-    },
-    {
-      "parcel_id": "p_0239",
-      "cost_usd": 16020.0,
-      "avoided_eal_people": 2.3061,
-      "co2_t_10yr": 427.2,
-      "income_usd_yr": 1335.0
-    },
-    {
-      "parcel_id": "p_0041",
-      "cost_usd": 11790.0,
-      "avoided_eal_people": 1.6645,
-      "co2_t_10yr": 314.4,
-      "income_usd_yr": 982.5
-    },
-    {
-      "parcel_id": "p_0213",
-      "cost_usd": 14280.0,
-      "avoided_eal_people": 1.988,
-      "co2_t_10yr": 380.8,
-      "income_usd_yr": 1190.0
-    },
-    {
-      "parcel_id": "p_0129",
-      "cost_usd": 14070.0,
-      "avoided_eal_people": 1.8726,
-      "co2_t_10yr": 375.2,
-      "income_usd_yr": 1172.5
-    },
-    {
-      "parcel_id": "p_0036",
-      "cost_usd": 11250.0,
-      "avoided_eal_people": 3.3795,
-      "co2_t_10yr": 27.0,
-      "income_usd_yr": 1350.0
-    },
-    {
-      "parcel_id": "p_0139",
-      "cost_usd": 7860.0,
-      "avoided_eal_people": 2.8547,
-      "co2_t_10yr": 26.2,
-      "income_usd_yr": 655.0
-    },
-    {
-      "parcel_id": "p_0007",
-      "cost_usd": 16000.0,
-      "avoided_eal_people": 4.7157,
-      "co2_t_10yr": 38.4,
-      "income_usd_yr": 1920.0
-    },
-    {
-      "parcel_id": "p_0109",
-      "cost_usd": 11040.0,
-      "avoided_eal_people": 1.3279,
-      "co2_t_10yr": 294.4,
-      "income_usd_yr": 920.0
-    },
-    {
-      "parcel_id": "p_0116",
-      "cost_usd": 12000.0,
-      "avoided_eal_people": 1.4165,
-      "co2_t_10yr": 320.0,
-      "income_usd_yr": 1000.0
-    },
-    {
-      "parcel_id": "p_0282",
-      "cost_usd": 8400.0,
-      "avoided_eal_people": 0.9829,
-      "co2_t_10yr": 224.0,
-      "income_usd_yr": 700.0
-    },
-    {
-      "parcel_id": "p_0145",
-      "cost_usd": 14970.0,
-      "avoided_eal_people": 1.7234,
-      "co2_t_10yr": 399.2,
-      "income_usd_yr": 1247.5
+      "parcel_id": "p_0075",
+      "cost_usd": 17900.0,
+      "avoided_eal_people": 391.3365,
+      "co2_t_10yr": 42.96,
+      "income_usd_yr": 2148.0
     },
     {
       "parcel_id": "p_0113",
-      "cost_usd": 13590.0,
-      "avoided_eal_people": 1.5549,
-      "co2_t_10yr": 362.4,
-      "income_usd_yr": 1132.5
+      "cost_usd": 13290.0,
+      "avoided_eal_people": 285.1172,
+      "co2_t_10yr": 354.4,
+      "income_usd_yr": 1107.5
     },
     {
-      "parcel_id": "p_0064",
-      "cost_usd": 12200.0,
-      "avoided_eal_people": 3.4526,
-      "co2_t_10yr": 29.28,
-      "income_usd_yr": 1464.0
+      "parcel_id": "p_0204",
+      "cost_usd": 6660.0,
+      "avoided_eal_people": 141.1029,
+      "co2_t_10yr": 177.6,
+      "income_usd_yr": 555.0
     },
     {
-      "parcel_id": "p_0062",
-      "cost_usd": 17300.0,
-      "avoided_eal_people": 4.846,
-      "co2_t_10yr": 41.52,
-      "income_usd_yr": 2076.0
+      "parcel_id": "p_0106",
+      "cost_usd": 14920.0,
+      "avoided_eal_people": 311.4462,
+      "co2_t_10yr": 167.85,
+      "income_usd_yr": 3170.5
+    },
+    {
+      "parcel_id": "p_0105",
+      "cost_usd": 15000.0,
+      "avoided_eal_people": 311.4462,
+      "co2_t_10yr": 168.75,
+      "income_usd_yr": 3187.5
     },
     {
       "parcel_id": "p_0149",
-      "cost_usd": 16500.0,
-      "avoided_eal_people": 4.5798,
-      "co2_t_10yr": 39.6,
-      "income_usd_yr": 1980.0
+      "cost_usd": 6630.0,
+      "avoided_eal_people": 138.2643,
+      "co2_t_10yr": 176.8,
+      "income_usd_yr": 552.5
     },
     {
-      "parcel_id": "p_0257",
-      "cost_usd": 17640.0,
-      "avoided_eal_people": 7.4647,
-      "co2_t_10yr": 88.2,
-      "income_usd_yr": 588.0
-    },
-    {
-      "parcel_id": "p_0088",
-      "cost_usd": 15050.0,
-      "avoided_eal_people": 4.1239,
-      "co2_t_10yr": 36.12,
-      "income_usd_yr": 1806.0
-    },
-    {
-      "parcel_id": "p_0091",
-      "cost_usd": 15480.0,
-      "avoided_eal_people": 1.434,
-      "co2_t_10yr": 412.8,
-      "income_usd_yr": 1290.0
+      "parcel_id": "p_0194",
+      "cost_usd": 17160.0,
+      "avoided_eal_people": 355.563,
+      "co2_t_10yr": 457.6,
+      "income_usd_yr": 1430.0
     },
     {
       "parcel_id": "p_0079",
-      "cost_usd": 12450.0,
-      "avoided_eal_people": 3.2096,
-      "co2_t_10yr": 29.88,
-      "income_usd_yr": 1494.0
+      "cost_usd": 19720.0,
+      "avoided_eal_people": 397.6312,
+      "co2_t_10yr": 221.85,
+      "income_usd_yr": 4190.5
     },
     {
-      "parcel_id": "p_0161",
-      "cost_usd": 14350.0,
-      "avoided_eal_people": 3.6969,
-      "co2_t_10yr": 34.44,
-      "income_usd_yr": 1722.0
-    },
-    {
-      "parcel_id": "p_0047",
-      "cost_usd": 14040.0,
-      "avoided_eal_people": 4.4696,
-      "co2_t_10yr": 46.8,
-      "income_usd_yr": 1170.0
-    },
-    {
-      "parcel_id": "p_0122",
-      "cost_usd": 8800.0,
-      "avoided_eal_people": 3.4926,
-      "co2_t_10yr": 38.5,
-      "income_usd_yr": 330.0
-    },
-    {
-      "parcel_id": "p_0212",
-      "cost_usd": 15720.0,
-      "avoided_eal_people": 1.2543,
-      "co2_t_10yr": 419.2,
-      "income_usd_yr": 1310.0
-    },
-    {
-      "parcel_id": "p_0178",
-      "cost_usd": 14610.0,
-      "avoided_eal_people": 1.145,
-      "co2_t_10yr": 389.6,
-      "income_usd_yr": 1217.5
-    },
-    {
-      "parcel_id": "p_0125",
-      "cost_usd": 12200.0,
-      "avoided_eal_people": 2.95,
-      "co2_t_10yr": 29.28,
-      "income_usd_yr": 1464.0
-    },
-    {
-      "parcel_id": "p_0226",
-      "cost_usd": 15720.0,
-      "avoided_eal_people": 6.0828,
-      "co2_t_10yr": 78.6,
-      "income_usd_yr": 524.0
-    },
-    {
-      "parcel_id": "p_0223",
-      "cost_usd": 17050.0,
-      "avoided_eal_people": 4.0531,
-      "co2_t_10yr": 40.92,
-      "income_usd_yr": 2046.0
-    },
-    {
-      "parcel_id": "p_0267",
-      "cost_usd": 13950.0,
-      "avoided_eal_people": 3.3074,
-      "co2_t_10yr": 33.48,
-      "income_usd_yr": 1674.0
-    },
-    {
-      "parcel_id": "p_0147",
-      "cost_usd": 9570.0,
-      "avoided_eal_people": 0.5499,
-      "co2_t_10yr": 255.2,
-      "income_usd_yr": 797.5
+      "parcel_id": "p_0111",
+      "cost_usd": 17600.0,
+      "avoided_eal_people": 354.2677,
+      "co2_t_10yr": 198.0,
+      "income_usd_yr": 3740.0
     },
     {
       "parcel_id": "p_0077",
-      "cost_usd": 18000.0,
-      "avoided_eal_people": 4.0562,
-      "co2_t_10yr": 43.2,
-      "income_usd_yr": 2160.0
+      "cost_usd": 22050.0,
+      "avoided_eal_people": 444.9972,
+      "co2_t_10yr": 52.92,
+      "income_usd_yr": 2646.0
     },
     {
-      "parcel_id": "p_0198",
-      "cost_usd": 12800.0,
-      "avoided_eal_people": 2.8071,
-      "co2_t_10yr": 30.72,
-      "income_usd_yr": 1536.0
+      "parcel_id": "p_0153",
+      "cost_usd": 18840.0,
+      "avoided_eal_people": 369.9623,
+      "co2_t_10yr": 211.95,
+      "income_usd_yr": 4003.5
     },
     {
-      "parcel_id": "p_0283",
-      "cost_usd": 20050.0,
-      "avoided_eal_people": 4.295,
-      "co2_t_10yr": 48.12,
-      "income_usd_yr": 2406.0
+      "parcel_id": "p_0249",
+      "cost_usd": 7530.0,
+      "avoided_eal_people": 145.1712,
+      "co2_t_10yr": 200.8,
+      "income_usd_yr": 627.5
     },
     {
-      "parcel_id": "p_0218",
-      "cost_usd": 18300.0,
-      "avoided_eal_people": 3.8975,
-      "co2_t_10yr": 43.92,
-      "income_usd_yr": 2196.0
+      "parcel_id": "p_0186",
+      "cost_usd": 12840.0,
+      "avoided_eal_people": 239.3119,
+      "co2_t_10yr": 144.45,
+      "income_usd_yr": 2728.5
     },
     {
-      "parcel_id": "p_0252",
-      "cost_usd": 17280.0,
-      "avoided_eal_people": 6.1914,
-      "co2_t_10yr": 86.4,
-      "income_usd_yr": 576.0
+      "parcel_id": "p_0145",
+      "cost_usd": 22720.0,
+      "avoided_eal_people": 416.2045,
+      "co2_t_10yr": 255.6,
+      "income_usd_yr": 4828.0
     },
     {
-      "parcel_id": "p_0082",
-      "cost_usd": 15480.0,
-      "avoided_eal_people": 0.4823,
-      "co2_t_10yr": 412.8,
-      "income_usd_yr": 1290.0
+      "parcel_id": "p_0176",
+      "cost_usd": 17840.0,
+      "avoided_eal_people": 323.1142,
+      "co2_t_10yr": 200.7,
+      "income_usd_yr": 3791.0
+    },
+    {
+      "parcel_id": "p_0043",
+      "cost_usd": 24950.0,
+      "avoided_eal_people": 449.0228,
+      "co2_t_10yr": 59.88,
+      "income_usd_yr": 2994.0
+    },
+    {
+      "parcel_id": "p_0039",
+      "cost_usd": 4750.0,
+      "avoided_eal_people": 83.8087,
+      "co2_t_10yr": 11.4,
+      "income_usd_yr": 570.0
+    },
+    {
+      "parcel_id": "p_0109",
+      "cost_usd": 16840.0,
+      "avoided_eal_people": 289.5959,
+      "co2_t_10yr": 189.45,
+      "income_usd_yr": 3578.5
     },
     {
       "parcel_id": "p_0042",
-      "cost_usd": 10320.0,
-      "avoided_eal_people": 2.7036,
-      "co2_t_10yr": 34.4,
-      "income_usd_yr": 860.0
+      "cost_usd": 16440.0,
+      "avoided_eal_people": 285.6259,
+      "co2_t_10yr": 82.2,
+      "income_usd_yr": 548.0
     },
     {
-      "parcel_id": "p_0040",
-      "cost_usd": 8220.0,
-      "avoided_eal_people": 2.1441,
-      "co2_t_10yr": 27.4,
-      "income_usd_yr": 685.0
+      "parcel_id": "p_0011",
+      "cost_usd": 9640.0,
+      "avoided_eal_people": 161.2937,
+      "co2_t_10yr": 108.45,
+      "income_usd_yr": 2048.5
     },
     {
-      "parcel_id": "p_0098",
+      "parcel_id": "p_0215",
+      "cost_usd": 15350.0,
+      "avoided_eal_people": 258.8506,
+      "co2_t_10yr": 36.84,
+      "income_usd_yr": 1842.0
+    },
+    {
+      "parcel_id": "p_0157",
+      "cost_usd": 12930.0,
+      "avoided_eal_people": 215.757,
+      "co2_t_10yr": 344.8,
+      "income_usd_yr": 1077.5
+    },
+    {
+      "parcel_id": "p_0190",
+      "cost_usd": 12750.0,
+      "avoided_eal_people": 209.2241,
+      "co2_t_10yr": 340.0,
+      "income_usd_yr": 1062.5
+    },
+    {
+      "parcel_id": "p_0175",
+      "cost_usd": 23100.0,
+      "avoided_eal_people": 376.9666,
+      "co2_t_10yr": 55.44,
+      "income_usd_yr": 2772.0
+    },
+    {
+      "parcel_id": "p_0119",
+      "cost_usd": 21550.0,
+      "avoided_eal_people": 343.1255,
+      "co2_t_10yr": 51.72,
+      "income_usd_yr": 2586.0
+    },
+    {
+      "parcel_id": "p_0078",
       "cost_usd": 20160.0,
-      "avoided_eal_people": 5.1982,
+      "avoided_eal_people": 317.8552,
       "co2_t_10yr": 67.2,
       "income_usd_yr": 1680.0
+    },
+    {
+      "parcel_id": "p_0044",
+      "cost_usd": 24400.0,
+      "avoided_eal_people": 384.8767,
+      "co2_t_10yr": 106.75,
+      "income_usd_yr": 915.0
+    },
+    {
+      "parcel_id": "p_0155",
+      "cost_usd": 21560.0,
+      "avoided_eal_people": 326.9289,
+      "co2_t_10yr": 242.55,
+      "income_usd_yr": 4581.5
+    },
+    {
+      "parcel_id": "p_0158",
+      "cost_usd": 18120.0,
+      "avoided_eal_people": 269.6963,
+      "co2_t_10yr": 60.4,
+      "income_usd_yr": 1510.0
+    },
+    {
+      "parcel_id": "p_0151",
+      "cost_usd": 16620.0,
+      "avoided_eal_people": 232.9595,
+      "co2_t_10yr": 443.2,
+      "income_usd_yr": 1385.0
+    },
+    {
+      "parcel_id": "p_0099",
+      "cost_usd": 6270.0,
+      "avoided_eal_people": 86.1575,
+      "co2_t_10yr": 167.2,
+      "income_usd_yr": 522.5
+    },
+    {
+      "parcel_id": "p_0045",
+      "cost_usd": 27850.0,
+      "avoided_eal_people": 386.6918,
+      "co2_t_10yr": 66.84,
+      "income_usd_yr": 3342.0
+    },
+    {
+      "parcel_id": "p_0067",
+      "cost_usd": 20720.0,
+      "avoided_eal_people": 277.4581,
+      "co2_t_10yr": 233.1,
+      "income_usd_yr": 4403.0
+    },
+    {
+      "parcel_id": "p_0046",
+      "cost_usd": 20520.0,
+      "avoided_eal_people": 276.2084,
+      "co2_t_10yr": 68.4,
+      "income_usd_yr": 1710.0
+    },
+    {
+      "parcel_id": "p_0013",
+      "cost_usd": 16450.0,
+      "avoided_eal_people": 216.7463,
+      "co2_t_10yr": 39.48,
+      "income_usd_yr": 1974.0
+    },
+    {
+      "parcel_id": "p_0230",
+      "cost_usd": 22650.0,
+      "avoided_eal_people": 296.6662,
+      "co2_t_10yr": 54.36,
+      "income_usd_yr": 2718.0
+    },
+    {
+      "parcel_id": "p_0134",
+      "cost_usd": 30300.0,
+      "avoided_eal_people": 393.8169,
+      "co2_t_10yr": 101.0,
+      "income_usd_yr": 2525.0
+    },
+    {
+      "parcel_id": "p_0107",
+      "cost_usd": 5920.0,
+      "avoided_eal_people": 73.7579,
+      "co2_t_10yr": 66.6,
+      "income_usd_yr": 1258.0
+    },
+    {
+      "parcel_id": "p_0184",
+      "cost_usd": 21600.0,
+      "avoided_eal_people": 268.9847,
+      "co2_t_10yr": 51.84,
+      "income_usd_yr": 2592.0
+    },
+    {
+      "parcel_id": "p_0012",
+      "cost_usd": 10740.0,
+      "avoided_eal_people": 134.4114,
+      "co2_t_10yr": 35.8,
+      "income_usd_yr": 895.0
+    },
+    {
+      "parcel_id": "p_0082",
+      "cost_usd": 39960.0,
+      "avoided_eal_people": 498.5496,
+      "co2_t_10yr": 199.8,
+      "income_usd_yr": 1332.0
+    },
+    {
+      "parcel_id": "p_0130",
+      "cost_usd": 6960.0,
+      "avoided_eal_people": 85.6711,
+      "co2_t_10yr": 23.2,
+      "income_usd_yr": 580.0
+    },
+    {
+      "parcel_id": "p_0189",
+      "cost_usd": 31920.0,
+      "avoided_eal_people": 390.9187,
+      "co2_t_10yr": 139.65,
+      "income_usd_yr": 1197.0
+    },
+    {
+      "parcel_id": "p_0231",
+      "cost_usd": 21640.0,
+      "avoided_eal_people": 254.2854,
+      "co2_t_10yr": 243.45,
+      "income_usd_yr": 4598.5
+    },
+    {
+      "parcel_id": "p_0068",
+      "cost_usd": 19560.0,
+      "avoided_eal_people": 231.2151,
+      "co2_t_10yr": 65.2,
+      "income_usd_yr": 1630.0
+    },
+    {
+      "parcel_id": "p_0159",
+      "cost_usd": 14560.0,
+      "avoided_eal_people": 161.1778,
+      "co2_t_10yr": 163.8,
+      "income_usd_yr": 3094.0
+    },
+    {
+      "parcel_id": "p_0250",
+      "cost_usd": 19040.0,
+      "avoided_eal_people": 217.7569,
+      "co2_t_10yr": 83.3,
+      "income_usd_yr": 714.0
+    },
+    {
+      "parcel_id": "p_0061",
+      "cost_usd": 5040.0,
+      "avoided_eal_people": 55.9788,
+      "co2_t_10yr": 134.4,
+      "income_usd_yr": 420.0
+    },
+    {
+      "parcel_id": "p_0192",
+      "cost_usd": 22400.0,
+      "avoided_eal_people": 249.3345,
+      "co2_t_10yr": 53.76,
+      "income_usd_yr": 2688.0
+    },
+    {
+      "parcel_id": "p_0164",
+      "cost_usd": 13320.0,
+      "avoided_eal_people": 144.6164,
+      "co2_t_10yr": 355.2,
+      "income_usd_yr": 1110.0
+    },
+    {
+      "parcel_id": "p_0142",
+      "cost_usd": 24750.0,
+      "avoided_eal_people": 257.8894,
+      "co2_t_10yr": 59.4,
+      "income_usd_yr": 2970.0
+    },
+    {
+      "parcel_id": "p_0049",
+      "cost_usd": 4200.0,
+      "avoided_eal_people": 42.6654,
+      "co2_t_10yr": 10.08,
+      "income_usd_yr": 504.0
+    },
+    {
+      "parcel_id": "p_0129",
+      "cost_usd": 11850.0,
+      "avoided_eal_people": 119.9395,
+      "co2_t_10yr": 28.44,
+      "income_usd_yr": 1422.0
+    },
+    {
+      "parcel_id": "p_0185",
+      "cost_usd": 29400.0,
+      "avoided_eal_people": 268.9847,
+      "co2_t_10yr": 147.0,
+      "income_usd_yr": 980.0
+    },
+    {
+      "parcel_id": "p_0083",
+      "cost_usd": 16050.0,
+      "avoided_eal_people": 138.0474,
+      "co2_t_10yr": 428.0,
+      "income_usd_yr": 1337.5
+    },
+    {
+      "parcel_id": "p_0047",
+      "cost_usd": 17240.0,
+      "avoided_eal_people": 144.8628,
+      "co2_t_10yr": 193.95,
+      "income_usd_yr": 3663.5
+    },
+    {
+      "parcel_id": "p_0086",
+      "cost_usd": 25600.0,
+      "avoided_eal_people": 225.3143,
+      "co2_t_10yr": 112.0,
+      "income_usd_yr": 960.0
+    },
+    {
+      "parcel_id": "p_0217",
+      "cost_usd": 18550.0,
+      "avoided_eal_people": 151.055,
+      "co2_t_10yr": 44.52,
+      "income_usd_yr": 2226.0
+    },
+    {
+      "parcel_id": "p_0014",
+      "cost_usd": 19080.0,
+      "avoided_eal_people": 154.8188,
+      "co2_t_10yr": 63.6,
+      "income_usd_yr": 1590.0
+    },
+    {
+      "parcel_id": "p_0132",
+      "cost_usd": 9680.0,
+      "avoided_eal_people": 74.8397,
+      "co2_t_10yr": 108.9,
+      "income_usd_yr": 2057.0
+    },
+    {
+      "parcel_id": "p_0148",
+      "cost_usd": 13680.0,
+      "avoided_eal_people": 106.9298,
+      "co2_t_10yr": 364.8,
+      "income_usd_yr": 1140.0
+    },
+    {
+      "parcel_id": "p_0160",
+      "cost_usd": 23600.0,
+      "avoided_eal_people": 188.0408,
+      "co2_t_10yr": 56.64,
+      "income_usd_yr": 2832.0
+    },
+    {
+      "parcel_id": "p_0161",
+      "cost_usd": 28300.0,
+      "avoided_eal_people": 216.9385,
+      "co2_t_10yr": 67.92,
+      "income_usd_yr": 3396.0
+    },
+    {
+      "parcel_id": "p_0165",
+      "cost_usd": 14010.0,
+      "avoided_eal_people": 95.9424,
+      "co2_t_10yr": 373.6,
+      "income_usd_yr": 1167.5
+    },
+    {
+      "parcel_id": "p_0048",
+      "cost_usd": 24150.0,
+      "avoided_eal_people": 169.0066,
+      "co2_t_10yr": 57.96,
+      "income_usd_yr": 2898.0
     }
   ],
   "totals": {
-    "cost_usd": 1995760.0,
-    "people_protected": 582.756,
-    "exposure_reduction_pct": 48.09,
-    "co2_t_10yr": 26352.13,
-    "income_usd_yr": 277452.5,
-    "households_benefiting": 4821
+    "cost_usd": 1998560.0,
+    "people_protected": 67944.179,
+    "exposure_reduction_pct": 50.81,
+    "co2_t_10yr": 17554.02,
+    "income_usd_yr": 226288.0,
+    "households_benefiting": 915128
   },
   "frontier": [
     {
       "budget_usd": 333333.33,
-      "people_protected": 178.131,
-      "co2_t_10yr": 5004.06
+      "people_protected": 35821.905,
+      "co2_t_10yr": 3980.4
     },
     {
       "budget_usd": 666666.67,
-      "people_protected": 291.042,
-      "co2_t_10yr": 8353.48
+      "people_protected": 47470.366,
+      "co2_t_10yr": 6400.56
     },
     {
       "budget_usd": 1000000.0,
-      "people_protected": 361.554,
-      "co2_t_10yr": 13368.05
+      "people_protected": 55114.114,
+      "co2_t_10yr": 10036.08
     },
     {
       "budget_usd": 1333333.33,
-      "people_protected": 444.906,
-      "co2_t_10yr": 17931.98
+      "people_protected": 60741.699,
+      "co2_t_10yr": 12814.83
     },
     {
       "budget_usd": 1666666.67,
-      "people_protected": 503.747,
-      "co2_t_10yr": 23624.95
+      "people_protected": 64977.196,
+      "co2_t_10yr": 14944.95
     },
     {
       "budget_usd": 2000000.0,
-      "people_protected": 582.756,
-      "co2_t_10yr": 26352.13
+      "people_protected": 67944.179,
+      "co2_t_10yr": 17554.02
     }
   ],
   "cvar": {
     "mode_available": true,
-    "tail_people_protected": 415.194,
+    "tail_people_protected": 41085.12,
     "alpha": 0.1
   },
   "provenance": {
     "data_status": "model output \u2014 screening-grade optimisation, not an investment recommendation",
-    "method": "marginal greedy triple-return/$ with per-cell EAL capping over 500 Monte-Carlo hazard scenarios; climate multiplier sigma=0.175 from GEV 100-yr CI; objective=expected",
+    "method": "marginal greedy triple-return/$ with per-cell EAL capping over 200 Monte-Carlo hazard scenarios; climate multiplier sigma=0.252 from GEV 100-yr CI; objective=expected",
     "factors": [
       {
         "type": "vetiver_slope",
