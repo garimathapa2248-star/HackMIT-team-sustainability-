@@ -1,0 +1,118 @@
+{
+  "region": "koshi_nepal",
+  "stations_processed": 72,
+  "station_years": 1511,
+  "return_levels_mm": {
+    "2": 32.266,
+    "5": 56.954,
+    "10": 73.55,
+    "25": 94.81,
+    "50": 110.793,
+    "100": 126.84
+  },
+  "return_levels_ci95": {
+    "2": [
+      23.217,
+      48.655
+    ],
+    "5": [
+      45.465,
+      71.362
+    ],
+    "10": [
+      59.848,
+      84.196
+    ],
+    "25": [
+      77.657,
+      113.48
+    ],
+    "50": [
+      88.941,
+      144.278
+    ],
+    "100": [
+      92.867,
+      179.762
+    ]
+  },
+  "headline": {
+    "statement": "The early-period 1-in-100-year daily rainfall depth now has a fitted recurrence of 7.75 years in the late-period sample.",
+    "old_return_period_yrs": 100,
+    "new_return_period_yrs": 7.75,
+    "threshold_mm": 80.255,
+    "early_period": [
+      1979,
+      1999
+    ],
+    "late_period": [
+      2000,
+      2024
+    ]
+  },
+  "trend": {
+    "metric": "annual_max_1day_precip_mm",
+    "slope_mm_per_decade": 13.116,
+    "p_value": 0.0
+  },
+  "landslide_trigger": {
+    "form": "I = a * D^b",
+    "a": 2.965e-07,
+    "b": 3.196,
+    "n_events": 138,
+    "auc": 0.934,
+    "kind": "rainfall_classifier",
+    "presentation": "rainfall classifier, AUC out-of-sample — not a Caine-style I–D threshold",
+    "note": "Fitted exponent b can be positive (inverse of classic Caine I = a·D^b with b<0). Do not present the power law as a physical intensity–duration threshold; the claim that survives scrutiny is the held-out rainfall-classifier AUC.",
+    "train_period": [
+      2008,
+      2015
+    ],
+    "test_period": [
+      2016,
+      2017
+    ],
+    "skipped_far_from_station": 176,
+    "skipped_data_gap": 450,
+    "max_station_km": 50.0
+  },
+  "lake_growth": [
+    {
+      "lake_id": "imja",
+      "name": "Imja Tsho",
+      "area_km2_first": 0.6,
+      "area_km2_last": 1.28,
+      "first_year": 1990,
+      "last_year": 2024,
+      "pct_growth": 113.3
+    },
+    {
+      "lake_id": "thulagi",
+      "name": "Thulagi",
+      "area_km2_first": 0.76,
+      "area_km2_last": 0.99,
+      "first_year": 1990,
+      "last_year": 2024,
+      "pct_growth": 30.3
+    },
+    {
+      "lake_id": "tsho_rolpa",
+      "name": "Tsho Rolpa",
+      "area_km2_first": 1.39,
+      "area_km2_last": 1.76,
+      "first_year": 1990,
+      "last_year": 2024,
+      "pct_growth": 26.6
+    }
+  ],
+  "provenance": {
+    "datasets": [
+      "NOAA Integrated Surface Database / Global Hourly",
+      "NASA Global Landslide Catalog / COOLR",
+      "ICIMOD glacial-lake inventory (annual areas)"
+    ],
+    "generated_utc": "2026-09-19T19:12:42Z",
+    "data_status": "model output \u2014 GEV fit to cleaned station observations",
+    "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap"
+  }
+}

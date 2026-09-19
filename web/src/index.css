@@ -1,0 +1,63 @@
+:root {
+  --bg: #070b14;
+  --panel: #10182a;
+  --ink: #e8eef7;
+  --muted: #8fa0b8;
+  --accent: #3ee0c0;
+  --warn: #f0c14b;
+  --line: rgba(143, 160, 184, 0.22);
+  font-family: "IBM Plex Sans", Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+button, input { font-family: inherit; }
+code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+a { color: var(--accent); }
+
+.app { display: grid; grid-template-columns: 1.35fr 1fr; height: 100%; }
+@media (max-width: 960px) { .app { grid-template-columns: 1fr; grid-template-rows: 48vh 1fr; } }
+
+.map-wrap { position: relative; }
+#map { width: 100%; height: 100%; }
+.map-legend {
+  position: absolute; left: 14px; bottom: 16px; z-index: 2;
+  background: rgba(16,24,42,0.92); border: 1px solid var(--line);
+  padding: 10px 12px; border-radius: 10px; font-size: 12px; color: var(--muted);
+}
+
+.side { overflow: auto; border-left: 1px solid var(--line); padding: 18px 18px 40px; }
+.brand { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+h1 { font-size: 22px; margin: 0 0 8px; }
+.lede { color: var(--muted); font-size: 13.5px; line-height: 1.45; margin: 0 0 14px; }
+.banner { background: #162036; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+.banner strong { color: var(--warn); font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 16px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.kpi span { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.kpi b { font-size: 18px; color: var(--accent); }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 14px; }
+.tabs button {
+  background: transparent; color: var(--muted); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer;
+}
+.tabs button.on { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+
+.slider { width: 100%; accent-color: var(--accent); }
+label.row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin: 8px 0; }
+
+.chart { width: 100%; height: 220px; }
+.chat { display: flex; flex-direction: column; gap: 8px; }
+.chat .msg { background: var(--panel); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; white-space: pre-wrap; }
+.chat form { display: flex; gap: 8px; }
+.chat input { flex: 1; background: #0b1220; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.chat button, .dl {
+  background: var(--accent); color: var(--bg); border: 0; border-radius: 8px;
+  padding: 8px 12px; font-weight: 600; cursor: pointer;
+}
+.report { white-space: pre-wrap; font-size: 13px; line-height: 1.5; color: var(--ink); background: var(--panel); padding: 12px; border-radius: 10px; }
+.detail { font-size: 13px; color: var(--muted); }
+.detail b { color: var(--ink); }
