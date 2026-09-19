@@ -1,0 +1,19 @@
+{
+  "name": "RootLedger",
+  "user": "ubuntu",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "api",
+      "command": ".venv/bin/python -m api.main"
+    },
+    {
+      "name": "web",
+      "command": "cd web && npm run dev"
+    }
+  ],
+  "ports": [
+    { "name": "api", "port": 8000 },
+    { "name": "web", "port": 5173 }
+  ]
+}
