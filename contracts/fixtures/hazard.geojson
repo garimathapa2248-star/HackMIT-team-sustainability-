@@ -1,0 +1,7 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[86.469,27.859],[86.474,27.859],[86.474,27.864],[86.469,27.864],[86.469,27.859]]]}, "properties": {"cell_id": "c_00421", "flood_depth_m": {"rp10": 0.4, "rp100": 1.8}, "glof_depth_m": 2.4, "landslide_prob": 0.23, "population": 312, "critical_assets": ["school"], "eal_people": 8.4, "eal_usd": 22000}},
+    {"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[86.474,27.859],[86.479,27.859],[86.479,27.864],[86.474,27.864],[86.474,27.859]]]}, "properties": {"cell_id": "c_00422", "flood_depth_m": {"rp10": 0.2, "rp100": 1.1}, "glof_depth_m": 1.2, "landslide_prob": 0.35, "population": 191, "critical_assets": [], "eal_people": 5.1, "eal_usd": 13800}}
+  ]
+}

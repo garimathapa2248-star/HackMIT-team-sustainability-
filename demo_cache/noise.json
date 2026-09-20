@@ -1,0 +1,58 @@
+{
+  "scale": {
+    "stations_processed": 498,
+    "station_years": 12066,
+    "compute": "Voloridge i7i.12xlarge (48 vCPU / 384 GiB) — parallel per-station-year parse",
+    "source": "NOAA ISD Global Hourly (s3://noaa-global-hourly-pds)"
+  },
+  "reproducible_subset": {
+    "note": "Numbers below are the Nepal-adjacent subset re-runnable off the booth box (data/parse.log, data/tidy_master.csv). The 498-station / 12,066-station-year figures above are the full High-Mountain-Asia parse.",
+    "stations": 72,
+    "station_years_requested": 2755,
+    "station_years_no_record": 1031,
+    "station_years_no_record_pct": 37.4,
+    "station_years_parsed": 1724,
+    "station_days_clean": 245053,
+    "year_range": [1979, 2024],
+    "station_years_by_decade": {
+      "1970s": 9,
+      "1980s": 338,
+      "1990s": 286,
+      "2000s": 239,
+      "2010s": 381,
+      "2020s": 258
+    }
+  },
+  "cleaning": [
+    {
+      "step": "Reject 9999 / 99999 sentinels",
+      "detail": "NOAA encodes missing depth as 9999. It is never coerced to 0 mm of rain."
+    },
+    {
+      "step": "Normalize NOAA accumulation windows",
+      "detail": "The frozen HMA run used canonical AA1 1/3/6/12/24-h windows. The current reproducible parser reads AA1–AA4, keeps shortest non-overlapping windows, and apportions them to UTC days."
+    },
+    {
+      "step": "Drop invalid quality codes",
+      "detail": "ISD quality flags marking erroneous or suspect values are excluded before any statistics."
+    },
+    {
+      "step": "Resolve duplicate station-days",
+      "detail": "Multiple records for one station-day are collapsed to a single daily maximum."
+    }
+  ],
+  "distribution": {
+    "dry_day_frac": 0.661,
+    "wet_day_frac": 0.339,
+    "days_ge_50mm": 2414,
+    "days_ge_100mm": 494,
+    "max_daily_mm": 400.0,
+    "max_daily_at": { "station": "44438099999", "date": "2013-11-10" }
+  },
+  "punchline": "Two-thirds of station-days are dry and a third of requested station-years don't exist in the archive. The GEV is fit on what survives — the extreme tail, not the noise.",
+  "provenance": {
+    "data_status": "observed NOAA ISD; counts from the reproducible Nepal-adjacent parse",
+    "sources": ["data/parse.log", "data/tidy_master.csv", "signals/ingest.py"],
+    "generated_utc": "2026-09-19T21:10:00Z"
+  }
+}

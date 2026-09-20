@@ -216,3 +216,42 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---------------------------------------------------------------
+# RootLedger additions
+# ---------------------------------------------------------------
+
+# Generated pipeline output
+artifacts/
+
+# Secrets: never commit. Names live in .env.example (committed) instead.
+# ORDER MATTERS: the negation must come AFTER .env.* or it has no effect.
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+
+# Large geo / data files
+*.tif
+*.tiff
+*.nc
+*.zip
+*.gz
+*.tar
+*.parquet
+
+# Raw data folders (anchored to repo root, so web/src/data/ is NOT hit)
+/data/
+/signals/data/
+/signal/data/
+/hazard/data/
+/optimize/data/
+/agent/data/
+
+# Node
+node_modules/
+web/dist/
+
+# OS junk
+.DS_Store

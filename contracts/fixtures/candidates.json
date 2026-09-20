@@ -1,0 +1,34 @@
+[
+  {
+    "parcel_id": "p_0007",
+    "type": "vetiver_slope",
+    "area_ha": 3.2,
+    "centroid": [86.4715, 27.8615],
+    "cell_ids": ["c_00421", "c_00422"],
+    "slope_deg": 22.5,
+    "landcover": "bare",
+    "risk_driver": "rainfall-triggered shallow landslide",
+    "suitability_score": 0.82,
+    "suitability_evidence": ["bare land", "slope 22.5°", "synthetic high landslide probability"],
+    "rationale": "Synthetic fixture: deep-rooted hedgerows are assigned to a steep bare slope.",
+    "assumptions": ["literature screening effect, not a site engineering estimate"],
+    "verification": ["field-check soil depth, tenure, drainage, and planting-line geometry"],
+    "data_status": "synthetic fixture"
+  },
+  {
+    "parcel_id": "p_0008",
+    "type": "riverbank_bio",
+    "area_ha": 1.6,
+    "centroid": [86.4765, 27.8615],
+    "cell_ids": ["c_00422"],
+    "slope_deg": 7.2,
+    "landcover": "cropland",
+    "risk_driver": "river flood and bank erosion",
+    "suitability_score": 0.71,
+    "suitability_evidence": ["cropland", "synthetic modeled flood exposure"],
+    "rationale": "Synthetic fixture: live riverbank reinforcement is assigned to an exposed low-slope bank.",
+    "assumptions": ["literature screening effect, not a site engineering estimate"],
+    "verification": ["field-check bank ownership, scour, channel migration, and material supply"],
+    "data_status": "synthetic fixture"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "event_date": null,
+  "sar_scene": null,
+  "observed_flood_km2": null,
+  "modeled_flood_km2": 493.46,
+  "hit_rate_pod": null,
+  "false_alarm_ratio": null,
+  "critical_success_index": null,
+  "stage_m": 112.55,
+  "counterfactual": {
+    "people_exposed_baseline": 0.0,
+    "people_exposed_with_plan": 0.0,
+    "reduction_pct": 0.0,
+    "note": "Counterfactual simulation: observed-flood-fraction \u00d7 population, reduced by literature-based effects for the selected preventive measures. Not unique lives and not an observed intervention trial.",
+    "risk_layers": {
+      "before": "risk_before.geojson",
+      "with_plan": "risk_with_plan.geojson"
+    }
+  },
+  "provenance": {
+    "data_status": "unvalidated \u2014 no UNOSAT/Sentinel-1 scene wired for Bengaluru; CSI is null and will not be invented",
+    "method": "HAND valley mask only",
+    "generated_utc": "2026-09-19T23:54:00Z"
+  }
+}

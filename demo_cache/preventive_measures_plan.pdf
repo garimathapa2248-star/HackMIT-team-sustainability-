@@ -1,0 +1,566 @@
+%PDF-1.4
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R] /Count 5 >> endobj
+3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 13 0 R >> >> >> endobj
+4 0 obj << /Length 3664 >> stream
+BT /F1 10 Tf 48 780 Td
+(SCREENING-GRADE WATERMARK -- not engineering design) Tj
+0 -16 Td
+(Preventive Measures Plan - hma) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(SCREENING-GRADE WATERMARK. Not an engineering design, not a field-verified parcel survey,) Tj
+0 -13 Td
+(not an observed intervention trial.) Tj
+0 -13 Td
+(Purpose: screening-grade, funder-oriented preventive action plan \(auto-filled from) Tj
+0 -13 Td
+(artifacts\)) Tj
+0 -13 Td
+(Portfolio status: counterfactual simulation - deterministic candidate suitability plus) Tj
+0 -13 Td
+(literature-based intervention effects; field verification required) Tj
+0 -13 Td
+(Evidence labels: observed data | model output | literature assumption | counterfactual) Tj
+0 -13 Td
+(simulation) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#1. Decision context) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Across High Mountain Asia NOAA ISD \(498 stations / 12066 station-years\). Nepal-adjacent) Tj
+0 -13 Td
+(GEV: The early-period 1-in-100-year daily rainfall depth now has a fitted recurrence of) Tj
+0 -13 Td
+(7.75 years in the late-period sample. [model output from observed NOAA ISD]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Annual-max trend: 5.229 mm/decade. [model output]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Lake-area series summary: Imja Tsho +113.3%, Thulagi +30.3%, Tsho Rolpa +26.6%.) Tj
+0 -13 Td
+([observed/derived inventory data]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Independent check \(ERA5-Land at the same station coordinates\): partially replicates) Tj
+0 -13 Td
+(\(16.72-yr vs ISD 7.75-yr; annmax Pearson r=0.128, mean bias 43.96 mm\). quasi-independent:) Tj
+0 -13 Td
+(reanalysis assimilates some gauges, but it is a different measurement and modeling system) Tj
+0 -13 Td
+(from raw ISD station records [model output on reanalysis]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#2. Evidence register) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Observed data: 498 NOAA stations / 12066 station-years; UNOSAT Sentinel-1 flood extent) Tj
+0 -13 Td
+(for 2024-09-27; observed flood area 121.00 km².) Tj
+0 -13 Td
+(- Model output: GEV return levels {'2': 29.359, '5': 41.664, '10': 49.032, '25': 57.54,) Tj
+0 -13 Td
+('50': 63.321, '100': 68.648} with bootstrap intervals {'2': [24.821, 35.525], '5': [34.902,) Tj
+0 -13 Td
+(50.83], '10': [42.208, 57.082], '25': [48.437, 75.369], '50': [51.13, 94.577], '100':) Tj
+0 -13 Td
+([52.984, 120.747]}; landslide rainfall classifier, AUC out-of-sample - not a Caine-style) Tj
+0 -13 Td
+(I-D threshold with held-out AUC 0.934 on 138 events; modeled flood area 393.62 km².) Tj
+0 -13 Td
+(- Hazard method: Copernicus GLO-30; local-min HAND proxy; CSI maximised on 27 Sep 2024) Tj
+0 -13 Td
+(scene. This is a local-min HAND proxy calibrated on this event, not Whitebox HAND or an) Tj
+0 -13 Td
+(independently validated hydrodynamic model.) Tj
+0 -13 Td
+(- Calibration-event metrics: CSI 0.053, POD 0.212, FAR 0.935 \(event 2024-09-27;) Tj
+0 -13 Td
+(calibration-event fit, not independent validation\).) Tj
+0 -13 Td
+(- Validation table:) Tj
+0 -13 Td
+(| Event | Role | CSI | POD | FAR |) Tj
+0 -13 Td
+(|---|---|---:|---:|---:|) Tj
+0 -13 Td
+(| 2024-09-27 | in-sample calibration | 0.053 | 0.212 | 0.935 |) Tj
+0 -13 Td
+(| 2017-08-13 | out-of-sample / transfer \(frozen 2024 model\) | 0.088 | 0.335 | 0.894 |) Tj
+0 -13 Td
+(| 2024-09-27 east half | spatial holdout \(west-fit, east-test\) | 0.056 | 0.373 | 0.938 |) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Baselines \(same 2024 domain\): JRC seasonal-water climatology CSI 0.067; area-matched) Tj
+0 -13 Td
+(elevation CSI 0.001. Permanent-water rule: JRC GSW occurrence >= 50%, 2021 v1.4 \(tile) Tj
+0 -13 Td
+(80E_30N\), excluded from BOTH masks.) Tj
+0 -13 Td
+(- Counterfactual simulation: Counterfactual exposure 77057.1 -> 54173.5 \(29.7% reduction;) Tj
+ET
+endstream endobj
+5 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 13 0 R >> >> >> endobj
+6 0 obj << /Length 4788 >> stream
+BT /F1 10 Tf 48 780 Td
+(SCREENING-GRADE WATERMARK -- not engineering design) Tj
+0 -16 Td
+(simulation using observed-flood fraction × population, not observed outcomes or unique) Tj
+0 -13 Td
+(lives\).) Tj
+0 -13 Td
+(- Tail cross-check: POT/GPD return levels {'2': 230.253, '5': 282.957, '10': 324.123, '25':) Tj
+0 -13 Td
+(380.314, '50': 424.203, '100': 469.32} [model output; different sample from the GEV) Tj
+0 -13 Td
+(headline].) Tj
+0 -13 Td
+(- Data gap: Daily IMERG is not on an unauthenticated public URL. Use Google Earth Engine) Tj
+0 -13 Td
+(NASA/GPM_L3/IMERG_V07 or Earthdata if credentials exist. RootLedger's headline remains NOAA) Tj
+0 -13 Td
+(ISD GEV.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#3. Prioritized preventive interventions) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Priority follows the optimizer's selected order. Coordinates are candidate centroids in) Tj
+0 -13 Td
+(EPSG:4326 and require site verification before procurement.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Priority | Measure ID | Measure | Coordinates \(lat, lon\) | Budget USD | Annual expected) Tj
+0 -13 Td
+(people-risk avoided | Risk driver | Suitability evidence | Evidence basis |) Tj
+0 -13 Td
+(|---:|---|---|---|---:|---:|---|---|---|) Tj
+0 -13 Td
+(| 1 | p_c_00132_floodplain_restore | floodplain_restore | 26.37000, 87.14000 | 32,000 |) Tj
+0 -13 Td
+(2384.6 | modelled_flood_exposure_and_rp100_depth | score 0.313; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.117; observed_flood_fraction: 0.037; flood_depth_rp100_m: 0.37; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00132; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 2 | p_c_00097_floodplain_restore | floodplain_restore | 26.53000, 87.06000 | 32,000 |) Tj
+0 -13 Td
+(2095.0 | modelled_flood_exposure_and_rp100_depth | score 0.283; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.077; observed_flood_fraction: 0.033; flood_depth_rp100_m: 0.25; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00097; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 3 | p_c_00098_floodplain_restore | floodplain_restore | 26.53000, 87.14000 | 32,000 |) Tj
+0 -13 Td
+(2049.4 | modelled_flood_exposure_and_rp100_depth | score 0.236; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.014; observed_flood_fraction: 0.006; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00098; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 4 | p_c_00115_floodplain_restore | floodplain_restore | 26.45000, 87.14000 | 32,000 |) Tj
+0 -13 Td
+(1956.5 | modelled_flood_exposure_and_rp100_depth | score 0.293; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.091; observed_flood_fraction: 0.012; flood_depth_rp100_m: 0.29; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00115; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+ET
+endstream endobj
+7 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 8 0 R /Resources << /Font << /F1 13 0 R >> >> >> endobj
+8 0 obj << /Length 5412 >> stream
+BT /F1 10 Tf 48 780 Td
+(SCREENING-GRADE WATERMARK -- not engineering design) Tj
+0 -16 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 5 | p_c_00100_floodplain_restore | floodplain_restore | 26.53000, 87.30000 | 32,000 |) Tj
+0 -13 Td
+(1756.3 | modelled_flood_exposure_and_rp100_depth | score 0.226; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.001; observed_flood_fraction: 0.0; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00100; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 6 | p_c_00133_floodplain_restore | floodplain_restore | 26.37000, 87.22000 | 32,000 |) Tj
+0 -13 Td
+(1539.1 | modelled_flood_exposure_and_rp100_depth | score 0.299; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.099; observed_flood_fraction: 0.042; flood_depth_rp100_m: 0.32; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00133; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 7 | p_c_00114_floodplain_restore | floodplain_restore | 26.45000, 87.06000 | 32,000 |) Tj
+0 -13 Td
+(1359.8 | modelled_flood_exposure_and_rp100_depth | score 0.297; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.096; observed_flood_fraction: 0.028; flood_depth_rp100_m: 0.31; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00114; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 8 | p_c_00080_floodplain_restore | floodplain_restore | 26.61000, 87.06000 | 32,000 |) Tj
+0 -13 Td
+(1245.5 | modelled_flood_exposure_and_rp100_depth | score 0.227; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.003; observed_flood_fraction: 0.003; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00080; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 9 | p_c_00081_floodplain_restore | floodplain_restore | 26.61000, 87.14000 | 32,000 |) Tj
+0 -13 Td
+(1177.2 | modelled_flood_exposure_and_rp100_depth | score 0.229; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.005; observed_flood_fraction: 0.0; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00081; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 10 | p_c_00116_floodplain_restore | floodplain_restore | 26.45000, 87.22000 | 32,000 |) Tj
+0 -13 Td
+(1104.2 | modelled_flood_exposure_and_rp100_depth | score 0.231; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.008; observed_flood_fraction: 0.003; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00116; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+ET
+endstream endobj
+9 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 10 0 R /Resources << /Font << /F1 13 0 R >> >> >> endobj
+10 0 obj << /Length 4548 >> stream
+BT /F1 10 Tf 48 780 Td
+(SCREENING-GRADE WATERMARK -- not engineering design) Tj
+0 -16 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 11 | p_c_00069_floodplain_restore | floodplain_restore | 26.61000, 86.18000 | 32,000 |) Tj
+0 -13 Td
+(858.7 | modelled_flood_exposure_and_rp100_depth | score 0.248; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.031; observed_flood_fraction: 0.013; flood_depth_rp100_m: 0.1; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00069; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+(| 12 | p_c_00096_floodplain_restore | floodplain_restore | 26.53000, 86.98000 | 32,000 |) Tj
+0 -13 Td
+(720.7 | modelled_flood_exposure_and_rp100_depth | score 0.238; modeled_flood_fraction:) Tj
+0 -13 Td
+(0.007; observed_flood_fraction: 0.017; flood_depth_rp100_m: 0.05; glof_depth_m: 0.0;) Tj
+0 -13 Td
+(landcover: cropland; +8 more fields | method: deterministic_cell_rules_v1; source_cell_id:) Tj
+0 -13 Td
+(c_00096; source_fields: ['cell_population', 'channel_proximity', 'critical_assets',) Tj
+0 -13 Td
+('eal_people', 'eal_usd', 'flood_depth_data_status', 'flood_depth_rp100_m', 'glof_depth_m',) Tj
+0 -13 Td
+('landcover', 'landcover_data_status', 'modeled_flood_fraction', 'observed_flood_fraction',) Tj
+0 -13 Td
+('population_data_status']; geometry_basis: hazard.geojson cell geometry; area_basis: 4.0 ha) Tj
+0 -13 Td
+(type-level screening footprint assumption; not measured from raster or cadastral data |) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#4. Budget and modeled outputs) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(| Measure | Sites | Modeled spend USD | Annual expected people-risk avoided |) Tj
+0 -13 Td
+(|---|---:|---:|---:|) Tj
+0 -13 Td
+(| floodplain_restore | 62 | 1,984,000 | 26306.1 |) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Budget ceiling: $2,000,000; modeled spend: $1,984,000; mode: expected.) Tj
+0 -13 Td
+(- Annual expected people-risk avoided: 26306.1 [model output; not unique people or observed) Tj
+0 -13 Td
+(lives saved].) Tj
+0 -13 Td
+(- Ten-year carbon: 8,680 tCO2 [model output from literature factors].) Tj
+0 -13 Td
+(- Annual livelihood-income potential: $74,400 [model output from per-hectare literature) Tj
+0 -13 Td
+(assumptions; not measured income, jobs, wages, or households reached].) Tj
+0 -13 Td
+(- Optimality: Greedy gap vs relaxed knapsack upper bound: 0.00% \(bound $132,708,374\). Upper) Tj
+0 -13 Td
+(bound ignores per-cell overlap capping, so the true gap is smaller.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#5. Assumptions and evidence basis) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- vetiver_slope - cost 5,000 USD/ha; effect fraction 0.35; carbon 12.0 tCO2/ha/10yr; income) Tj
+0 -13 Td
+(600 USD/ha/yr. Source: Vetiver hedgerows cut slope erosion >90% \(Truong et al.\);) Tj
+0 -13 Td
+(cost/income from ICIMOD bioengineering field costings. [literature assumption]) Tj
+0 -13 Td
+(- bamboo_slope - cost 4,000 USD/ha; effect fraction 0.30; carbon 45.0 tCO2/ha/10yr; income) Tj
+0 -13 Td
+(850 USD/ha/yr. Source: Bamboo root reinforcement for shallow landslides; bamboo is an) Tj
+0 -13 Td
+(established Nepali rural cash crop \(INBAR\). [literature assumption]) Tj
+0 -13 Td
+(- floodplain_restore - cost 8,000 USD/ha; effect fraction 0.30; carbon 35.0 tCO2/ha/10yr;) Tj
+0 -13 Td
+(income 300 USD/ha/yr. Source: NbS flood-depth reduction ~15-40% \(UNEP\); floodplain) Tj
+0 -13 Td
+(reconnection costs from World Bank NbS catalogue. [literature assumption]) Tj
+0 -13 Td
+(- wetland_restore - cost 12,000 USD/ha; effect fraction 0.35; carbon 60.0 tCO2/ha/10yr;) Tj
+0 -13 Td
+(income 400 USD/ha/yr. Source: Wetland attenuation of peak flows; high soil-carbon uptake) Tj
+0 -13 Td
+(\(Ramsar / IPCC wetlands supplement\). [literature assumption]) Tj
+0 -13 Td
+(- afforestation - cost 3,000 USD/ha; effect fraction 0.20; carbon 80.0 tCO2/ha/10yr; income) Tj
+ET
+endstream endobj
+11 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 12 0 R /Resources << /Font << /F1 13 0 R >> >> >> endobj
+12 0 obj << /Length 3633 >> stream
+BT /F1 10 Tf 48 780 Td
+(SCREENING-GRADE WATERMARK -- not engineering design) Tj
+0 -16 Td
+(250 USD/ha/yr. Source: Catchment afforestation for slope stability and infiltration;) Tj
+0 -13 Td
+(sequestration from IPCC AFOLU defaults. [literature assumption]) Tj
+0 -13 Td
+(- riverbank_bio - cost 6,000 USD/ha; effect fraction 0.25; carbon 20.0 tCO2/ha/10yr; income) Tj
+0 -13 Td
+(500 USD/ha/yr. Source: Bioengineered riverbank protection \(live crib walls, brush layering\)) Tj
+0 -13 Td
+(per ICIMOD/DSCWM manuals. [literature assumption]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(The optimizer applies marginal greedy triple-return per dollar, per-cell EAL capping, and) Tj
+0 -13 Td
+(Monte-Carlo climate multipliers derived from the GEV 100-year confidence interval. [model) Tj
+0 -13 Td
+(design assumption]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(Equity weighting \(verbatim from hazard/proof.py _grid_features\): rural = landcover in) Tj
+0 -13 Td
+(cropland/grass/shrub AND no critical_assets; dense = population at or above the 70th) Tj
+0 -13 Td
+(percentile of cell pops; low_income_score = 1.0 if \(rural and dense\) else \(0.55 if rural) Tj
+0 -13 Td
+(else 0.15\); equity_weight = 1.0 + 0.5 * low_income_score \(range 1.075-1.5x\). eal_people is) Tj
+0 -13 Td
+(multiplied by equity_weight, so low-income rural exposure ranks higher in expected-loss.) Tj
+0 -13 Td
+([model design assumption]) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(No causal percentage is assigned to government, communities, or households. Implementation) Tj
+0 -13 Td
+(roles require local governance and community confirmation.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#6. Monitoring and verification) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- Rainfall signal: append observed NOAA ISD records annually; re-fit GEV and publish sample) Tj
+0 -13 Td
+(size, confidence interval, and any changed recurrence estimate.) Tj
+0 -13 Td
+(- Flood extent: after qualifying events, derive observed Sentinel-1 extent and report POD,) Tj
+0 -13 Td
+(FAR, and CSI separately from the calibration event.) Tj
+0 -13 Td
+(- Intervention delivery: verify each parcel centroid, boundary, measure type, area, and) Tj
+0 -13 Td
+(installation date through field sign-off plus dated optical imagery.) Tj
+0 -13 Td
+(- Carbon: report planted/restored area and survival first; convert to tCO2 only with the) Tj
+0 -13 Td
+(stated factor and uncertainty. Ground-sample biomass before claiming credits.) Tj
+0 -13 Td
+(- Risk performance: compare post-event observed exposure with a pre-registered baseline; do) Tj
+0 -13 Td
+(not present the counterfactual simulation as an observed outcome.) Tj
+0 -13 Td
+(- Livelihoods: measure participant payments or income directly before making beneficiary,) Tj
+0 -13 Td
+(household, job, or wage claims.) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(#7. Limitations) Tj
+0 -13 Td
+() Tj
+0 -13 Td
+(- The flood surface is a screening-grade local-min HAND proxy calibrated on the 27 Sep 2024) Tj
+0 -13 Td
+(event. Its event-fit CSI is low and is not independent validation.) Tj
+0 -13 Td
+(- Hazard depths, EAL, avoided people-risk, carbon, income, and the optimized ranking are) Tj
+0 -13 Td
+(model outputs; field feasibility, tenure, ecological safeguards, and engineering design) Tj
+0 -13 Td
+(remain unverified.) Tj
+0 -13 Td
+(- Candidate centroids are screening locations, not surveyed parcel boundaries.) Tj
+0 -13 Td
+(- Literature effect sizes and unit costs may not transfer to local implementation) Tj
+0 -13 Td
+(conditions.) Tj
+0 -13 Td
+(- The counterfactual is a simulation, not a prediction or measured causal effect.) Tj
+0 -13 Td
+(- IMERG was not fused, and the HMA-pooled late GEV did not identify the Nepal-adjacent) Tj
+0 -13 Td
+(headline shift.) Tj
+ET
+endstream endobj
+13 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
+xref
+0 14
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000140 00000 n 
+0000000267 00000 n 
+0000003983 00000 n 
+0000004110 00000 n 
+0000008950 00000 n 
+0000009077 00000 n 
+0000014541 00000 n 
+0000014669 00000 n 
+0000019270 00000 n 
+0000019399 00000 n 
+0000023085 00000 n 
+trailer << /Size 14 /Root 1 0 R >>
+startxref
+23156
+%%EOF

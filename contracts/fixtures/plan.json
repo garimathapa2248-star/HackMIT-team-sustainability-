@@ -1,0 +1,9 @@
+{
+  "budget_usd": 2000000,
+  "mode": "expected",
+  "selected": [{"parcel_id": "p_0007", "cost_usd": 38400, "avoided_eal_people": 3.5, "co2_t_10yr": 38.4, "income_usd_yr": 1920}],
+  "totals": {"cost_usd": 38400, "people_protected": 3.5, "exposure_reduction_pct": 25.9, "co2_t_10yr": 38.4, "income_usd_yr": 1920, "households_benefiting": null, "households_note": "Unavailable without an intervention-area adoption model."},
+  "frontier": [{"budget_usd": 500000, "people_protected": 3.5, "co2_t_10yr": 38.4}],
+  "cvar": {"mode_available": true, "tail_people_protected": 2.4},
+  "provenance": {"data_status": "synthetic fixture — not an investment recommendation"}
+}

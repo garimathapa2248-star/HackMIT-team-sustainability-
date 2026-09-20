@@ -1,0 +1,6 @@
+{
+  "event_date": "2024-09-27", "sar_scene": "SYNTHETIC_FIXTURE", "observed_flood_km2": null, "modeled_flood_km2": null,
+  "hit_rate_pod": null, "false_alarm_ratio": null, "critical_success_index": null,
+  "counterfactual": {"people_exposed_baseline": null, "people_exposed_with_plan": null, "reduction_pct": null},
+  "provenance": {"data_status": "synthetic fixture — not a validation"}
+}
