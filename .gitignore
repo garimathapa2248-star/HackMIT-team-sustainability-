@@ -259,3 +259,4 @@ web/dist/
 # Reference clones of FloodAdapt / CLIMADA / Rhodium-SWMM / ThinkHazard.
 # Not imported at runtime.
 vendor/
+.vercel

@@ -28,7 +28,12 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/web/$1",
+      "check": true
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/web/index.html"
     }
   ]
 }

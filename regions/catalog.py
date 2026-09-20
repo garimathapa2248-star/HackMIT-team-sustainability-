@@ -5,6 +5,10 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+# Same read order as api.loader: generated artifacts win, the committed demo pack is the
+# fallback. A deploy ships demo_cache/ only (artifacts/ is gitignored), so without this the
+# catalogue would report every city as not ready and hide the ones registered at build time.
+READ_ROOTS = (ROOT / "artifacts", ROOT / "demo_cache")
 
 CITIES = {
     "koshi": {
@@ -24,9 +28,18 @@ CITIES = {
 }
 
 
+def _read_dir(city: str) -> Path:
+    """Where this city's pack can be read from, preferring generated artifacts."""
+    for root in READ_ROOTS:
+        d = root if city in (None, "", "koshi") else root / "cities" / city
+        if (d / "plan.json").exists():
+            return d
+    return city_dir(city)
+
+
 def _extra_cities() -> dict:
-    path = ROOT / "artifacts" / "cities.json"
-    if not path.exists():
+    path = next((r / "cities.json" for r in READ_ROOTS if (r / "cities.json").exists()), None)
+    if path is None:
         return {}
     try:
         data = json.loads(path.read_text())
@@ -74,7 +87,7 @@ def city_dir(city: str) -> Path:
 def list_cities() -> list[dict]:
     out = []
     for cid, meta in all_cities().items():
-        d = city_dir(cid)
+        d = _read_dir(cid)
         ready = (d / "plan.json").exists() and (d / "hazard.geojson").exists()
         out.append({**meta, "ready": ready, "path": str(d.relative_to(ROOT))})
     return out
