@@ -24,6 +24,10 @@
       "dest": "/server.py"
     },
     {
+      "src": "/hub(/.*)?",
+      "dest": "/server.py"
+    },
+    {
       "handle": "filesystem"
     },
     {
