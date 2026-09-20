@@ -116,6 +116,7 @@ select {
   transition: transform 0.12s, background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 .btn.small { padding: 7px 14px; font-size: 13px; }
+a.btn { line-height: normal; } /* links inherit the page line-height; buttons do not */
 .btn.primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 6px 20px -8px rgba(62, 224, 192, 0.7); }
 .btn.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 26px -8px rgba(62, 224, 192, 0.8); }
 .btn.ghost { background: transparent; border-color: var(--line-strong); color: var(--ink); }
