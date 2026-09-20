@@ -123,6 +123,21 @@ def get_flood_modeled():
     return _payload("flood_modeled")
 
 
+@app.get("/flood_observed_2017")
+def get_flood_observed_2017():
+    return _payload("flood_observed_2017")
+
+
+@app.get("/flood_modeled_2017")
+def get_flood_modeled_2017():
+    return _payload("flood_modeled_2017")
+
+
+@app.get("/replication")
+def get_replication():
+    return _payload("replication")
+
+
 @app.get("/risk_before")
 def get_risk_before():
     return _payload("risk_before")

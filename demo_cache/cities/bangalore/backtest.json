@@ -11,11 +11,15 @@
     "people_exposed_baseline": 0.0,
     "people_exposed_with_plan": 0.0,
     "reduction_pct": 0.0,
-    "note": "Observed-flood-fraction \u00d7 population, reduced by greedy NbS capture. Not unique lives."
+    "note": "Counterfactual simulation: observed-flood-fraction \u00d7 population, reduced by literature-based effects for the selected preventive measures. Not unique lives and not an observed intervention trial.",
+    "risk_layers": {
+      "before": "risk_before.geojson",
+      "with_plan": "risk_with_plan.geojson"
+    }
   },
   "provenance": {
     "data_status": "unvalidated \u2014 no UNOSAT/Sentinel-1 scene wired for Bengaluru; CSI is null and will not be invented",
     "method": "HAND valley mask only",
-    "generated_utc": "2026-09-19T20:50:13Z"
+    "generated_utc": "2026-09-19T23:54:00Z"
   }
 }

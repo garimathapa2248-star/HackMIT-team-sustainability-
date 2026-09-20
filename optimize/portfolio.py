@@ -92,10 +92,21 @@ def _index_hazard(geojson: dict) -> dict[str, dict]:
         cell_id = props.get("cell_id")
         if cell_id is None:
             continue
-        cells[str(cell_id)] = {
+        cell = {
             "eal_people": float(props.get("eal_people", 0.0) or 0.0),
             "population": float(props.get("population", 0.0) or 0.0),
         }
+        if props.get("low_income_score") is not None:
+            try:
+                cell["low_income_score"] = float(props["low_income_score"])
+            except (TypeError, ValueError):
+                pass
+        if props.get("equity_weight") is not None:
+            try:
+                cell["equity_weight"] = float(props["equity_weight"])
+            except (TypeError, ValueError):
+                pass
+        cells[str(cell_id)] = cell
     return cells
 
 
@@ -290,9 +301,22 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
         prepared, n_cells, cell_expected, scenario_cell, float(budget), alternate_mode, np
     )
     alternate_ids = {row["parcel_id"] for row in alternate["selected"]}
+    by_id = {p.get("parcel_id"): p for p in candidates if p.get("parcel_id")}
     for rank, row in enumerate(selected, start=1):
         row["priority_rank"] = rank
         row["selected_in_both_objectives"] = row["parcel_id"] in alternate_ids
+        parcel = by_id.get(row["parcel_id"]) or {}
+        scores, weights = [], []
+        for cid in parcel.get("cell_ids") or []:
+            cell = hazard.get(str(cid)) or {}
+            if cell.get("low_income_score") is not None:
+                scores.append(float(cell["low_income_score"]))
+            if cell.get("equity_weight") is not None:
+                weights.append(float(cell["equity_weight"]))
+        if scores:
+            row["low_income_score"] = round(max(scores), 2)
+        if weights:
+            row["equity_weight"] = round(max(weights), 3)
     overlap_count = sum(1 for row in selected if row["selected_in_both_objectives"])
 
     people_protected = float(portfolio.mean()) if portfolio.size else 0.0
@@ -314,12 +338,37 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
     frontier = _build_frontier(prepared, n_cells, cell_expected, scenario_cell, float(budget),
                                mode, np, frontier_points)
 
+    optimality = {
+        "greedy_value_usd": None,
+        "knapsack_upper_bound_usd": None,
+        "gap_pct": None,
+        "note": "Upper bound ignores per-cell overlap capping, so the true gap is smaller.",
+    }
+    if selected and cell_index:
+        try:
+            from .knapsack import optimality_gap
+            gap = optimality_gap(
+                candidates, cell_index, cell_expected, float(budget),
+                [row["parcel_id"] for row in selected],
+            )
+            optimality = {
+                "greedy_value_usd": gap["greedy_value_usd"],
+                "knapsack_upper_bound_usd": gap["knapsack_bound_usd"],
+                "gap_pct": gap["gap_pct"],
+                "note": (
+                    "Upper bound ignores per-cell overlap capping, so the true gap is smaller."
+                ),
+            }
+        except Exception as exc:
+            optimality["note"] = f"knapsack bound unavailable: {exc}"
+
     return {
         "budget_usd": float(budget),
         "mode": mode,
         "selected": selected,
         "totals": totals,
         "frontier": frontier,
+        "optimality": optimality,
         "cvar": {
             "mode_available": True,
             "tail_people_protected": round(tail_people, 3),

@@ -9,10 +9,10 @@
       "implementation_lead": "government",
       "owner": "government",
       "risk_share_pct": null,
-      "plan_spend_usd": 1760000.0,
-      "fix_cost_usd": 1760000.0,
-      "annual_expected_people_risk_avoided": 16058.307,
-      "people_protected": 16058.307,
+      "plan_spend_usd": 1984000.0,
+      "fix_cost_usd": 1984000.0,
+      "annual_expected_people_risk_avoided": 26306.075,
+      "people_protected": 26306.075,
       "risk_driver": "flood",
       "source": "NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue."
     },
@@ -35,6 +35,6 @@
   "provenance": {
     "data_status": "planning assumptions plus model-output spend; no empirical causal attribution percentages",
     "method": "intervention type mapped to a provisional implementation lead; roles require local confirmation",
-    "generated_utc": "2026-09-19T21:30:06Z"
+    "generated_utc": "2026-09-20T00:07:41Z"
   }
 }

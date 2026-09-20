@@ -7,13 +7,18 @@ Do not quote cached concept-note prose or `households_benefiting`.
 
 These values are locked to the current root artifacts:
 
-- `signal.json` generated `2026-09-19T19:43:26Z`: 498 stations, 12,066 station-years, fitted Nepal-adjacent recurrence 7.75 years.
-- `backtest.json` generated `2026-09-19T20:39:09Z`: CSI 0.086, POD 0.211, FAR 0.873; local-min HAND proxy calibrated on the 27 Sep 2024 event.
-- `plan.json`: $2,000,000 budget, $1,760,000 modeled spend, 16,058.307 annual expected people-risk avoided, 7,700 tCO₂/10yr, and $66,000/yr modeled livelihood-income potential.
-- `backtest.json` counterfactual: 54,993.4 baseline exposure units to 38,912.4 with-plan units, a 29.24% simulated reduction.
+- `signal.json` generated `2026-09-19T19:43:26Z`: 498 stations, 12,066 station-years, fitted Nepal-adjacent recurrence **7.75 years**. HMA-pooled late GEV: no recurrence shift.
+- `backtest.json` generated `2026-09-19T22:54:53Z`: **in-sample** CSI **0.053**, POD 0.212, FAR 0.935 on UNOSAT 27 Sep 2024 (observed 121.00 km² vs modeled 393.62 km²). JRC seasonal-water CSI **0.067**; area-matched elevation CSI **0.001**. Skill vs scale **falls** (0.053 → 0.000). Permanent water: JRC GSW ≥50% excluded from both masks.
+- `backtest.json` validation (2017-08-13 ICIMOD RDS 33616): **transfer**, not same-valley. Frozen 2024 model, CSI **0.088**, POD 0.335, FAR 0.894, vs JRC CSI **0.141**. Product bbox 82.03–84.98°E; Koshi calibration is 86.06–87.47°E.
+- `backtest.json` spatial_holdout (2024 west-fit / east-test): CSI **0.056**. Same storm, spatial split only.
+- `replication.json`: ERA5-Land at **39 of 73** Nepal-adjacent ISD coordinates (Open-Meteo rate-limited the rest). Two-era GEV **16.72-year** recurrence vs ISD 7.75. Verdict: **partially replicates**. Mean-annmax Pearson r=0.128, bias +43.96 mm (n=30 after dropping empty ISD series). IMERG `available: false`.
+- `plan.json`: $2,000,000 budget, **$1,984,000** modeled spend, **62** floodplain-restoration measures, **26,306.075** annual expected people-risk avoided, **8,680** tCO₂/10yr, **$74,400**/yr modeled livelihood-income. Knapsack gap **0%** (greedy matches the relaxed independent-value bound). Equity weight up to **1.5×** on selected parcels.
+- Counterfactual: **77,057.1** → **54,173.5** people-exposure units (**29.7%** simulated reduction). Not unique lives.
 
 If any source artifact changes, update this lock and every matching spoken value before presenting. Run
 `python3 scripts/verify_artifacts.py` to check cache hashes; it is read-only.
+
+**Swear-jar:** never say “same valley” for 2017, never say the model beats JRC, never say skill-vs-scale rises, never say 16,058 people were saved.
 
 ## Exact 3:20 script
 
@@ -21,117 +26,126 @@ Stage directions are in brackets and are not spoken. Rehearse to the timestamp b
 
 ### 0:00–0:20 — Hook
 
-[Show the Sentinel-1 observed flood layer.]
+[Map, 2024 UNOSAT observed layer.]
 
-“During the monsoon, clouds hide floods from normal optical satellites. RootLedger starts with observed radar:
-this is UNOSAT’s Sentinel-1 flood extent from 27 September 2024 over Koshi and Madhesh.”
+“On 27 September 2024 the Koshi flooded. Monsoon clouds blind optical satellites, so this is radar — UNOSAT’s
+Sentinel-1 flood extent. Everyone else builds the warning for next time. We built the plan for what to *plant*
+so next time is smaller.”
 
-### 0:20–0:45 — Calibration evidence
+### 0:20–0:50 — Proof, twice
 
-[Toggle observed versus modeled.]
+[Toggle modeled/observed; flip event toggle to 2017 transfer.]
 
-“We compare that observation with a screening model: a Copernicus GLO-30 local-min HAND proxy, with stage
-calibrated on this same event. Its calibration-event CSI is 0.086, POD 0.211, and FAR 0.873. That is low, and it
-is not independent validation; we show it because honest evidence is more useful than a polished fake score.”
+“Our screening flood model was calibrated on this one event — in-sample CSI 0.053. It beats a naïve elevation
+baseline (CSI 0.001) and **does not beat** JRC seasonal-water climatology (CSI 0.067). We report the miss.
+Then we froze every parameter and replayed a flood it had never seen: 13 August 2017, ICIMOD Sentinel-1 over
+the western Terai — a spatial-plus-temporal *transfer*, not the same valley. Out-of-sample CSI 0.088; JRC is
+0.141 there too. Permanent river water is excluded from scoring on both sides. Skill versus scale on 2024
+falls, it does not rise — the curve is on the Proof tab.”
 
-### 0:45–1:15 — Signal in the noise
+### 0:50–1:20 — The signal
 
-[Open the signal panel and return-level chart.]
+[Signal tab, return-level curve, ERA5 card.]
 
-“Upstream, we processed 498 NOAA stations and 12,066 station-years across High Mountain Asia. We cleaned missing
-sentinels, quality flags, duplicate days, and mixed accumulation windows, then fit extreme-value models. In the
-Nepal-adjacent subset, the old one-in-one-hundred-year rainfall depth has a fitted late-sample recurrence of 7.75
-years. That is model output from observed records, not a forecast, and the HMA-pooled fit did not show the same
-shift.”
+“Upstream: 498 NOAA stations, 12,066 station-years, parsed on Voloridge’s 48-core box — sentinels, broken
+accumulation windows, duplicate days, all cleaned and counted. Extreme-value theory, the same tail math as
+VaR. Nepal-adjacent result: the old 1-in-100-year daily rainfall now fits a **7.75-year** recurrence. Two
+controls: the full-HMA pool shows **no shift** — we published our own miss — and an independent re-fit on
+ERA5-Land at the same station coordinates **partially replicates** (16.72-year vs 7.75-year). Magnitudes
+disagree; we show the scatter instead of averaging it away. IMERG was not fused.”
 
-### 1:15–1:35 — Evidence labels
+### 1:20–1:35 — Evidence labels
 
-[Point to the evidence labels.]
+[Point at banner.]
 
-“RootLedger keeps four categories separate: observed data, model output, literature assumptions, and
-counterfactual simulation. The rainfall record and radar extent are observations. Hazard and optimization are
-models. Cost, carbon, efficacy, and income factors come from literature.”
+“Four categories, never mixed: observed data, model output, literature assumptions, counterfactual
+simulation.”
 
-### 1:35–2:05 — Preventive pivot
+### 1:35–2:05 — The pivot + the plan
 
-[Open the plan and highlight selected parcels.]
+[Plan tab, $2M.]
 
-“Most tools stop at warning. We ask what preventive measures fit a fixed budget: wetland and floodplain
-restoration, riverbank bioengineering, vetiver, bamboo, and afforestation. The optimizer ranks candidate parcels
-with per-cell expected-loss capping and Monte Carlo climate uncertainty. Each recommendation carries a centroid,
-budget, risk metric, and the available suitability and evidence fields; if an artifact does not support a reason,
-the agent says so.”
+“So what do we do with a fatter tail? Not an alert. A budget. At two million dollars the optimizer selects
+62 preventive measures — here, floodplain restoration on the Terai cells the evidence supports — 26,306
+annual expected people-risk avoided, 8,680 tonnes of CO₂ over ten years, 74,400 dollars per year of modeled
+livelihood income. Cells flagged low-income carry up to 1.5× weight — equity is in the objective function,
+not the slide deck.”
 
-### 2:05–2:35 — Current portfolio
+### 2:05–2:25 — Tail-risk mode
 
-[Set the budget to $2M; do not mention households.]
+[Point at CVaR copy and knapsack line. Offline freeze: do not drag live controls.]
 
-“At a two-million-dollar ceiling, modeled spend is 1,760,000 dollars. The output is 16,058 annual expected
-people-risk units avoided, not unique people or observed lives saved; 7,700 tonnes of carbon over ten years; and
-66,000 dollars per year of livelihood-income potential from per-hectare literature factors. Those are screening
-outputs, not measured impact, income, jobs, wages, or households reached.”
+“Same discipline as a trading book: CVaR re-ranks for the worst 10% of climate draws. Greedy matches the
+relaxed knapsack upper bound — gap 0 percent. The bound ignores per-cell overlap capping, so the true gap
+is smaller.”
 
-### 2:35–2:55 — Grounded ask
+### 2:25–2:45 — Grounded agent
 
-[Ask exactly: “Why is parcel p_c_00098_floodplain_restore ahead of p_c_00115_floodplain_restore?”]
+[Ask: “Why was preventive measure p_c_00132_floodplain_restore selected before p_c_00097_floodplain_restore?”]
 
-“The answer is grounded in the candidate and selected-plan rows. The first floodplain-restoration opportunity is
-at 26.53 north, 87.14 east: 32,000 dollars, suitability 0.235, and 2,499.3286 annual people-risk units avoided.
-The second is also 32,000 dollars, with suitability 0.28 and 1,886.9204 units. The order is model output, not
-observed causal proof.”
+“The agent answers only from artifact numbers. If a tool didn’t return it, it says it doesn’t have it.”
 
-### 2:55–3:10 — Data to action
+### 2:45–3:00 — It generalizes
 
-[Open “Preventive Measures Plan”.]
+[City dropdown → Bengaluru, then Kathmandu if asked. CSI-null banner must stay visible.]
 
-“One click produces a Preventive Measures Plan: prioritized interventions with coordinates and budget, an
-evidence register, literature assumptions, monitoring and verification, and limitations. It never turns the
-counterfactual into an observed claim or assigns synthetic responsibility percentages.”
+“Same engine, any watershed: Bengaluru’s urban-lake pack from the same public stack, CSI null — we will not
+invent a score — and Kathmandu is pre-built the same way.”
 
-### 3:10–3:20 — Close
+### 3:00–3:20 — Close
 
-[Return to the map.]
+[Back to Koshi map. Export tab.]
 
-“RootLedger turns noisy public data into a transparent prevention shortlist—and keeps every claim auditable.”
+“One click exports the screening plan a district can take to a funder. Noisy public rain → a fitted tail →
+a validated-against-radar flood model → a budget spent on prevention. RootLedger makes resilience a
+portfolio — and every claim is auditable.”
+
+**Cut order if over time:** knapsack line → generalization beat → agent beat. **Never cut:** proof-twice
+(with the JRC miss), the 7.75 + negative control + ERA5 verdict, the $2M plan.
 
 ## Q&A — exact answers
 
-**“Is this a validated flood model?”**  
+**“Is this a validated flood model?”**
 “No. It is a screening-grade Copernicus GLO-30 local-min HAND proxy, with stage calibrated on the 27 September
-2024 event. CSI 0.086, POD 0.211, and FAR 0.873 are calibration-event fit metrics, not independent validation.”
+2024 event. CSI 0.053, POD 0.212, and FAR 0.935 are in-sample calibration-event metrics. The 2017 row is a
+frozen transfer onto a different Terai reach, CSI 0.088.”
 
-**“Why is the CSI so low?”**  
-“The proxy overpredicts extent: modeled area is 221.82 km² versus 134.18 km² observed, and FAR is 0.873. We keep
-the result visible and limit the use case to screening. Independent events or a hydrodynamic model are needed
-before design or investment.”
+**“Why is the CSI so low?”**
+“At 200 m against speckled SAR paddy flooding, yes — that is the strictest test. Skill vs scale does not
+rescue it: CSI stays 0.052 at ~1 km and falls to 0 at 4.5 km. We still beat elevation (0.001) and we still
+lose to JRC seasonal water (0.067). We would rather show a real 0.053 than a fake 0.8.”
 
-**“Did you save 16,058 people?”**  
-“No. `people_protected` is the model’s sum of annual expected people-risk avoided. It is not unique people, an
-observed outcome, or lives saved.”
+**“Is the 2017 test truly out-of-sample?”**
+“Parameters were frozen on 2024 before the 2017 raster was scored — that part is true out-of-sample. The
+product does not overlap Koshi (82–85°E vs 86–87°E), so we call it a transfer, not same-valley. A 2024
+west/east spatial holdout on Koshi itself is CSI 0.056.”
 
-**“Is the 29.24% reduction observed?”**  
+**“Did you save 26,306 people?”**
+“No. `people_protected` is the model’s sum of annual expected people-risk avoided. It is not unique people,
+an observed outcome, or lives saved.”
+
+**“Is the 29.7% reduction observed?”**
 “No. It is a counterfactual simulation: observed-flood fraction times population, reduced by modeled
 nature-based-solution capture. It is not a measured causal effect.”
 
-**“How many households benefit?”**  
-“We do not have defensible participant or household data, so we make no household-reach claim. The income value
-is modeled potential from per-hectare literature assumptions and must be measured during implementation.”
+**“Reanalysis assimilates gauges — is ERA5 really independent?”**
+“Quasi-independent; the card says exactly that. Different system, different failure modes. It partially
+replicates the direction (16.72-year vs 7.75-year) on 39 of 73 coordinates; Pearson r on mean annual maxima
+is 0.128. We show the disagreement. IMERG was not fused.”
 
-**“Who is responsible: government, communities, or households?”**  
-“The data does not identify causal responsibility percentages. We show provisional implementation roles for
-planning, and those require local governance and community confirmation; they are not an allocation of blame.”
+**“How close is greedy to optimal?”**
+“The independent-value knapsack bound matches greedy to 0%. That bound ignores per-cell overlap capping, so
+the true gap is smaller.”
 
-**“Why is p_c_00098_floodplain_restore ahead of p_c_00115_floodplain_restore?”**  
-“The current selected order places them first and second. Both cost 32,000 dollars; the first has 2,499.3286
-annual expected people-risk units avoided versus 1,886.9204 for the second. The candidate records also expose
-their centroids, risk driver, suitability score and evidence, assumptions, and required verification. The order
-is model output, not observed causal proof.”
+**“How many households benefit?”**
+“We do not have defensible participant or household data, so we make no household-reach claim. The income
+value is modeled potential from per-hectare literature assumptions.”
 
-**“What is observed versus assumed?”**  
-“Observed: NOAA station records and the UNOSAT Sentinel-1 flood extent. Model output: GEV recurrence, hazard
-proxy, expected risk, ranking, carbon, and income calculations. Literature assumptions: unit cost, efficacy,
-carbon, and income factors. Counterfactual simulation: with-plan exposure.”
+**“Why is p_c_00132_floodplain_restore ahead of p_c_00097_floodplain_restore?”**
+“Both cost 32,000 dollars. The first is at 26.37 north, 87.14 east, suitability 0.313, 2,384.558 annual
+people-risk units avoided, equity weight 1.5. The second is at 26.53 north, 87.06 east, suitability 0.283,
+2,094.981 units, also weight 1.5. The order is model output, not observed causal proof.”
 
-**“Can this fund construction now?”**  
+**“Can this fund construction now?”**
 “No. It is a screening shortlist. Parcel boundaries, tenure, suitability, safeguards, costs, engineering,
 governance roles, and monitoring baselines all need field verification.”

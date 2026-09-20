@@ -20,10 +20,14 @@ SYNC_FILES = (
     "preventive_measures_plan.pdf",
     "flood_observed.geojson",
     "flood_modeled.geojson",
+    "flood_observed_2017.geojson",
+    "flood_modeled_2017.geojson",
     "risk_before.geojson",
     "risk_with_plan.geojson",
     "government_scorecard.md",
     "citizen_brief.md",
+    "replication.json",
+    "cities.json",
 )
 SYNC_TREES = ("charts", "cities")
 TARGETS = ("demo_cache", "web/public/demo_cache")

@@ -1,1064 +1,1895 @@
 {
   "budget_usd": 2000000.0,
-  "mode": "cvar",
+  "mode": "expected",
   "selected": [
     {
-      "parcel_id": "blr_p_0381",
-      "cost_usd": 4800.0,
-      "avoided_eal_people": 724.9302,
-      "co2_t_10yr": 21.0,
-      "income_usd_yr": 180.0
-    },
-    {
-      "parcel_id": "blr_p_0358",
-      "cost_usd": 8400.0,
-      "avoided_eal_people": 1121.4032,
-      "co2_t_10yr": 42.0,
-      "income_usd_yr": 280.0
-    },
-    {
-      "parcel_id": "blr_p_0409",
-      "cost_usd": 12080.0,
-      "avoided_eal_people": 1382.3403,
-      "co2_t_10yr": 52.85,
-      "income_usd_yr": 453.0
-    },
-    {
-      "parcel_id": "blr_p_0361",
-      "cost_usd": 4500.0,
-      "avoided_eal_people": 493.216,
-      "co2_t_10yr": 15.0,
-      "income_usd_yr": 375.0
-    },
-    {
-      "parcel_id": "blr_p_0384",
-      "cost_usd": 7020.0,
-      "avoided_eal_people": 559.3911,
-      "co2_t_10yr": 23.4,
-      "income_usd_yr": 585.0
-    },
-    {
-      "parcel_id": "blr_p_0386",
-      "cost_usd": 27480.0,
-      "avoided_eal_people": 1874.6011,
-      "co2_t_10yr": 137.4,
-      "income_usd_yr": 916.0
-    },
-    {
-      "parcel_id": "blr_p_0334",
-      "cost_usd": 21000.0,
-      "avoided_eal_people": 1530.0917,
-      "co2_t_10yr": 105.0,
-      "income_usd_yr": 700.0
-    },
-    {
-      "parcel_id": "blr_p_0124",
-      "cost_usd": 3600.0,
-      "avoided_eal_people": 265.9196,
-      "co2_t_10yr": 96.0,
-      "income_usd_yr": 300.0
-    },
-    {
-      "parcel_id": "blr_p_0310",
-      "cost_usd": 7920.0,
-      "avoided_eal_people": 614.1278,
-      "co2_t_10yr": 89.1,
-      "income_usd_yr": 1683.0
-    },
-    {
-      "parcel_id": "blr_p_0408",
-      "cost_usd": 23520.0,
-      "avoided_eal_people": 1977.1188,
-      "co2_t_10yr": 117.6,
-      "income_usd_yr": 784.0
-    },
-    {
-      "parcel_id": "blr_p_0289",
-      "cost_usd": 11520.0,
-      "avoided_eal_people": 802.1044,
-      "co2_t_10yr": 50.4,
-      "income_usd_yr": 432.0
-    },
-    {
-      "parcel_id": "blr_p_0286",
-      "cost_usd": 20160.0,
-      "avoided_eal_people": 1263.2329,
-      "co2_t_10yr": 100.8,
-      "income_usd_yr": 672.0
-    },
-    {
-      "parcel_id": "blr_p_0412",
-      "cost_usd": 5280.0,
-      "avoided_eal_people": 331.3835,
-      "co2_t_10yr": 23.1,
-      "income_usd_yr": 198.0
-    },
-    {
-      "parcel_id": "blr_p_0359",
-      "cost_usd": 11580.0,
-      "avoided_eal_people": 604.5893,
-      "co2_t_10yr": 308.8,
-      "income_usd_yr": 965.0
-    },
-    {
-      "parcel_id": "blr_p_0383",
-      "cost_usd": 11580.0,
-      "avoided_eal_people": 646.693,
-      "co2_t_10yr": 38.6,
-      "income_usd_yr": 965.0
-    },
-    {
-      "parcel_id": "blr_p_0339",
-      "cost_usd": 33720.0,
-      "avoided_eal_people": 2179.9323,
-      "co2_t_10yr": 168.6,
-      "income_usd_yr": 1124.0
-    },
-    {
-      "parcel_id": "blr_p_0309",
-      "cost_usd": 15360.0,
-      "avoided_eal_people": 755.2091,
-      "co2_t_10yr": 67.2,
-      "income_usd_yr": 576.0
-    },
-    {
-      "parcel_id": "blr_p_0404",
-      "cost_usd": 9000.0,
-      "avoided_eal_people": 446.931,
-      "co2_t_10yr": 45.0,
-      "income_usd_yr": 300.0
-    },
-    {
-      "parcel_id": "blr_p_0216",
-      "cost_usd": 6750.0,
-      "avoided_eal_people": 354.0338,
-      "co2_t_10yr": 16.2,
-      "income_usd_yr": 810.0
-    },
-    {
-      "parcel_id": "blr_p_0363",
-      "cost_usd": 22240.0,
-      "avoided_eal_people": 1132.7949,
-      "co2_t_10yr": 97.3,
-      "income_usd_yr": 834.0
-    },
-    {
-      "parcel_id": "blr_p_0406",
-      "cost_usd": 6840.0,
-      "avoided_eal_people": 393.7854,
-      "co2_t_10yr": 22.8,
-      "income_usd_yr": 570.0
-    },
-    {
-      "parcel_id": "blr_p_0387",
-      "cost_usd": 25760.0,
-      "avoided_eal_people": 1462.5911,
-      "co2_t_10yr": 112.7,
-      "income_usd_yr": 966.0
-    },
-    {
-      "parcel_id": "blr_p_0360",
-      "cost_usd": 10620.0,
-      "avoided_eal_people": 501.8726,
-      "co2_t_10yr": 35.4,
-      "income_usd_yr": 885.0
-    },
-    {
-      "parcel_id": "blr_p_0170",
-      "cost_usd": 2600.0,
-      "avoided_eal_people": 121.4487,
-      "co2_t_10yr": 29.25,
-      "income_usd_yr": 552.5
-    },
-    {
-      "parcel_id": "blr_p_0380",
-      "cost_usd": 8320.0,
-      "avoided_eal_people": 374.5846,
-      "co2_t_10yr": 36.4,
-      "income_usd_yr": 312.0
-    },
-    {
-      "parcel_id": "blr_p_0178",
-      "cost_usd": 4100.0,
-      "avoided_eal_people": 183.8354,
-      "co2_t_10yr": 9.84,
-      "income_usd_yr": 492.0
-    },
-    {
-      "parcel_id": "blr_p_0164",
-      "cost_usd": 2580.0,
-      "avoided_eal_people": 101.076,
-      "co2_t_10yr": 68.8,
-      "income_usd_yr": 215.0
-    },
-    {
-      "parcel_id": "blr_p_0242",
-      "cost_usd": 4080.0,
-      "avoided_eal_people": 172.2799,
-      "co2_t_10yr": 45.9,
-      "income_usd_yr": 867.0
-    },
-    {
-      "parcel_id": "blr_p_0336",
-      "cost_usd": 44160.0,
-      "avoided_eal_people": 1868.1424,
-      "co2_t_10yr": 220.8,
-      "income_usd_yr": 1472.0
-    },
-    {
-      "parcel_id": "blr_p_0122",
-      "cost_usd": 5640.0,
-      "avoided_eal_people": 227.7103,
-      "co2_t_10yr": 63.45,
-      "income_usd_yr": 1198.5
-    },
-    {
-      "parcel_id": "blr_p_0024",
-      "cost_usd": 3250.0,
-      "avoided_eal_people": 126.1755,
-      "co2_t_10yr": 7.8,
-      "income_usd_yr": 390.0
-    },
-    {
-      "parcel_id": "blr_p_0407",
-      "cost_usd": 28200.0,
-      "avoided_eal_people": 1307.2655,
-      "co2_t_10yr": 141.0,
-      "income_usd_yr": 940.0
-    },
-    {
-      "parcel_id": "blr_p_0284",
-      "cost_usd": 4360.0,
-      "avoided_eal_people": 162.9206,
-      "co2_t_10yr": 49.05,
-      "income_usd_yr": 926.5
-    },
-    {
-      "parcel_id": "blr_p_0266",
-      "cost_usd": 6720.0,
-      "avoided_eal_people": 278.3476,
-      "co2_t_10yr": 75.6,
-      "income_usd_yr": 1428.0
-    },
-    {
-      "parcel_id": "blr_p_0218",
-      "cost_usd": 5050.0,
-      "avoided_eal_people": 197.7303,
-      "co2_t_10yr": 12.12,
-      "income_usd_yr": 606.0
-    },
-    {
-      "parcel_id": "blr_p_0314",
-      "cost_usd": 15000.0,
-      "avoided_eal_people": 600.6597,
-      "co2_t_10yr": 50.0,
-      "income_usd_yr": 1250.0
-    },
-    {
-      "parcel_id": "blr_p_0335",
-      "cost_usd": 15420.0,
-      "avoided_eal_people": 521.5975,
-      "co2_t_10yr": 51.4,
-      "income_usd_yr": 1285.0
-    },
-    {
-      "parcel_id": "blr_p_0035",
-      "cost_usd": 8520.0,
-      "avoided_eal_people": 271.9819,
-      "co2_t_10yr": 42.6,
-      "income_usd_yr": 284.0
-    },
-    {
-      "parcel_id": "blr_p_0288",
-      "cost_usd": 21040.0,
-      "avoided_eal_people": 852.3673,
-      "co2_t_10yr": 92.05,
-      "income_usd_yr": 789.0
-    },
-    {
-      "parcel_id": "blr_p_0171",
-      "cost_usd": 4650.0,
-      "avoided_eal_people": 144.5861,
-      "co2_t_10yr": 124.0,
-      "income_usd_yr": 387.5
-    },
-    {
-      "parcel_id": "blr_p_0213",
-      "cost_usd": 12960.0,
-      "avoided_eal_people": 345.6735,
-      "co2_t_10yr": 56.7,
-      "income_usd_yr": 486.0
-    },
-    {
-      "parcel_id": "blr_p_0168",
-      "cost_usd": 10000.0,
-      "avoided_eal_people": 277.5981,
-      "co2_t_10yr": 112.5,
-      "income_usd_yr": 2125.0
-    },
-    {
-      "parcel_id": "blr_p_0214",
-      "cost_usd": 16100.0,
-      "avoided_eal_people": 403.2858,
-      "co2_t_10yr": 38.64,
-      "income_usd_yr": 1932.0
-    },
-    {
-      "parcel_id": "blr_p_0078",
-      "cost_usd": 7620.0,
-      "avoided_eal_people": 193.067,
-      "co2_t_10yr": 203.2,
-      "income_usd_yr": 635.0
-    },
-    {
-      "parcel_id": "blr_p_0337",
-      "cost_usd": 39360.0,
-      "avoided_eal_people": 1226.3987,
-      "co2_t_10yr": 196.8,
-      "income_usd_yr": 1312.0
-    },
-    {
-      "parcel_id": "blr_p_0261",
-      "cost_usd": 6690.0,
-      "avoided_eal_people": 200.0394,
-      "co2_t_10yr": 178.4,
-      "income_usd_yr": 557.5
-    },
-    {
-      "parcel_id": "blr_p_0259",
-      "cost_usd": 4530.0,
-      "avoided_eal_people": 124.581,
-      "co2_t_10yr": 120.8,
-      "income_usd_yr": 377.5
-    },
-    {
-      "parcel_id": "blr_p_0084",
-      "cost_usd": 3550.0,
-      "avoided_eal_people": 100.149,
-      "co2_t_10yr": 8.52,
-      "income_usd_yr": 426.0
-    },
-    {
-      "parcel_id": "blr_p_0357",
-      "cost_usd": 47880.0,
-      "avoided_eal_people": 1296.03,
-      "co2_t_10yr": 239.4,
-      "income_usd_yr": 1596.0
-    },
-    {
-      "parcel_id": "blr_p_0176",
-      "cost_usd": 8360.0,
-      "avoided_eal_people": 194.3252,
-      "co2_t_10yr": 94.05,
-      "income_usd_yr": 1776.5
-    },
-    {
-      "parcel_id": "blr_p_0388",
-      "cost_usd": 32800.0,
-      "avoided_eal_people": 789.9409,
-      "co2_t_10yr": 143.5,
-      "income_usd_yr": 1230.0
-    },
-    {
-      "parcel_id": "blr_p_0215",
-      "cost_usd": 12800.0,
-      "avoided_eal_people": 303.4575,
-      "co2_t_10yr": 144.0,
-      "income_usd_yr": 2720.0
-    },
-    {
-      "parcel_id": "blr_p_0362",
-      "cost_usd": 25560.0,
-      "avoided_eal_people": 656.2583,
-      "co2_t_10yr": 85.2,
-      "income_usd_yr": 2130.0
-    },
-    {
-      "parcel_id": "blr_p_0312",
-      "cost_usd": 22560.0,
-      "avoided_eal_people": 495.8353,
-      "co2_t_10yr": 75.2,
-      "income_usd_yr": 1880.0
-    },
-    {
-      "parcel_id": "blr_p_0263",
-      "cost_usd": 6960.0,
-      "avoided_eal_people": 174.1129,
-      "co2_t_10yr": 78.3,
-      "income_usd_yr": 1479.0
-    },
-    {
-      "parcel_id": "blr_p_0241",
-      "cost_usd": 25440.0,
-      "avoided_eal_people": 681.9916,
-      "co2_t_10yr": 111.3,
-      "income_usd_yr": 954.0
-    },
-    {
-      "parcel_id": "blr_p_0315",
-      "cost_usd": 20400.0,
-      "avoided_eal_people": 463.4901,
-      "co2_t_10yr": 68.0,
-      "income_usd_yr": 1700.0
-    },
-    {
-      "parcel_id": "blr_p_0313",
-      "cost_usd": 20220.0,
-      "avoided_eal_people": 469.4314,
-      "co2_t_10yr": 67.4,
-      "income_usd_yr": 1685.0
-    },
-    {
-      "parcel_id": "blr_p_0382",
-      "cost_usd": 17580.0,
-      "avoided_eal_people": 417.5253,
-      "co2_t_10yr": 58.6,
-      "income_usd_yr": 1465.0
-    },
-    {
-      "parcel_id": "blr_p_0217",
-      "cost_usd": 5190.0,
-      "avoided_eal_people": 112.9888,
-      "co2_t_10yr": 138.4,
-      "income_usd_yr": 432.5
-    },
-    {
-      "parcel_id": "blr_p_0433",
-      "cost_usd": 8700.0,
-      "avoided_eal_people": 168.6126,
-      "co2_t_10yr": 232.0,
-      "income_usd_yr": 725.0
-    },
-    {
-      "parcel_id": "blr_p_0385",
-      "cost_usd": 40200.0,
-      "avoided_eal_people": 967.9523,
-      "co2_t_10yr": 201.0,
-      "income_usd_yr": 1340.0
-    },
-    {
-      "parcel_id": "blr_p_0077",
-      "cost_usd": 15280.0,
-      "avoided_eal_people": 289.6006,
-      "co2_t_10yr": 66.85,
-      "income_usd_yr": 573.0
-    },
-    {
-      "parcel_id": "blr_p_0239",
-      "cost_usd": 18320.0,
-      "avoided_eal_people": 357.4251,
-      "co2_t_10yr": 80.15,
-      "income_usd_yr": 687.0
-    },
-    {
-      "parcel_id": "blr_p_0262",
-      "cost_usd": 15680.0,
-      "avoided_eal_people": 310.1959,
-      "co2_t_10yr": 68.6,
-      "income_usd_yr": 588.0
-    },
-    {
-      "parcel_id": "blr_p_0082",
-      "cost_usd": 6270.0,
-      "avoided_eal_people": 112.3074,
-      "co2_t_10yr": 167.2,
-      "income_usd_yr": 522.5
-    },
-    {
-      "parcel_id": "blr_p_0356",
-      "cost_usd": 11120.0,
-      "avoided_eal_people": 264.7156,
-      "co2_t_10yr": 125.1,
-      "income_usd_yr": 2363.0
-    },
-    {
-      "parcel_id": "blr_p_0285",
-      "cost_usd": 16560.0,
-      "avoided_eal_people": 327.0011,
-      "co2_t_10yr": 186.3,
-      "income_usd_yr": 3519.0
-    },
-    {
-      "parcel_id": "blr_p_0333",
-      "cost_usd": 23400.0,
-      "avoided_eal_people": 503.4531,
-      "co2_t_10yr": 78.0,
-      "income_usd_yr": 1950.0
-    },
-    {
-      "parcel_id": "blr_p_0265",
-      "cost_usd": 12480.0,
-      "avoided_eal_people": 216.0882,
-      "co2_t_10yr": 332.8,
-      "income_usd_yr": 1040.0
-    },
-    {
-      "parcel_id": "blr_p_0123",
-      "cost_usd": 24960.0,
-      "avoided_eal_people": 465.3593,
-      "co2_t_10yr": 124.8,
-      "income_usd_yr": 832.0
-    },
-    {
-      "parcel_id": "blr_p_0236",
-      "cost_usd": 6600.0,
-      "avoided_eal_people": 108.0309,
-      "co2_t_10yr": 74.25,
-      "income_usd_yr": 1402.5
-    },
-    {
-      "parcel_id": "blr_p_0126",
-      "cost_usd": 7680.0,
-      "avoided_eal_people": 106.0211,
-      "co2_t_10yr": 86.4,
-      "income_usd_yr": 1632.0
-    },
-    {
-      "parcel_id": "blr_p_0340",
-      "cost_usd": 15420.0,
-      "avoided_eal_people": 282.6542,
-      "co2_t_10yr": 51.4,
-      "income_usd_yr": 1285.0
+      "parcel_id": "blr_p_0275",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.56,
+        12.97
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 714.8822,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 1,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0274",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.54,
+        12.97
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 683.935,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 2,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0253",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.6,
+        12.99
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 664.3343,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 3,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0205",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.6,
+        13.03
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 636.8395,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 4,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0226",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.54,
+        13.01
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 591.3044,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 5,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0251",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.56,
+        12.99
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 580.3813,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 6,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0203",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.56,
+        13.03
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 547.1923,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 7,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0252",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.58,
+        12.99
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 544.8193,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 8,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0224",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.5,
+        13.01
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 519.9449,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 9,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "blr_p_0204",
-      "cost_usd": 4840.0,
-      "avoided_eal_people": 73.4215,
-      "co2_t_10yr": 54.45,
-      "income_usd_yr": 1028.5
+      "type": "riverbank_bio",
+      "centroid": [
+        77.58,
+        13.03
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 497.7313,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 10,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0111",
-      "cost_usd": 5520.0,
-      "avoided_eal_people": 107.1464,
-      "co2_t_10yr": 24.15,
-      "income_usd_yr": 207.0
+      "parcel_id": "blr_p_0206",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.62,
+        13.03
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 476.5159,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 11,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0617",
-      "cost_usd": 13440.0,
-      "avoided_eal_people": 232.3731,
-      "co2_t_10yr": 67.2,
-      "income_usd_yr": 448.0
+      "parcel_id": "blr_p_0273",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.52,
+        12.97
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 444.5015,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 12,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0081",
-      "cost_usd": 12240.0,
-      "avoided_eal_people": 196.5379,
-      "co2_t_10yr": 61.2,
-      "income_usd_yr": 408.0
+      "parcel_id": "blr_p_0297",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.52,
+        12.95
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 386.9412,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 13,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0127",
-      "cost_usd": 4980.0,
-      "avoided_eal_people": 64.1801,
-      "co2_t_10yr": 132.8,
-      "income_usd_yr": 415.0
+      "parcel_id": "blr_p_0230",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 2273.4518,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 14,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0219",
-      "cost_usd": 25200.0,
-      "avoided_eal_people": 379.3276,
-      "co2_t_10yr": 126.0,
-      "income_usd_yr": 840.0
+      "parcel_id": "blr_p_0299",
+      "type": "wetland_restore",
+      "centroid": [
+        77.56,
+        12.95
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 2128.1039,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 15,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0328",
-      "cost_usd": 2340.0,
-      "avoided_eal_people": 31.7315,
-      "co2_t_10yr": 62.4,
-      "income_usd_yr": 195.0
+      "parcel_id": "blr_p_0229",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.6,
+        13.01
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 344.088,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 16,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0290",
-      "cost_usd": 52080.0,
-      "avoided_eal_people": 895.8269,
-      "co2_t_10yr": 260.4,
-      "income_usd_yr": 1736.0
+      "parcel_id": "blr_p_0227",
+      "type": "wetland_restore",
+      "centroid": [
+        77.56,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1978.8584,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 17,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0201",
-      "cost_usd": 7360.0,
-      "avoided_eal_people": 116.0281,
-      "co2_t_10yr": 82.8,
-      "income_usd_yr": 1564.0
+      "parcel_id": "blr_p_0278",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1949.5563,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 18,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0338",
-      "cost_usd": 21000.0,
-      "avoided_eal_people": 326.9955,
-      "co2_t_10yr": 70.0,
-      "income_usd_yr": 1750.0
+      "parcel_id": "blr_p_0277",
+      "type": "wetland_restore",
+      "centroid": [
+        77.6,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1932.5483,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 19,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0162",
-      "cost_usd": 12320.0,
-      "avoided_eal_people": 154.2633,
-      "co2_t_10yr": 138.6,
-      "income_usd_yr": 2618.0
+      "parcel_id": "blr_p_0225",
+      "type": "wetland_restore",
+      "centroid": [
+        77.52,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1847.0837,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 20,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0114",
-      "cost_usd": 6540.0,
-      "avoided_eal_people": 107.8389,
-      "co2_t_10yr": 21.8,
-      "income_usd_yr": 545.0
+      "parcel_id": "blr_p_0231",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.64,
+        13.01
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 303.3696,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 21,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0073",
-      "cost_usd": 4650.0,
-      "avoided_eal_people": 59.6455,
-      "co2_t_10yr": 124.0,
-      "income_usd_yr": 387.5
+      "parcel_id": "blr_p_0300",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        12.95
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1745.9496,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 22,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0287",
-      "cost_usd": 20280.0,
-      "avoided_eal_people": 349.3122,
-      "co2_t_10yr": 101.4,
-      "income_usd_yr": 676.0
+      "parcel_id": "blr_p_0228",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1537.5459,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 23,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0316",
-      "cost_usd": 11400.0,
-      "avoided_eal_people": 198.7553,
-      "co2_t_10yr": 38.0,
-      "income_usd_yr": 950.0
+      "parcel_id": "blr_p_0177",
+      "type": "wetland_restore",
+      "centroid": [
+        77.52,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1469.9727,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 24,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0026",
-      "cost_usd": 3480.0,
-      "avoided_eal_people": 47.4651,
-      "co2_t_10yr": 39.15,
-      "income_usd_yr": 739.5
+      "parcel_id": "blr_p_0296",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.5,
+        12.95
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 241.8665,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 25,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0332",
-      "cost_usd": 20560.0,
-      "avoided_eal_people": 307.605,
-      "co2_t_10yr": 89.95,
-      "income_usd_yr": 771.0
+      "parcel_id": "blr_p_0254",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1423.4877,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 26,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0232",
-      "cost_usd": 7840.0,
-      "avoided_eal_people": 115.0518,
-      "co2_t_10yr": 34.3,
-      "income_usd_yr": 294.0
+      "parcel_id": "blr_p_0248",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1405.0183,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 27,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0107",
-      "cost_usd": 3880.0,
-      "avoided_eal_people": 50.0566,
-      "co2_t_10yr": 43.65,
-      "income_usd_yr": 824.5
+      "parcel_id": "blr_p_0323",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.56,
+        12.93
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 230.6539,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 28,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0234",
-      "cost_usd": 18560.0,
-      "avoided_eal_people": 259.0123,
-      "co2_t_10yr": 81.2,
-      "income_usd_yr": 696.0
+      "parcel_id": "blr_p_0249",
+      "type": "wetland_restore",
+      "centroid": [
+        77.52,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1373.4519,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 29,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0378",
-      "cost_usd": 13520.0,
-      "avoided_eal_people": 196.4858,
-      "co2_t_10yr": 59.15,
-      "income_usd_yr": 507.0
+      "parcel_id": "blr_p_0207",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.64,
+        13.03
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 216.6928,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 30,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0212",
-      "cost_usd": 8190.0,
-      "avoided_eal_people": 102.6498,
-      "co2_t_10yr": 218.4,
-      "income_usd_yr": 682.5
+      "parcel_id": "blr_p_0298",
+      "type": "wetland_restore",
+      "centroid": [
+        77.54,
+        12.95
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1254.6988,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 31,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0028",
-      "cost_usd": 9930.0,
-      "avoided_eal_people": 104.4854,
-      "co2_t_10yr": 264.8,
-      "income_usd_yr": 827.5
-    },
-    {
-      "parcel_id": "blr_p_0115",
-      "cost_usd": 3840.0,
-      "avoided_eal_people": 49.9675,
-      "co2_t_10yr": 43.2,
-      "income_usd_yr": 816.0
-    },
-    {
-      "parcel_id": "blr_p_0260",
-      "cost_usd": 6840.0,
-      "avoided_eal_people": 74.469,
-      "co2_t_10yr": 182.4,
-      "income_usd_yr": 570.0
-    },
-    {
-      "parcel_id": "blr_p_0243",
-      "cost_usd": 24840.0,
-      "avoided_eal_people": 363.6417,
-      "co2_t_10yr": 124.2,
-      "income_usd_yr": 828.0
-    },
-    {
-      "parcel_id": "blr_p_0074",
-      "cost_usd": 5760.0,
-      "avoided_eal_people": 59.6455,
-      "co2_t_10yr": 153.6,
-      "income_usd_yr": 480.0
-    },
-    {
-      "parcel_id": "blr_p_0593",
-      "cost_usd": 25320.0,
-      "avoided_eal_people": 347.9211,
-      "co2_t_10yr": 126.6,
-      "income_usd_yr": 844.0
-    },
-    {
-      "parcel_id": "blr_p_0158",
-      "cost_usd": 2940.0,
-      "avoided_eal_people": 37.6618,
-      "co2_t_10yr": 78.4,
-      "income_usd_yr": 245.0
-    },
-    {
-      "parcel_id": "blr_p_0592",
-      "cost_usd": 13560.0,
-      "avoided_eal_people": 165.2573,
-      "co2_t_10yr": 67.8,
-      "income_usd_yr": 452.0
-    },
-    {
-      "parcel_id": "blr_p_0306",
-      "cost_usd": 8040.0,
-      "avoided_eal_people": 102.878,
-      "co2_t_10yr": 40.2,
-      "income_usd_yr": 268.0
-    },
-    {
-      "parcel_id": "blr_p_0220",
-      "cost_usd": 8760.0,
-      "avoided_eal_people": 104.9942,
-      "co2_t_10yr": 43.8,
-      "income_usd_yr": 292.0
-    },
-    {
-      "parcel_id": "blr_p_0172",
-      "cost_usd": 16320.0,
-      "avoided_eal_people": 180.7326,
-      "co2_t_10yr": 54.4,
-      "income_usd_yr": 1360.0
-    },
-    {
-      "parcel_id": "blr_p_0452",
-      "cost_usd": 9680.0,
-      "avoided_eal_people": 99.1287,
-      "co2_t_10yr": 42.35,
-      "income_usd_yr": 363.0
-    },
-    {
-      "parcel_id": "blr_p_0032",
-      "cost_usd": 10920.0,
-      "avoided_eal_people": 96.7734,
-      "co2_t_10yr": 122.85,
-      "income_usd_yr": 2320.5
-    },
-    {
-      "parcel_id": "blr_p_0036",
-      "cost_usd": 19200.0,
-      "avoided_eal_people": 194.2728,
-      "co2_t_10yr": 64.0,
-      "income_usd_yr": 1600.0
-    },
-    {
-      "parcel_id": "blr_p_0149",
-      "cost_usd": 4120.0,
-      "avoided_eal_people": 38.8691,
-      "co2_t_10yr": 46.35,
-      "income_usd_yr": 875.5
+      "parcel_id": "blr_p_0301",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.6,
+        12.95
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 206.634,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 32,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "blr_p_0179",
-      "cost_usd": 3600.0,
-      "avoided_eal_people": 40.3189,
-      "co2_t_10yr": 96.0,
-      "income_usd_yr": 300.0
+      "type": "wetland_restore",
+      "centroid": [
+        77.56,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1224.4733,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 33,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0411",
-      "cost_usd": 12300.0,
-      "avoided_eal_people": 130.1477,
-      "co2_t_10yr": 41.0,
-      "income_usd_yr": 1025.0
+      "parcel_id": "blr_p_0180",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1166.5749,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 34,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0364",
-      "cost_usd": 29880.0,
-      "avoided_eal_people": 334.2759,
-      "co2_t_10yr": 149.4,
-      "income_usd_yr": 996.0
+      "parcel_id": "blr_p_0276",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1161.4464,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 35,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0432",
-      "cost_usd": 16200.0,
-      "avoided_eal_people": 206.4659,
-      "co2_t_10yr": 54.0,
-      "income_usd_yr": 1350.0
+      "parcel_id": "blr_p_0250",
+      "type": "wetland_restore",
+      "centroid": [
+        77.54,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1108.0746,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 36,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0283",
-      "cost_usd": 9840.0,
-      "avoided_eal_people": 91.094,
-      "co2_t_10yr": 262.4,
-      "income_usd_yr": 820.0
+      "parcel_id": "blr_p_0200",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        13.03
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1067.4094,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 37,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0267",
-      "cost_usd": 19800.0,
-      "avoided_eal_people": 205.1456,
-      "co2_t_10yr": 99.0,
-      "income_usd_yr": 660.0
+      "parcel_id": "blr_p_0181",
+      "type": "wetland_restore",
+      "centroid": [
+        77.6,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 1035.1197,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 38,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0125",
-      "cost_usd": 13920.0,
-      "avoided_eal_people": 106.0211,
-      "co2_t_10yr": 156.6,
-      "income_usd_yr": 2958.0
+      "parcel_id": "blr_p_0272",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 996.4591,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 39,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0118",
-      "cost_usd": 7710.0,
-      "avoided_eal_people": 69.8711,
-      "co2_t_10yr": 205.6,
-      "income_usd_yr": 642.5
+      "parcel_id": "blr_p_0279",
+      "type": "wetland_restore",
+      "centroid": [
+        77.64,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 977.524,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 40,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0311",
-      "cost_usd": 51600.0,
-      "avoided_eal_people": 538.8616,
-      "co2_t_10yr": 258.0,
-      "income_usd_yr": 1720.0
+      "parcel_id": "blr_p_0302",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.62,
+        12.95
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 157.3921,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 41,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0129",
-      "cost_usd": 8880.0,
-      "avoided_eal_people": 82.2236,
-      "co2_t_10yr": 99.9,
-      "income_usd_yr": 1887.0
+      "parcel_id": "blr_p_0132",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 857.1451,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 42,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0577",
-      "cost_usd": 4880.0,
-      "avoided_eal_people": 51.0468,
-      "co2_t_10yr": 21.35,
-      "income_usd_yr": 183.0
-    },
-    {
-      "parcel_id": "blr_p_0157",
-      "cost_usd": 3630.0,
-      "avoided_eal_people": 37.6618,
-      "co2_t_10yr": 96.8,
-      "income_usd_yr": 302.5
-    },
-    {
-      "parcel_id": "blr_p_0161",
-      "cost_usd": 20280.0,
-      "avoided_eal_people": 179.9739,
-      "co2_t_10yr": 101.4,
-      "income_usd_yr": 676.0
-    },
-    {
-      "parcel_id": "blr_p_0013",
-      "cost_usd": 5680.0,
-      "avoided_eal_people": 47.9429,
-      "co2_t_10yr": 63.9,
-      "income_usd_yr": 1207.0
-    },
-    {
-      "parcel_id": "blr_p_0331",
-      "cost_usd": 28560.0,
-      "avoided_eal_people": 243.4723,
-      "co2_t_10yr": 124.95,
-      "income_usd_yr": 1071.0
-    },
-    {
-      "parcel_id": "blr_p_0379",
-      "cost_usd": 22240.0,
-      "avoided_eal_people": 242.1649,
-      "co2_t_10yr": 97.3,
-      "income_usd_yr": 834.0
-    },
-    {
-      "parcel_id": "blr_p_0485",
-      "cost_usd": 6880.0,
-      "avoided_eal_people": 68.9697,
-      "co2_t_10yr": 30.1,
-      "income_usd_yr": 258.0
+      "parcel_id": "blr_p_0201",
+      "type": "wetland_restore",
+      "centroid": [
+        77.52,
+        13.03
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 798.3425,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 43,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
       "parcel_id": "blr_p_0202",
-      "cost_usd": 12880.0,
-      "avoided_eal_people": 116.0281,
-      "co2_t_10yr": 144.9,
-      "income_usd_yr": 2737.0
+      "type": "wetland_restore",
+      "centroid": [
+        77.54,
+        13.03
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 571.651,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 44,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0581",
-      "cost_usd": 10240.0,
-      "avoided_eal_people": 88.2266,
-      "co2_t_10yr": 44.8,
-      "income_usd_yr": 384.0
+      "parcel_id": "blr_p_0062",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        13.15
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 562.9964,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 45,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0355",
-      "cost_usd": 33680.0,
-      "avoided_eal_people": 323.2173,
-      "co2_t_10yr": 147.35,
-      "income_usd_yr": 1263.0
+      "parcel_id": "blr_p_0303",
+      "type": "wetland_restore",
+      "centroid": [
+        77.64,
+        12.95
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 518.6747,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 46,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0066",
-      "cost_usd": 7920.0,
-      "avoided_eal_people": 77.9196,
-      "co2_t_10yr": 39.6,
-      "income_usd_yr": 264.0
+      "parcel_id": "blr_p_0295",
+      "type": "wetland_restore",
+      "centroid": [
+        77.48,
+        12.95
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 497.6004,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 47,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0431",
-      "cost_usd": 21960.0,
-      "avoided_eal_people": 230.5023,
-      "co2_t_10yr": 109.8,
-      "income_usd_yr": 732.0
+      "parcel_id": "blr_p_0271",
+      "type": "wetland_restore",
+      "centroid": [
+        77.48,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 496.7998,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 48,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0618",
-      "cost_usd": 5040.0,
-      "avoided_eal_people": 44.6698,
-      "co2_t_10yr": 22.05,
-      "income_usd_yr": 189.0
+      "parcel_id": "blr_p_0130",
+      "type": "wetland_restore",
+      "centroid": [
+        77.54,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 483.8127,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 49,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "blr_p_0120",
-      "cost_usd": 6240.0,
-      "avoided_eal_people": 53.8784,
-      "co2_t_10yr": 166.4,
-      "income_usd_yr": 520.0
+      "parcel_id": "blr_p_0107",
+      "type": "wetland_restore",
+      "centroid": [
+        77.56,
+        13.11
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 469.0992,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 50,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0403",
-      "cost_usd": 21680.0,
-      "avoided_eal_people": 172.3766,
-      "co2_t_10yr": 94.85,
-      "income_usd_yr": 813.0
+      "parcel_id": "blr_p_0223",
+      "type": "wetland_restore",
+      "centroid": [
+        77.48,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 462.8751,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 51,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0282",
-      "cost_usd": 21200.0,
-      "avoided_eal_people": 199.8964,
-      "co2_t_10yr": 92.75,
-      "income_usd_yr": 795.0
+      "parcel_id": "blr_p_0176",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 461.7637,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 52,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0146",
-      "cost_usd": 3900.0,
-      "avoided_eal_people": 33.4353,
-      "co2_t_10yr": 9.36,
-      "income_usd_yr": 468.0
-    },
-    {
-      "parcel_id": "blr_p_0405",
-      "cost_usd": 22200.0,
-      "avoided_eal_people": 182.8558,
-      "co2_t_10yr": 74.0,
-      "income_usd_yr": 1850.0
-    },
-    {
-      "parcel_id": "blr_p_0264",
-      "cost_usd": 27600.0,
-      "avoided_eal_people": 273.4036,
-      "co2_t_10yr": 138.0,
-      "income_usd_yr": 920.0
-    },
-    {
-      "parcel_id": "blr_p_0221",
-      "cost_usd": 4020.0,
-      "avoided_eal_people": 26.7602,
-      "co2_t_10yr": 107.2,
-      "income_usd_yr": 335.0
-    },
-    {
-      "parcel_id": "blr_p_0117",
-      "cost_usd": 15120.0,
-      "avoided_eal_people": 104.8067,
-      "co2_t_10yr": 170.1,
-      "income_usd_yr": 3213.0
+      "parcel_id": "blr_p_0156",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.07
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 451.1758,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 53,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
       "parcel_id": "blr_p_0153",
-      "cost_usd": 2820.0,
-      "avoided_eal_people": 20.7884,
-      "co2_t_10yr": 75.2,
-      "income_usd_yr": 235.0
+      "type": "wetland_restore",
+      "centroid": [
+        77.52,
+        13.07
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 450.9559,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 54,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     },
     {
-      "parcel_id": "blr_p_0607",
-      "cost_usd": 3180.0,
-      "avoided_eal_people": 16.8839,
-      "co2_t_10yr": 84.8,
-      "income_usd_yr": 265.0
+      "parcel_id": "blr_p_0108",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.11
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 439.8542,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 55,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0110",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        13.11
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 429.2081,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 56,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0152",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        13.07
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 424.8559,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 57,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0246",
+      "type": "wetland_restore",
+      "centroid": [
+        77.46,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 424.6998,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 58,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0134",
+      "type": "wetland_restore",
+      "centroid": [
+        77.62,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 421.2969,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 59,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0255",
+      "type": "wetland_restore",
+      "centroid": [
+        77.64,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 418.813,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 60,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0178",
+      "type": "wetland_restore",
+      "centroid": [
+        77.54,
+        13.05
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 416.9454,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 61,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0484",
+      "type": "wetland_restore",
+      "centroid": [
+        77.42,
+        12.79
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 413.0548,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 62,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0039",
+      "type": "wetland_restore",
+      "centroid": [
+        77.64,
+        13.17
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 408.4676,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 63,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0125",
+      "type": "wetland_restore",
+      "centroid": [
+        77.44,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 402.5271,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 64,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0084",
+      "type": "wetland_restore",
+      "centroid": [
+        77.58,
+        13.13
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 383.5898,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 65,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0131",
+      "type": "wetland_restore",
+      "centroid": [
+        77.56,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 379.3432,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 66,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0157",
+      "type": "wetland_restore",
+      "centroid": [
+        77.6,
+        13.07
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 377.3254,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 67,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0247",
+      "type": "wetland_restore",
+      "centroid": [
+        77.48,
+        12.99
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 359.1688,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 68,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0270",
+      "type": "wetland_restore",
+      "centroid": [
+        77.46,
+        12.97
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 348.1791,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 69,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0128",
+      "type": "wetland_restore",
+      "centroid": [
+        77.5,
+        13.09
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 346.0711,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 70,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0018",
+      "type": "wetland_restore",
+      "centroid": [
+        77.7,
+        13.19
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 344.6859,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 71,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
+    },
+    {
+      "parcel_id": "blr_p_0327",
+      "type": "riverbank_bio",
+      "centroid": [
+        77.64,
+        12.93
+      ],
+      "area_ha": 1.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 6000.0,
+      "avoided_eal_people": 56.4218,
+      "co2_t_10yr": 20.0,
+      "income_usd_yr": 500.0,
+      "effect_fraction_assumed": 0.25,
+      "priority_rank": 72,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "blr_p_0222",
+      "type": "wetland_restore",
+      "centroid": [
+        77.46,
+        13.01
+      ],
+      "area_ha": 3.0,
+      "risk_driver": null,
+      "suitability_score": null,
+      "suitability_evidence": null,
+      "rationale": null,
+      "assumptions": null,
+      "verification": null,
+      "data_status": null,
+      "cost_usd": 36000.0,
+      "avoided_eal_people": 329.3461,
+      "co2_t_10yr": 180.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.35,
+      "priority_rank": 73,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.4,
+      "equity_weight": 1.2
     }
   ],
   "totals": {
-    "cost_usd": 1999500.0,
-    "people_protected": 53370.314,
-    "exposure_reduction_pct": 25.37,
-    "co2_t_10yr": 13864.88,
-    "income_usd_yr": 136603.0,
-    "households_benefiting": 635411
+    "cost_usd": 1998000.0,
+    "people_protected": 54253.575,
+    "exposure_reduction_pct": 22.72,
+    "co2_t_10yr": 9780.0,
+    "income_usd_yr": 72900.0,
+    "households_benefiting": null,
+    "households_note": "Unavailable: intervention-area livelihood beneficiaries require a field-tested employment/adoption model; exposed cell population is not a household count."
   },
   "frontier": [
     {
       "budget_usd": 333333.33,
-      "people_protected": 22371.517,
-      "co2_t_10yr": 1976.44
+      "people_protected": 20942.231,
+      "co2_t_10yr": 1460.0
     },
     {
       "budget_usd": 666666.67,
-      "people_protected": 33627.339,
-      "co2_t_10yr": 4361.72
+      "people_protected": 33757.218,
+      "co2_t_10yr": 3120.0
     },
     {
       "budget_usd": 1000000.0,
-      "people_protected": 41190.177,
-      "co2_t_10yr": 6392.82
+      "people_protected": 42365.111,
+      "co2_t_10yr": 4760.0
     },
     {
       "budget_usd": 1333333.33,
-      "people_protected": 46549.485,
-      "co2_t_10yr": 8950.32
+      "people_protected": 46836.91,
+      "co2_t_10yr": 6420.0
     },
     {
       "budget_usd": 1666666.67,
-      "people_protected": 50267.028,
-      "co2_t_10yr": 11811.07
+      "people_protected": 50706.402,
+      "co2_t_10yr": 8060.0
     },
     {
       "budget_usd": 2000000.0,
-      "people_protected": 53370.314,
-      "co2_t_10yr": 13864.88
+      "people_protected": 54253.575,
+      "co2_t_10yr": 9780.0
     }
   ],
+  "optimality": {
+    "greedy_value_usd": 272485877.44,
+    "knapsack_upper_bound_usd": 272485877.44,
+    "gap_pct": 0.0,
+    "note": "Upper bound ignores per-cell overlap capping, so the true gap is smaller."
+  },
   "cvar": {
     "mode_available": true,
-    "tail_people_protected": 19840.78,
+    "tail_people_protected": 20413.162,
     "alpha": 0.1
   },
+  "robustness": {
+    "comparison_mode": "cvar",
+    "selected_in_both_count": 73,
+    "selected_count": 73,
+    "overlap_pct": 100.0,
+    "interpretation": "Measures selected by both expected-value and CVaR objectives are robust to the choice of portfolio objective under the stated Monte-Carlo scenarios."
+  },
   "provenance": {
-    "data_status": "model output \u2014 screening-grade optimisation, not an investment recommendation",
-    "method": "marginal greedy triple-return/$ with per-cell EAL capping over 120 Monte-Carlo hazard scenarios; climate multiplier sigma=0.475 from GEV 100-yr CI; objective=worst-10% tail",
+    "data_status": "counterfactual simulation \u2014 deterministic candidate suitability plus literature-based intervention effects; field verification required",
+    "method": "marginal greedy triple-return/$ with per-cell EAL capping over 160 Monte-Carlo hazard scenarios; climate multiplier sigma=0.475 from GEV 100-yr CI; objective=expected",
     "factors": [
       {
         "type": "vetiver_slope",

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -57,21 +58,61 @@ def _read_dem(bbox, out_res=0.002, urls=None) -> tuple[np.ndarray, object]:
     canvas = np.full((height, width), np.nan, dtype=np.float32)
     for url in urls:
         tmp = np.full_like(canvas, np.nan)
-        with rasterio.Env():
-            with rasterio.open("/vsicurl/" + url) as src:
-                reproject(
-                    source=rasterio.band(src, 1),
-                    destination=tmp,
-                    src_transform=src.transform,
-                    src_crs=src.crs,
-                    src_nodata=src.nodata,
-                    dst_transform=transform,
-                    dst_crs="EPSG:4326",
-                    dst_nodata=np.nan,
-                    resampling=Resampling.bilinear,
-                )
+        try:
+            with rasterio.Env():
+                with rasterio.open("/vsicurl/" + url) as src:
+                    reproject(
+                        source=rasterio.band(src, 1),
+                        destination=tmp,
+                        src_transform=src.transform,
+                        src_crs=src.crs,
+                        src_nodata=src.nodata,
+                        dst_transform=transform,
+                        dst_crs="EPSG:4326",
+                        dst_nodata=np.nan,
+                        resampling=Resampling.bilinear,
+                    )
+        except Exception:
+            continue  # ocean/missing GLO-30 tile
         canvas = np.where(np.isfinite(tmp), tmp, canvas)
     return canvas, transform
+
+
+def _glo30_urls(bbox) -> list[str]:
+    """Copernicus GLO-30 tile URLs covering a lon/lat bbox (northern/eastern hemisphere)."""
+    west, south, east, north = bbox
+    urls = []
+    for la in range(int(math.floor(south)), int(math.ceil(north))):
+        for lo in range(int(math.floor(west)), int(math.ceil(east))):
+            name = f"Copernicus_DSM_COG_10_N{la:02d}_00_E{lo:03d}_00_DEM"
+            urls.append(f"https://copernicus-dem-30m.s3.amazonaws.com/{name}/{name}.tif")
+    return urls
+
+
+GSW_TILE = "data/gsw/occurrence_80E_30N.tif"
+
+
+def _occurrence(root: Path, shape, transform, cache_name: str) -> np.ndarray:
+    """JRC Global Surface Water occurrence (0-100%) reprojected onto the working grid."""
+    from rasterio.warp import Resampling
+    cache = root / f"data/gsw/{cache_name}.npy"
+    if cache.exists():
+        arr = np.load(cache)
+        if arr.shape == tuple(shape):
+            return arr
+    tile = root / GSW_TILE
+    if not tile.exists():
+        raise SystemExit(f"missing JRC Global Surface Water tile {tile}")
+    arr = rasters._warp_path(tile, shape, transform, Resampling.max)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    np.save(cache, arr)
+    return arr
+
+
+def _permanent_water(root: Path, shape, transform, cache_name: str) -> np.ndarray:
+    """Boolean permanent/semi-permanent water mask: JRC occurrence >= 50%."""
+    occ = _occurrence(root, shape, transform, cache_name)
+    return np.nan_to_num(occ, nan=0.0) >= 50.0
 
 
 def _glof_from_tsho(plains_shape, plains_transform) -> tuple[np.ndarray, str]:
@@ -112,6 +153,70 @@ def _csi(obs: np.ndarray, mod: np.ndarray, domain: np.ndarray | None = None) -> 
     far = fp / (tp + fp) if (tp + fp) else 0.0
     csi = tp / (tp + fp + fn) if (tp + fp + fn) else 0.0
     return pod, far, csi, {"tp": tp, "fp": fp, "fn": fn, "tn": tn}
+
+
+def _baselines(obs: np.ndarray, elev: np.ndarray, occ: np.ndarray, domain: np.ndarray) -> dict:
+    """Two dumb baselines scored in the same evaluation domain as the model."""
+    out: dict = {}
+    occv = np.nan_to_num(occ, nan=0.0)
+    jrc = domain & (occv >= 10.0)
+    pod, far, csi, _ = _csi(obs, jrc, domain)
+    out["jrc_seasonal_water"] = {
+        "definition": "flood = JRC GSW occurrence >= 10% (anywhere water is seen seasonally)",
+        "pod": round(pod, 3), "far": round(far, 3), "csi": round(csi, 3),
+    }
+    n_obs = int((obs & domain).sum())
+    dom_n = int(domain.sum())
+    if n_obs > 0 and dom_n > 0:
+        zs = elev[domain]
+        k = min(n_obs, zs.size)
+        thresh = float(np.partition(zs, k - 1)[k - 1])
+        elev_b = domain & (elev <= thresh)
+        pod, far, csi, _ = _csi(obs, elev_b, domain)
+        out["area_matched_elevation"] = {
+            "definition": (
+                f"flood = lowest-elevation {100.0 * k / dom_n:.1f}% of domain "
+                f"(area-matched to observed flood, z <= {thresh:.1f} m)"
+            ),
+            "pod": round(pod, 3), "far": round(far, 3), "csi": round(csi, 3),
+        }
+    else:
+        out["area_matched_elevation"] = {
+            "definition": "unavailable: empty observed flood or domain",
+            "pod": None, "far": None, "csi": None,
+        }
+    return out
+
+
+def _csi_at_scale(obs: np.ndarray, mod: np.ndarray, domain: np.ndarray, transform,
+                  scales=(0.002, 0.01, 0.02, 0.04)) -> list[dict]:
+    """Block-average both masks to fractions, threshold at 0.3, score per scale."""
+    res = abs(transform.a)
+    rows = []
+    for s in scales:
+        b = max(1, int(round(s / res)))
+        hh = (obs.shape[0] // b) * b
+        ww = (obs.shape[1] // b) * b
+        if hh == 0 or ww == 0:
+            continue
+
+        def blk(a):
+            return a[:hh, :ww].reshape(hh // b, b, ww // b, b).sum(axis=(1, 3))
+
+        dom_ct = blk(domain.astype(np.float32))
+        valid = dom_ct > 0
+        obs_frac = np.zeros_like(dom_ct)
+        mod_frac = np.zeros_like(dom_ct)
+        obs_frac[valid] = blk((obs & domain).astype(np.float32))[valid] / dom_ct[valid]
+        mod_frac[valid] = blk((mod & domain).astype(np.float32))[valid] / dom_ct[valid]
+        pod, far, csi, _ = _csi(obs_frac >= 0.3, mod_frac >= 0.3, valid)
+        rows.append({
+            "scale_deg": s,
+            "approx_km": round(s * 111.32, 1),
+            "block_px": b,
+            "pod": round(pod, 3), "far": round(far, 3), "csi": round(csi, 3),
+        })
+    return rows
 
 
 def calibrate_flood(elev: np.ndarray, obs: np.ndarray, domain: np.ndarray,
@@ -172,6 +277,57 @@ def calibrate_flood(elev: np.ndarray, obs: np.ndarray, domain: np.ndarray,
         "hand_window_px": pack.get("hand_window_px"),
         "stream_threshold": pack.get("stream_threshold"),
     }
+
+
+def _apply_frozen(elev: np.ndarray, transform, frozen: dict, tmp: Path) -> np.ndarray:
+    """Apply an already-calibrated model (method + params + stage) with ZERO refitting."""
+    method = frozen["method"]
+    stage = float(frozen["stage_m"])
+    if method == "WhiteboxTools elevation_above_stream":
+        hg = whitebox_hand(elev, transform, tmp, stream_threshold=float(frozen["stream_threshold"]))
+        if hg is None:
+            raise SystemExit("frozen model needs WhiteboxTools but it is unavailable")
+    elif method == "D8 HAND":
+        hg = hand(elev, stream_frac=float(frozen["stream_frac"]))
+    elif method == "local-min HAND proxy":
+        from scipy.ndimage import minimum_filter
+        finite_z = np.where(np.isfinite(elev), elev, np.nanmax(elev))
+        hg = elev - minimum_filter(finite_z, size=int(frozen["hand_window_px"]))
+    else:
+        raise SystemExit(f"unknown frozen method {method!r}")
+    return np.isfinite(elev) & np.isfinite(hg) & (hg <= stage)
+
+
+def _load_2024(root: Path):
+    """Load the 2024 calibration grid: DEM, observed flood, honest evaluation domain.
+
+    Domain = finite DEM ∧ UNOSAT S-1 analysis extent ∧ NOT permanent water
+    (JRC GSW occurrence >= 50%). Both obs and mod are scored inside it, so the
+    permanent river channel never counts for or against the model.
+    """
+    shp = root / "data/obs/FL20240928NPL_SHP/S1_20240927_FloodExtent_Koshi_Madhesh.shp"
+    extent_shp = root / "data/obs/FL20240928NPL_SHP/S1_20240927_AnalysisExtent_Koshi_Madhesh.shp"
+    if not shp.exists():
+        raise SystemExit(f"missing {shp}")
+    obs_geom = _obs_geom(shp)
+    elev, transform = _read_dem(BBOX)
+    h, w = elev.shape
+    obs = rasterize([(mapping(obs_geom), 1)], out_shape=(h, w), transform=transform,
+                    fill=0, dtype="uint8").astype(bool)
+    if extent_shp.exists():
+        extent_geom = _obs_geom(extent_shp)
+        extent = rasterize([(mapping(extent_geom), 1)], out_shape=(h, w), transform=transform,
+                           fill=0, dtype="uint8").astype(bool)
+        extent_note = "UNOSAT S1_20240927_AnalysisExtent_Koshi_Madhesh shapefile"
+    else:
+        from scipy.ndimage import binary_dilation
+        extent = binary_dilation(obs, iterations=20)
+        extent_note = "20-px dilation of observed flood (analysis-extent shapefile missing)"
+    occ = _occurrence(root, elev.shape, transform, "occ_koshi")
+    permanent = np.nan_to_num(occ, nan=0.0) >= 50.0
+    domain = np.isfinite(elev) & extent & ~permanent
+    obs = obs & domain
+    return elev, transform, obs, domain, occ, extent_note
 
 
 def _grid_features(elev, transform, obs, mod, glof, assets, pop_grid, cover, lhasa_grid) -> list[dict]:
@@ -554,22 +710,13 @@ def _geojson_from_mask(mask, transform) -> dict:
 
 
 def run(root: Path) -> None:
-    shp = root / "data/obs/FL20240928NPL_SHP/S1_20240927_FloodExtent_Koshi_Madhesh.shp"
-    extent_shp = root / "data/obs/FL20240928NPL_SHP/S1_20240927_AnalysisExtent_Koshi_Madhesh.shp"
-    if not shp.exists():
-        raise SystemExit(f"missing {shp}")
-    obs_geom = _obs_geom(shp)
-    elev, transform = _read_dem(BBOX)
-    h, w = elev.shape
-    obs = rasterize([(mapping(obs_geom), 1)], out_shape=(h, w), transform=transform, fill=0, dtype="uint8").astype(bool)
-    from scipy.ndimage import binary_dilation
-    inside = binary_dilation(obs, iterations=20)
-    valid = np.isfinite(elev) & inside
-    obs &= valid
+    elev, transform, obs, valid, occ, extent_note = _load_2024(root)
     mod, metrics = calibrate_flood(elev, obs, valid, transform=transform, tmp=root / "data/tmp_wbt")
     mod &= valid
     pod, far, csi, counts = _csi(obs, mod, valid)
     stage = metrics["stage_m"]
+    baselines = _baselines(obs, elev, occ, valid)
+    skill_vs_scale = _csi_at_scale(obs, mod, valid, transform)
 
     # Tsho Rolpa outburst routed on the mountain-to-plains corridor.
     try:
@@ -629,6 +776,14 @@ def run(root: Path) -> None:
     (art / "candidates.json").write_text(json.dumps(cands))
 
     px_km2 = abs(transform.a * transform.e) * 111.32 * 111.32
+    frozen_model = {
+        "method": metrics["method"],
+        "stage_m": round(stage, 2),
+        "stream_frac": metrics.get("stream_frac"),
+        "hand_window_px": metrics.get("hand_window_px"),
+        "stream_threshold": metrics.get("stream_threshold"),
+        "frozen_on": "2024-09-27 UNOSAT S-1 calibration",
+    }
     backtest = {
         "event_date": "2024-09-27",
         "sar_scene": "UNOSAT FL20240928NPL S1_20240927_FloodExtent_Koshi_Madhesh",
@@ -640,21 +795,264 @@ def run(root: Path) -> None:
         "stage_m": round(stage, 2),
         "counts": counts,
         "counterfactual": {"people_exposed_baseline": None, "people_exposed_with_plan": None, "reduction_pct": None},
+        "permanent_water_mask": "JRC GSW occurrence >= 50%, 2021 v1.4 (tile 80E_30N), excluded from BOTH masks",
+        "evaluation_domain": (
+            f"finite GLO-30 DEM AND {extent_note} AND NOT permanent water (2024 calibration); "
+            "bbox minus permanent water (2017 validation)"
+        ),
+        "baselines": baselines,
+        "skill_vs_scale": skill_vs_scale,
+        "frozen_model": frozen_model,
         "provenance": {
-            "data_status": f"observed UNOSAT S-1 vs {metrics['method']}; stage calibrated on this event",
+            "data_status": (
+                f"observed UNOSAT S-1 vs {metrics['method']}; stage CALIBRATED on this event "
+                "(in-sample fit, see 'validation' for out-of-sample)"
+            ),
             "method": f"Copernicus GLO-30; {metrics['method']}; CSI maximised on 27 Sep 2024 scene",
+            "domain": f"finite DEM AND {extent_note} AND NOT JRC permanent water (occurrence >= 50%)",
             "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         },
     }
+    # Carry forward an existing out-of-sample validation block if (and only if)
+    # it was produced against the identical frozen model — recalibration is
+    # deterministic, so re-running the chain must not silently drop it.
+    old_path = art / "backtest.json"
+    if old_path.exists():
+        try:
+            old = json.loads(old_path.read_text())
+        except Exception:
+            old = {}
+        if old.get("frozen_model") == frozen_model:
+            for key in ("validation", "cross_validation"):
+                if key in old:
+                    backtest[key] = old[key]
     (art / "backtest.json").write_text(json.dumps(backtest, indent=2) + "\n")
     print(f"CSI={csi:.3f} POD={pod:.3f} FAR={far:.3f} stage={stage:.1f}m cells={len(cells)} parcels={len(cands)}")
+    print(f"baselines: jrc={baselines['jrc_seasonal_water']['csi']} "
+          f"elev={baselines['area_matched_elevation']['csi']}")
+    print("skill_vs_scale:", [(r["scale_deg"], r["csi"]) for r in skill_vs_scale])
+
+
+def _load_event_raster(event_path: Path):
+    """Load a flood raster (1 = flood) and return (flood_bool, transform, crs, tight_bbox)."""
+    with rasterio.open(event_path) as src:
+        arr = src.read(1)
+        t = src.transform
+        crs = src.crs
+    flood = arr == 1
+    rows = np.where(flood.any(axis=1))[0]
+    cols = np.where(flood.any(axis=0))[0]
+    if rows.size == 0:
+        raise SystemExit(f"no flood pixels (value 1) in {event_path}")
+    west, north = t * (int(cols.min()), int(rows.min()))
+    east, south = t * (int(cols.max()) + 1, int(rows.max()) + 1)
+    grid = 0.002
+    bbox = (
+        math.floor(west / grid) * grid,
+        math.floor(south / grid) * grid,
+        math.ceil(east / grid) * grid,
+        math.ceil(north / grid) * grid,
+    )
+    return flood, t, crs, bbox
+
+
+def validate(root: Path, event_path: Path, event_date: str = "2017-08-13") -> None:
+    """Out-of-sample evaluation of the FROZEN 2024-calibrated model on a second event.
+
+    NOTE: the ICIMOD 2017-08-13 product covers western/central Nepal Terai
+    (~82.0-85.0 E) and does NOT overlap the Koshi calibration bbox (86.06-87.47 E),
+    so this is a spatial+temporal transfer test: the frozen method/parameters/stage
+    are applied to the 2017 product's own extent with zero refitting.
+    """
+    from rasterio.warp import Resampling, reproject
+
+    back_path = root / "artifacts" / "backtest.json"
+    if not back_path.exists():
+        raise SystemExit("run calibration first: python3 -m hazard.proof --root .")
+    backtest = json.loads(back_path.read_text())
+    frozen = backtest.get("frozen_model")
+    if not frozen:
+        raise SystemExit("backtest.json has no frozen_model; re-run calibration first")
+
+    flood_src, src_transform, src_crs, vbbox = _load_event_raster(event_path)
+    print(f"validation bbox {vbbox} (event {event_date})")
+    elev, transform = _read_dem(vbbox, out_res=0.002, urls=_glo30_urls(vbbox))
+    h, w = elev.shape
+
+    # Majority-resample the 30 m flood raster onto the 0.002-deg grid (>=50% cover).
+    frac = np.full((h, w), np.nan, dtype=np.float32)
+    reproject(
+        source=flood_src.astype(np.float32),
+        destination=frac,
+        src_transform=src_transform,
+        src_crs=src_crs,
+        dst_transform=transform,
+        dst_crs="EPSG:4326",
+        dst_nodata=np.nan,
+        resampling=Resampling.average,
+    )
+    permanent = _permanent_water(root, elev.shape, transform, f"occ_val_{event_date.replace('-', '')}")
+    occ = _occurrence(root, elev.shape, transform, f"occ_val_{event_date.replace('-', '')}")
+    domain = np.isfinite(elev) & ~permanent
+    obs = (np.nan_to_num(frac, nan=0.0) >= 0.5) & domain
+
+    # FROZEN model, zero refitting.
+    mod = _apply_frozen(elev, transform, frozen, root / "data/tmp_wbt_val") & domain
+    pod, far, csi, counts = _csi(obs, mod, domain)
+    baselines = _baselines(obs, elev, occ, domain)
+    skill_vs_scale = _csi_at_scale(obs, mod, domain, transform)
+    px_km2 = abs(transform.a * transform.e) * 111.32 * 111.32
+
+    art = root / "artifacts"
+    art.mkdir(exist_ok=True)
+    year = event_date[:4]
+    observed_gj = _geojson_from_mask(obs, transform)
+    for f in observed_gj["features"]:
+        f["properties"]["source"] = f"ICIMOD RDS Sentinel-1 {event_date}"
+    modeled_gj = _geojson_from_mask(mod, transform)
+    for f in modeled_gj["features"]:
+        f["properties"]["source"] = f"frozen 2024 model applied to {event_date} extent"
+    (art / f"flood_observed_{year}.geojson").write_text(json.dumps(observed_gj))
+    (art / f"flood_modeled_{year}.geojson").write_text(json.dumps(modeled_gj))
+
+    # Cross-validation: calibrate on 2017, evaluate frozen on 2024.
+    print("cross-validation: calibrating on 2017 event (sweep)...")
+    _, metrics17 = calibrate_flood(elev, obs, domain, transform=transform, tmp=root / "data/tmp_wbt_val")
+    frozen17 = {
+        "method": metrics17["method"],
+        "stage_m": metrics17["stage_m"],
+        "stream_frac": metrics17.get("stream_frac"),
+        "hand_window_px": metrics17.get("hand_window_px"),
+        "stream_threshold": metrics17.get("stream_threshold"),
+    }
+    elev24, transform24, obs24, domain24, _occ24, _note = _load_2024(root)
+    mod24 = _apply_frozen(elev24, transform24, frozen17, root / "data/tmp_wbt_x24") & domain24
+    _pod_x, _far_x, csi_x, _ = _csi(obs24, mod24, domain24)
+
+    backtest["validation"] = {
+        "event_date": event_date,
+        "source": (
+            "ICIMOD RDS Sentinel-1 flood extent (DOI 10.26066/rds.33616), "
+            "western/central Nepal Terai — does not overlap the Koshi calibration bbox"
+        ),
+        "grid_bbox": list(vbbox),
+        "observed_flood_km2": round(float(obs.sum()) * px_km2, 2),
+        "modeled_flood_km2": round(float(mod.sum()) * px_km2, 2),
+        "hit_rate_pod": round(pod, 3),
+        "false_alarm_ratio": round(far, 3),
+        "critical_success_index": round(csi, 3),
+        "counts": counts,
+        "stage_frozen_from": "2024-09-27 calibration",
+        "frozen_model": frozen,
+        "note": (
+            "True out-of-sample: no parameter was fit on this event. The 2017 product "
+            "covers a different Terai reach (83-85E) than the Koshi bbox, so this is a "
+            "spatial+temporal transfer of the frozen model. Domain = finite DEM AND "
+            "product bbox AND NOT permanent water; no analysis-extent shapefile exists "
+            "for this product. 30 m raster majority-resampled (>=50% cell cover) to the "
+            "0.002-deg grid."
+        ),
+        "skill_vs_scale": skill_vs_scale,
+        "baselines": baselines,
+    }
+    backtest["cross_validation"] = {
+        "calibrate_2017_test_2024_csi": round(csi_x, 3),
+        "calibrate_2017_insample_csi": metrics17["critical_success_index"],
+        "model_calibrated_on_2017": frozen17,
+        "note": "reverse direction: sweep run on the 2017 event, winner applied frozen to 2024",
+    }
+    back_path.write_text(json.dumps(backtest, indent=2) + "\n")
+    print(f"VALIDATION {event_date}: CSI={csi:.3f} POD={pod:.3f} FAR={far:.3f}")
+    print(f"  baselines: jrc={baselines['jrc_seasonal_water']['csi']} "
+          f"elev={baselines['area_matched_elevation']['csi']}")
+    print("  skill_vs_scale:", [(r["scale_deg"], r["csi"]) for r in skill_vs_scale])
+    print(f"CROSS-VAL calibrate-2017/test-2024: CSI={csi_x:.3f} "
+          f"(2017 in-sample {metrics17['critical_success_index']}, method {metrics17['method']})")
+
+
+def spatial_holdout(root: Path) -> dict:
+    """Same-valley OOS: calibrate on the western half of the 2024 scene, freeze, score east.
+
+    Used when no 2017 product overlaps the Koshi bbox. Does not overwrite the
+    2024 in-sample scores or the 2017 western-Terai transfer row.
+    """
+    elev, transform, obs, domain, occ, _note = _load_2024(root)
+    _h, w = elev.shape
+    mid = w // 2
+    west = np.zeros_like(domain)
+    east = np.zeros_like(domain)
+    west[:, :mid] = True
+    east[:, mid:] = True
+    west_dom = domain & west
+    east_dom = domain & east
+    print(f"spatial holdout: west_px={int(west_dom.sum())} east_px={int(east_dom.sum())}")
+    # Skip Whitebox (tmp=None): the frozen 2024 winner is local-min; keep this cheap.
+    _mod_w, metrics = calibrate_flood(elev, obs, west_dom, transform=transform, tmp=None)
+    frozen = {
+        "method": metrics["method"],
+        "stage_m": metrics["stage_m"],
+        "stream_frac": metrics.get("stream_frac"),
+        "hand_window_px": metrics.get("hand_window_px"),
+        "stream_threshold": metrics.get("stream_threshold"),
+        "frozen_on": "2024-09-27 western half of UNOSAT S-1 (spatial holdout)",
+    }
+    mod = _apply_frozen(elev, transform, frozen, root / "data/tmp_wbt_holdout")
+    pod, far, csi, counts = _csi(obs, mod, east_dom)
+    baselines = _baselines(obs, elev, occ, east_dom)
+    skill = _csi_at_scale(obs, mod, east_dom, transform)
+    west_lon, _north = transform * (0, 0)
+    split_lon, _ = transform * (mid, 0)
+    east_lon, _ = transform * (w, 0)
+    pack = {
+        "kind": "spatial_holdout",
+        "event_date": "2024-09-27",
+        "split": "west calibrate / east validate, column midpoint of the 2024 working grid",
+        "split_lon": round(float(split_lon), 4),
+        "west_lon_range": [round(float(west_lon), 4), round(float(split_lon), 4)],
+        "east_lon_range": [round(float(split_lon), 4), round(float(east_lon), 4)],
+        "calibrate_west_csi": metrics["critical_success_index"],
+        "calibrate_west_method": metrics["method"],
+        "hit_rate_pod": round(pod, 3),
+        "false_alarm_ratio": round(far, 3),
+        "critical_success_index": round(csi, 3),
+        "counts": counts,
+        "stage_frozen_from": "western half of 2024-09-27 (not the full-scene calibration)",
+        "frozen_model": frozen,
+        "baselines": baselines,
+        "skill_vs_scale": skill,
+        "note": (
+            "Weaker than a second-event backtest: same storm, spatial split only. "
+            "Parameters were not fit on the eastern half. The 2017 ICIMOD row remains "
+            "the true temporal out-of-sample transfer (different valley)."
+        ),
+    }
+    art = root / "artifacts"
+    back_path = art / "backtest.json"
+    backtest = json.loads(back_path.read_text()) if back_path.exists() else {}
+    backtest["spatial_holdout"] = pack
+    back_path.write_text(json.dumps(backtest, indent=2) + "\n")
+    print(f"SPATIAL HOLDOUT east CSI={csi:.3f} POD={pod:.3f} FAR={far:.3f} "
+          f"(west in-sample {metrics['critical_success_index']}, method {metrics['method']})")
+    print(f"  baselines: jrc={baselines['jrc_seasonal_water']['csi']} "
+          f"elev={baselines['area_matched_elevation']['csi']}")
+    return pack
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default=".")
+    parser.add_argument("--validate-on", default=None,
+                        help="path to a second-event flood raster (1=flood); runs frozen out-of-sample validation")
+    parser.add_argument("--event-date", default="2017-08-13")
+    parser.add_argument("--spatial-holdout", action="store_true",
+                        help="calibrate 2024 west half, evaluate frozen on east half")
     args = parser.parse_args()
-    run(Path(args.root))
+    if args.spatial_holdout:
+        spatial_holdout(Path(args.root))
+    elif args.validate_on:
+        validate(Path(args.root), Path(args.validate_on), args.event_date)
+    else:
+        run(Path(args.root))
 
 
 if __name__ == "__main__":

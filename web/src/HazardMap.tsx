@@ -354,6 +354,17 @@ export default function HazardMap({
         if (!g || g.type !== "Polygon") continue;
         for (const pt of g.coordinates[0]) b.extend(pt as [number, number]);
       }
+      const overlayFc = [observed, modeled];
+      for (const fc of overlayFc) {
+        for (const f of fc?.features || []) {
+          const g = f.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon | undefined;
+          if (!g) continue;
+          const rings = g.type === "Polygon" ? g.coordinates : g.coordinates.flat();
+          for (const ring of rings) {
+            for (const pt of ring) b.extend(pt as [number, number]);
+          }
+        }
+      }
       if (!b.isEmpty()) map.fitBounds(b, { padding: 36, duration: 700 });
     };
 

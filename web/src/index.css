@@ -66,7 +66,10 @@ a { color: var(--accent); }
 .maplibregl-ctrl-group button { filter: invert(0.85); }
 
 .side { overflow: auto; border-left: 1px solid var(--line); padding: 18px 18px 40px; }
-.brand { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.brand { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.city-select {
+  letter-spacing: 0; text-transform: none; font-size: 12px; margin-left: auto;
+}
 .result-scope {
   margin: 0 0 5px; color: var(--warn); font-size: 10.5px;
   text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
@@ -120,6 +123,10 @@ button:disabled, input:disabled, select:disabled { cursor: not-allowed; opacity:
 .mix-row span { color: var(--muted); text-align: right; }
 
 .claim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 12px; }
+.claim-grid.three { grid-template-columns: 1fr; }
+@media (min-width: 720px) {
+  .claim-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+}
 .claim-card {
   min-height: 112px; border-radius: 10px; padding: 11px 12px;
   border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px;
@@ -130,6 +137,12 @@ button:disabled, input:disabled, select:disabled { cursor: not-allowed; opacity:
 .claim-card b { color: var(--ink); font-size: 15px; line-height: 1.25; }
 .claim-card.primary b { color: var(--accent); }
 .claim-card.control b { color: var(--warn); }
+.claim-card.oos { background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.35); }
+.claim-card.oos b { color: #7dd3fc; }
+.equity-chip {
+  background: rgba(62,224,192,0.08); border: 1px solid rgba(62,224,192,0.28);
+  border-radius: 9px; padding: 8px 10px; font-size: 12px; color: var(--muted); margin: 8px 0;
+}
 .claim-card small { color: var(--muted); line-height: 1.35; }
 
 .optimizer-status {

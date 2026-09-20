@@ -5,11 +5,14 @@ import {
   ComposedChart,
   Line,
   ResponsiveContainer,
+  Scatter,
+  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
+  ZAxis,
 } from "recharts";
-import { ask, conceptNote, loadJson, optimize } from "./api";
+import { ask, conceptNote, listCities, loadJson, optimize } from "./api";
 import HazardMap from "./HazardMap";
 import NoisePanel from "./NoisePanel";
 
@@ -55,6 +58,8 @@ type SelectedMeasure = {
   avoided_eal_people: number;
   co2_t_10yr: number;
   income_usd_yr: number;
+  low_income_score?: number | null;
+  equity_weight?: number | null;
 };
 
 type ScreeningFactor = {
@@ -79,6 +84,12 @@ type Plan = {
   };
   frontier: { budget_usd: number; people_protected: number; co2_t_10yr: number }[];
   cvar?: { mode_available?: boolean; tail_people_protected?: number; alpha?: number };
+  optimality?: {
+    greedy_value_usd?: number | null;
+    knapsack_upper_bound_usd?: number | null;
+    gap_pct?: number | null;
+    note?: string;
+  };
   provenance?: {
     data_status?: string;
     candidates_note?: string;
@@ -118,6 +129,30 @@ type CandidateSite = {
   verification?: string | string[];
 };
 
+type SkillRow = {
+  scale_deg: number;
+  approx_km?: number;
+  pod?: number;
+  far?: number;
+  csi?: number;
+};
+
+type SkillEvent = {
+  event_date?: string;
+  source?: string;
+  hit_rate_pod?: number | null;
+  false_alarm_ratio?: number | null;
+  critical_success_index?: number | null;
+  observed_flood_km2?: number | null;
+  modeled_flood_km2?: number | null;
+  note?: string;
+  skill_vs_scale?: SkillRow[];
+  baselines?: {
+    jrc_seasonal_water?: { csi?: number | null; definition?: string };
+    area_matched_elevation?: { csi?: number | null; definition?: string };
+  };
+};
+
 type Backtest = {
   critical_success_index: number | null;
   hit_rate_pod?: number | null;
@@ -125,6 +160,13 @@ type Backtest = {
   observed_flood_km2?: number | null;
   modeled_flood_km2?: number | null;
   sar_scene?: string;
+  event_date?: string;
+  permanent_water_mask?: string;
+  evaluation_domain?: string;
+  skill_vs_scale?: SkillRow[];
+  baselines?: SkillEvent["baselines"];
+  validation?: SkillEvent;
+  spatial_holdout?: SkillEvent & { kind?: string; split?: string };
   provenance?: { data_status?: string; method?: string };
   counterfactual?: {
     people_exposed_baseline?: number | null;
@@ -134,9 +176,24 @@ type Backtest = {
   };
 };
 
-type OptimizerState = "checking" | "live" | "frozen" | "unavailable";
+type Replication = {
+  verdict?: string;
+  verdict_note?: string;
+  isd_headline_new_return_yrs?: number;
+  era5_headline_new_return_yrs?: number | null;
+  era5_headline_statement?: string;
+  independence?: string;
+  agreement?: {
+    stations_compared?: number;
+    annmax_pearson_r?: number | null;
+    mean_bias_mm?: number | null;
+    scatter?: { station: string; isd_mm: number; era5_mm: number }[];
+  };
+};
 
-const CITY = "koshi";
+type CityRow = { id: string; name: string; ready?: boolean };
+
+type OptimizerState = "checking" | "live" | "frozen" | "unavailable";
 
 const money = (value: number | null | undefined) => {
   if (value == null || !Number.isFinite(value)) return "—";
@@ -156,6 +213,10 @@ const textValue = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value.join("; ") : value;
 
 export default function App() {
+  const [city, setCity] = useState("koshi");
+  const [cities, setCities] = useState<CityRow[]>([
+    { id: "koshi", name: "Koshi / Madhesh (Nepal)", ready: true },
+  ]);
   const [tab, setTab] = useState<FlowStep>("backtest");
   const [signal, setSignal] = useState<Signal | null>(null);
   const [hazard, setHazard] = useState<GeoJSON.FeatureCollection | null>(null);
@@ -167,6 +228,10 @@ export default function App() {
   const [overlay, setOverlay] = useState<"none" | "observed" | "modeled" | "both">("observed");
   const [observed, setObserved] = useState<GeoJSON.FeatureCollection | null>(null);
   const [modeled, setModeled] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [observed2017, setObserved2017] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [modeled2017, setModeled2017] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [proofEvent, setProofEvent] = useState<"2024" | "2017">("2024");
+  const [replication, setReplication] = useState<Replication | null>(null);
   const [riskBefore, setRiskBefore] = useState<GeoJSON.FeatureCollection | null>(null);
   const [riskWithPlan, setRiskWithPlan] = useState<GeoJSON.FeatureCollection | null>(null);
   const [riskView, setRiskView] = useState<"before" | "with_plan">("before");
@@ -180,11 +245,21 @@ export default function App() {
   const [note, setNote] = useState("");
 
   useEffect(() => {
+    listCities()
+      .then((payload: { cities?: CityRow[] }) => {
+        const rows = (payload.cities || []).filter((row) => row.ready !== false);
+        if (rows.length) setCities(rows);
+      })
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
     setBusy(true);
+    setProofEvent("2024");
     Promise.all([
-      loadJson("signal", CITY).then((value: Signal) => setSignal(value)),
-      loadJson("hazard", CITY).then(setHazard),
-      optimize<Plan>(2_000_000, "expected", CITY)
+      loadJson("signal", city).then((value: Signal) => setSignal(value)),
+      loadJson("hazard", city).then(setHazard),
+      optimize<Plan>(2_000_000, "expected", city)
         .then((result) => {
           setPlan(result.plan);
           setBudget(result.plan.budget_usd);
@@ -197,19 +272,22 @@ export default function App() {
           }
         })
         .catch(() => setOptimizerState("unavailable")),
-      loadJson("candidates", CITY).then((value: CandidateSite[]) => setCandidates(value)),
-      loadJson("backtest", CITY).then((value: Backtest) => setBacktest(value)),
-      loadJson("flood_observed", CITY).then(setObserved),
-      loadJson("flood_modeled", CITY).then(setModeled),
-      loadJson("risk_before", CITY).then(setRiskBefore),
-      loadJson("risk_with_plan", CITY).then(setRiskWithPlan),
-      conceptNote(CITY).then(setNote),
+      loadJson("candidates", city).then((value: CandidateSite[]) => setCandidates(value)),
+      loadJson("backtest", city).then((value: Backtest) => setBacktest(value)),
+      loadJson("flood_observed", city).then(setObserved).catch(() => setObserved(null)),
+      loadJson("flood_modeled", city).then(setModeled).catch(() => setModeled(null)),
+      loadJson("flood_observed_2017", city).then(setObserved2017).catch(() => setObserved2017(null)),
+      loadJson("flood_modeled_2017", city).then(setModeled2017).catch(() => setModeled2017(null)),
+      loadJson("replication", city).then(setReplication).catch(() => setReplication(null)),
+      loadJson("risk_before", city).then(setRiskBefore).catch(() => setRiskBefore(null)),
+      loadJson("risk_with_plan", city).then(setRiskWithPlan).catch(() => setRiskWithPlan(null)),
+      conceptNote(city).then(setNote).catch(() => setNote("")),
     ])
       .catch(() => {
         // Individual artifacts render as unavailable; the judged flow remains usable.
       })
       .finally(() => setBusy(false));
-  }, []);
+  }, [city]);
 
   const selectedIds = useMemo(
     () => new Set((plan?.selected || []).map((selected) => selected.parcel_id)),
@@ -249,9 +327,11 @@ export default function App() {
     const proof =
       backtest?.critical_success_index == null
         ? "This site has not been field-verified; no flood CSI is available."
-        : `This site has not been field-verified. The portfolio hazard layer was checked against the 27 Sep 2024 UNOSAT flood (CSI ${backtest.critical_success_index.toFixed(
+        : `This site has not been field-verified. The portfolio hazard layer was checked against the ${
+            backtest.event_date || "calibration"
+          } scene (CSI ${backtest.critical_success_index.toFixed(
             3
-          )}), calibrated on that event; another flood is needed for out-of-sample verification.`;
+          )}), which is an in-sample calibration fit.`;
 
     return {
       id: picked,
@@ -318,7 +398,7 @@ export default function App() {
     if (optimizerState !== "live") return;
     setBusy(true);
     try {
-      const result = await optimize<Plan>(nextBudget, nextMode, CITY);
+      const result = await optimize<Plan>(nextBudget, nextMode, city);
       setPlan(result.plan);
       if (result.source === "cache") {
         setOptimizerState("frozen");
@@ -339,7 +419,7 @@ export default function App() {
     event.preventDefault();
     setAsking(true);
     try {
-      const response = await ask(q, CITY, {
+      const response = await ask(q, city, {
         signal,
         plan,
         backtest,
@@ -376,6 +456,23 @@ export default function App() {
   const hasCounterfactual =
     counterfactual?.people_exposed_baseline != null &&
     counterfactual.people_exposed_with_plan != null;
+  const activeObserved = proofEvent === "2017" ? observed2017 : observed;
+  const activeModeled = proofEvent === "2017" ? modeled2017 : modeled;
+  const cityName = cities.find((row) => row.id === city)?.name || city;
+  const jrcCsi = backtest?.baselines?.jrc_seasonal_water?.csi;
+  const elevCsi = backtest?.baselines?.area_matched_elevation?.csi;
+  const modelBeatsJrc =
+    backtest?.critical_success_index != null &&
+    jrcCsi != null &&
+    backtest.critical_success_index > jrcCsi;
+  const skillRows = (proofEvent === "2017" ? backtest?.validation?.skill_vs_scale : backtest?.skill_vs_scale) || [];
+  const scatter = replication?.agreement?.scatter || [];
+  const knapsackPct =
+    plan?.optimality?.gap_pct == null ? null : Math.max(0, 100 - plan.optimality.gap_pct);
+  const equityLine =
+    pickedRow?.low_income_score != null && pickedRow.low_income_score >= 0.55
+      ? `Serves a flagged low-income cell (weight ×${metric(pickedRow.equity_weight, 3)}).`
+      : null;
 
   const steps: { id: FlowStep; label: string }[] = [
     { id: "noise", label: "1 · Noise" },
@@ -400,8 +497,8 @@ export default function App() {
           candidates={candidates}
           selectedIds={selectedIds}
           onSelect={onSelect}
-          observed={observed}
-          modeled={modeled}
+          observed={activeObserved}
+          modeled={activeModeled}
           overlay={tab === "backtest" ? overlay : "none"}
         />
         <div className="map-legend">
@@ -411,33 +508,66 @@ export default function App() {
             <>
               <br />
               Risk surface = {riskView === "with_plan" ? "with-plan counterfactual" : "current model"}.
-              Blue fill = UNOSAT observed water · gold outline = modeled flood.
+              Blue fill = observed water · gold outline = modeled flood
+              {proofEvent === "2017" ? " (2017 transfer event)." : " (2024 calibration event)."}
             </>
           )}
         </div>
       </div>
 
       <aside className="side">
-        <p className="brand">RootLedger · Koshi / Madhesh, Nepal</p>
-        <p className="result-scope">Nepal-adjacent GEV · fitted comparison, not a forecast</p>
+        <p className="brand">
+          RootLedger · {cityName}
+          <select
+            className="city-select"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+            aria-label="City pack"
+          >
+            {cities.map((row) => (
+              <option key={row.id} value={row.id}>
+                {row.name}
+              </option>
+            ))}
+          </select>
+        </p>
+        <p className="result-scope">
+          {city === "koshi"
+            ? "Nepal-adjacent GEV · fitted comparison, not a forecast"
+            : "City screening pack · ERA5-Land at centroid, CSI not invented"}
+        </p>
         <h1>
           {signal
-            ? `The old 100-year rain depth now fits a ${metric(
-                signal.headline.new_return_period_yrs,
-                2
-              )}-year recurrence`
-            : "Loading the Nepal-adjacent rainfall tail…"}
+            ? signal.headline.new_return_period_yrs == null
+              ? city === "koshi"
+                ? "Loading the rainfall tail…"
+                : "City screening pack — flood CSI not invented"
+              : `The old 100-year rain depth now fits a ${metric(
+                  signal.headline.new_return_period_yrs,
+                  2
+                )}-year recurrence`
+            : "Loading the rainfall tail…"}
         </h1>
         <p className="lede">
-          This headline uses the Nepal-adjacent subset. The 498-station High Mountain Asia pool is
-          the scale and negative-control story; it did not identify a recurrence shift.
+          {city === "koshi"
+            ? `This headline uses the Nepal-adjacent subset. The ${metric(
+                signal?.stations_processed,
+                0
+              )}-station High Mountain Asia pool is the scale and negative-control story; it did not identify a recurrence shift.`
+            : "This pack is a screening run on public DEM / OSM / ERA5-Land. Flood CSI is null unless a SAR scene is wired."}
         </p>
 
         <div className="banner">
           <strong>Screening-grade and explicit.</strong> {aucCopy}{" "}
           {backtest?.critical_success_index == null
             ? "Flood CSI is unavailable; it is not replaced with zero."
-            : `The HAND proxy scores CSI ${backtest.critical_success_index.toFixed(3)} against the 27 Sep 2024 UNOSAT scene; stage was calibrated on this event.`}
+            : `The HAND proxy scores CSI ${backtest.critical_success_index.toFixed(3)} on the ${
+                backtest.event_date || "calibration"
+              } scene (in-sample). ${
+                backtest.validation?.critical_success_index != null
+                  ? `Frozen out-of-sample / transfer CSI ${backtest.validation.critical_success_index.toFixed(3)}.`
+                  : ""
+              }`}
         </div>
 
         <div className="kpis">
@@ -475,7 +605,8 @@ export default function App() {
 
         {tab === "signal" && signal && (
           <>
-            <div className="claim-grid">
+            {city === "koshi" ? (
+            <div className="claim-grid three">
               <div className="claim-card primary">
                 <span>Nepal-adjacent decision region</span>
                 <b>
@@ -490,13 +621,52 @@ export default function App() {
               <div className="claim-card control">
                 <span>HMA pooled negative control</span>
                 <b>No recurrence shift identified</b>
-                <small>We did not force the 7.75-year headline onto all 498 stations.</small>
+                <small>
+                  We did not force the catchment headline onto all{" "}
+                  {metric(signal.stations_processed, 0)} stations.
+                </small>
+              </div>
+              {replication && (
+                <div className="claim-card oos">
+                  <span>Independent check · ERA5-Land</span>
+                  <b>
+                    {replication.verdict || "unavailable"} (
+                    {metric(replication.era5_headline_new_return_yrs, 2)}-yr vs{" "}
+                    {metric(replication.isd_headline_new_return_yrs, 2)}-yr)
+                  </b>
+                  <small>{replication.verdict_note || replication.independence}</small>
+                </div>
+              )}
+            </div>
+            ) : (
+            <div className="claim-grid">
+              <div className="claim-card primary">
+                <span>{cityName} screening GEV</span>
+                <b>
+                  {signal.headline.new_return_period_yrs == null
+                    ? "No credible intensification identified"
+                    : `${signal.headline.old_return_period_yrs}-yr depth → ${metric(
+                        signal.headline.new_return_period_yrs,
+                        2
+                      )}-yr recurrence`}
+                </b>
+                <small>
+                  ERA5-Land / public DEM pack. Flood CSI is null and is not invented.
+                </small>
               </div>
             </div>
+            )}
 
             <p className="detail">
-              HMA scale: {metric(signal.stations_processed, 0)} stations ·{" "}
-              {metric(signal.station_years, 0)} station-years. HMA-pooled annual-max trend:{" "}
+              {city === "koshi"
+                ? `HMA scale: ${metric(signal.stations_processed, 0)} stations · ${metric(
+                    signal.station_years,
+                    0
+                  )} station-years. HMA-pooled annual-max trend:`
+                : `This pack: ${metric(signal.stations_processed, 0)} series · ${metric(
+                    signal.station_years,
+                    0
+                  )} station-years. Annual-max trend:`}{" "}
               <b>
                 +{metric(signal.trend.slope_mm_per_decade, 3)} mm/decade (p=
                 {signal.trend.p_value.toLocaleString()})
@@ -509,8 +679,12 @@ export default function App() {
             </p>
 
             <div className="chart-head">
-              <b>HMA-pooled return-level curve</b>
-              <span>Negative control · not the 7.75-year subset result</span>
+              <b>{city === "koshi" ? "HMA-pooled return-level curve" : "City return-level curve"}</b>
+              <span>
+                {city === "koshi"
+                  ? "Negative control · not the catchment subset result"
+                  : "Screening GEV on this pack’s rainfall series"}
+              </span>
             </div>
             <div className="chart">
               <ResponsiveContainer>
@@ -550,6 +724,45 @@ export default function App() {
               {signal.provenance?.headline_note ||
                 "The pooled fit is shown separately from the catchment headline."}
             </p>
+            {city === "koshi" && scatter.length > 0 && (
+              <>
+                <div className="chart-head">
+                  <b>ISD vs ERA5 mean annual maximum</b>
+                  <span>
+                    r={metric(replication?.agreement?.annmax_pearson_r, 3)} · bias{" "}
+                    {metric(replication?.agreement?.mean_bias_mm, 1)} mm ·{" "}
+                    {metric(replication?.agreement?.stations_compared, 0)} stations
+                  </span>
+                </div>
+                <div className="chart">
+                  <ResponsiveContainer>
+                    <ScatterChart margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(143,160,184,0.15)" />
+                      <XAxis
+                        dataKey="isd_mm"
+                        name="ISD"
+                        stroke="#8fa0b8"
+                        unit=" mm"
+                        type="number"
+                      />
+                      <YAxis
+                        dataKey="era5_mm"
+                        name="ERA5"
+                        stroke="#8fa0b8"
+                        unit=" mm"
+                        type="number"
+                      />
+                      <ZAxis range={[40, 40]} />
+                      <Tooltip
+                        contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
+                        formatter={(value) => [`${Number(value).toFixed(1)} mm`]}
+                      />
+                      <Scatter data={scatter} fill="#3ee0c0" />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
           </>
         )}
 
@@ -634,6 +847,10 @@ export default function App() {
                 : ""}
             </p>
 
+            <p className="equity-chip">
+              Equity-weighted: cells flagged low-income carry up to 1.5× weight in expected-loss
+              ranking (`equity_weight` in hazard.geojson).
+            </p>
             <div className="mix">
               {Object.entries(
                 plan.selected.reduce<
@@ -692,6 +909,12 @@ export default function App() {
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
+            {knapsackPct != null && (
+              <p className="detail">
+                Greedy achieves ≥{metric(knapsackPct, 1)}% of the relaxed knapsack upper bound
+                {plan.optimality?.note ? ` — ${plan.optimality.note}` : "."}
+              </p>
+            )}
 
             {measureDetails && (
               <section className="measure-card" aria-label={`Details for ${measureDetails.id}`}>
@@ -731,6 +954,12 @@ export default function App() {
                     <dt>Verification</dt>
                     <dd>{measureDetails.verification}</dd>
                   </div>
+                  {equityLine && (
+                    <div>
+                      <dt>Equity</dt>
+                      <dd>{equityLine}</dd>
+                    </div>
+                  )}
                 </dl>
               </section>
             )}
@@ -756,6 +985,25 @@ export default function App() {
                 ))}
               </div>
               <div>
+                <b>Event</b>
+                <span>2024 in-sample vs 2017 frozen transfer</span>
+              </div>
+              <div className="segmented risk-scenario" role="group" aria-label="Proof event">
+                <button
+                  className={proofEvent === "2024" ? "on" : ""}
+                  onClick={() => setProofEvent("2024")}
+                >
+                  2024 calibration
+                </button>
+                <button
+                  className={proofEvent === "2017" ? "on" : ""}
+                  onClick={() => setProofEvent("2017")}
+                  disabled={!backtest?.validation}
+                >
+                  2017 transfer
+                </button>
+              </div>
+              <div>
                 <b>Preventive impact surface</b>
                 <span>Current modeled risk vs literature-effect counterfactual</span>
               </div>
@@ -775,15 +1023,75 @@ export default function App() {
               </div>
             </div>
 
+            <div className="claim-grid">
+              <div className="claim-card primary">
+                <span>Calibration · {backtest?.event_date || "in-sample"}</span>
+                <b>
+                  CSI {metric(backtest?.critical_success_index, 3)} · POD{" "}
+                  {metric(backtest?.hit_rate_pod, 3)} · FAR {metric(backtest?.false_alarm_ratio, 3)}
+                </b>
+                <small>In-sample: stage was fit on this event. Not independent validation.</small>
+              </div>
+              <div className="claim-card oos">
+                <span>Validation · {backtest?.validation?.event_date || "second event"}</span>
+                <b>
+                  {backtest?.validation?.critical_success_index == null
+                    ? "No second-event CSI"
+                    : `CSI ${metric(backtest.validation.critical_success_index, 3)} · POD ${metric(
+                        backtest.validation.hit_rate_pod,
+                        3
+                      )} · FAR ${metric(backtest.validation.false_alarm_ratio, 3)}`}
+                </b>
+                <small>
+                  {backtest?.validation?.note ||
+                    "Out-of-sample: frozen 2024 model, zero refit."}
+                </small>
+              </div>
+            </div>
             <p className="detail">
-              <b>UNOSAT Sentinel-1 · 27 Sep 2024</b> ({backtest?.sar_scene || "scene unavailable"}).
-              Observed {metric(backtest?.observed_flood_km2)} km² vs modeled{" "}
-              {metric(backtest?.modeled_flood_km2)} km². CSI{" "}
-              <b>{metric(backtest?.critical_success_index, 3)}</b>, POD{" "}
-              {metric(backtest?.hit_rate_pod, 3)}, FAR{" "}
-              {metric(backtest?.false_alarm_ratio, 3)}. This event calibrated the stage; another
-              flood is required for an out-of-sample test.
+              {modelBeatsJrc
+                ? `Beats climatology baseline (JRC seasonal water): model CSI ${metric(
+                    backtest?.critical_success_index,
+                    3
+                  )} vs baseline ${metric(jrcCsi, 3)}.`
+                : `Does not beat JRC seasonal-water climatology on the calibration event (model CSI ${metric(
+                    backtest?.critical_success_index,
+                    3
+                  )} vs JRC ${metric(jrcCsi, 3)}; elevation baseline ${metric(elevCsi, 3)}). We report the miss.`}
             </p>
+            {backtest?.spatial_holdout?.critical_success_index != null && (
+              <p className="detail">
+                2024 spatial holdout (west-fit / east-test on the Koshi grid): CSI{" "}
+                {metric(backtest.spatial_holdout.critical_success_index, 3)}. Same storm,
+                spatial split only — not a second event.
+              </p>
+            )}
+            {backtest?.permanent_water_mask && (
+              <p className="truth-note">{backtest.permanent_water_mask}</p>
+            )}
+            {skillRows.length > 0 && (
+              <>
+                <div className="chart-head">
+                  <b>Skill vs aggregation scale</b>
+                  <span>{proofEvent === "2017" ? "2017 transfer" : "2024 calibration"}</span>
+                </div>
+                <div className="chart">
+                  <ResponsiveContainer>
+                    <ComposedChart data={skillRows} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(143,160,184,0.15)" />
+                      <XAxis dataKey="approx_km" stroke="#8fa0b8" tickFormatter={(v) => `${v} km`} />
+                      <YAxis stroke="#8fa0b8" domain={[0, 1]} />
+                      <Tooltip
+                        contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
+                      />
+                      <Line type="monotone" dataKey="csi" stroke="#3ee0c0" strokeWidth={2} name="CSI" />
+                      <Line type="monotone" dataKey="pod" stroke="#38bdf8" strokeWidth={1.5} name="POD" />
+                      <Line type="monotone" dataKey="far" stroke="#f0c14b" strokeWidth={1.5} name="FAR" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
 
             {hasCounterfactual ? (
               <>
@@ -838,7 +1146,15 @@ export default function App() {
               <button className="dl" onClick={downloadNote}>
                 Download prevention plan
               </button>
-              <a className="dl" href="/demo_cache/preventive_measures_plan.pdf" download>
+              <a
+                className="dl"
+                href={
+                  city === "koshi"
+                    ? "/demo_cache/preventive_measures_plan.pdf"
+                    : `/demo_cache/cities/${city}/preventive_measures_plan.pdf`
+                }
+                download
+              >
                 Download cached PDF
               </a>
             </div>

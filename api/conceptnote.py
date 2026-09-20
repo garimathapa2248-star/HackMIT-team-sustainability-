@@ -168,11 +168,66 @@ def _budget_table(plan: dict, candidates: list) -> str:
     )
 
 
+def _validation_block(backtest: dict) -> str:
+    val = backtest.get("validation") or {}
+    hold = backtest.get("spatial_holdout") or {}
+    bases = backtest.get("baselines") or {}
+    jrc = (bases.get("jrc_seasonal_water") or {}).get("csi")
+    elev = (bases.get("area_matched_elevation") or {}).get("csi")
+    csi = backtest.get("critical_success_index")
+    lines = [
+        "| Event | Role | CSI | POD | FAR |",
+        "|---|---|---:|---:|---:|",
+        f"| {backtest.get('event_date') or 'calibration'} | in-sample calibration | "
+        f"{_n(csi, '.3f')} | {_n(backtest.get('hit_rate_pod'), '.3f')} | "
+        f"{_n(backtest.get('false_alarm_ratio'), '.3f')} |",
+    ]
+    if val.get("critical_success_index") is not None:
+        lines.append(
+            f"| {val.get('event_date')} | out-of-sample / transfer (frozen 2024 model) | "
+            f"{_n(val.get('critical_success_index'), '.3f')} | {_n(val.get('hit_rate_pod'), '.3f')} | "
+            f"{_n(val.get('false_alarm_ratio'), '.3f')} |"
+        )
+    if hold.get("critical_success_index") is not None:
+        lines.append(
+            f"| {hold.get('event_date')} east half | spatial holdout (west-fit, east-test) | "
+            f"{_n(hold.get('critical_success_index'), '.3f')} | {_n(hold.get('hit_rate_pod'), '.3f')} | "
+            f"{_n(hold.get('false_alarm_ratio'), '.3f')} |"
+        )
+    extra = []
+    if jrc is not None:
+        extra.append(f"JRC seasonal-water climatology CSI {_n(jrc, '.3f')}")
+    if elev is not None:
+        extra.append(f"area-matched elevation CSI {_n(elev, '.3f')}")
+    water = backtest.get("permanent_water_mask") or "permanent water excluded where available"
+    return (
+        "\n".join(lines)
+        + f"\n\nBaselines (same 2024 domain): {'; '.join(extra) or 'not computed'}. "
+        f"Permanent-water rule: {water}."
+    )
+
+
+def _replication_line(replication: dict | None) -> str:
+    if not replication:
+        return "ERA5-Land independent re-fit is not in this artifact bundle."
+    agree = replication.get("agreement") or {}
+    return (
+        f"Independent check (ERA5-Land at the same station coordinates): "
+        f"**{replication.get('verdict') or 'unavailable'}** "
+        f"({_n(replication.get('era5_headline_new_return_yrs'), '.2f')}-yr vs ISD "
+        f"{_n(replication.get('isd_headline_new_return_yrs'), '.2f')}-yr; "
+        f"annmax Pearson r={agree.get('annmax_pearson_r')}, "
+        f"mean bias {agree.get('mean_bias_mm')} mm). "
+        f"{replication.get('independence') or ''} **[model output on reanalysis]**"
+    )
+
+
 def render() -> str:
     signal = loader.load("signal") or {}
     plan = loader.load("plan") or {}
     backtest = loader.load("backtest") or {}
     candidates = loader.load("candidates") or []
+    replication = loader.load("replication") or {}
     h = signal.get("headline") or {}
     t = plan.get("totals") or {}
     ls = signal.get("landslide_trigger") or {}
@@ -211,8 +266,17 @@ def render() -> str:
         "**[literature assumption]**"
         for row in factors
     ) or "- No factor assumptions are available."
+    opt = plan.get("optimality") or {}
+    gap = opt.get("gap_pct")
+    gap_line = (
+        f"Greedy gap vs relaxed knapsack upper bound: {_n(abs(float(gap)), '.2f')}% "
+        f"(bound ${_n(opt.get('knapsack_upper_bound_usd'))}). {opt.get('note')}"
+        if gap is not None
+        else "Knapsack optimality bound not computed for this plan."
+    )
     return f"""# Preventive Measures Plan — {signal.get('region', 'watershed')}
 
+**SCREENING-GRADE WATERMARK.** Not an engineering design, not a field-verified parcel survey, not an observed intervention trial.
 **Purpose:** screening-grade, funder-oriented preventive action plan (auto-filled from artifacts)
 **Portfolio status:** {(plan.get('provenance') or {}).get('data_status', 'model output')}
 **Evidence labels:** observed data · model output · literature assumption · counterfactual simulation
@@ -225,12 +289,16 @@ Annual-max trend: **{_n((signal.get('trend') or {}).get('slope_mm_per_decade'), 
 
 Lake-area series summary: {lake_line}. **[observed/derived inventory data]**
 
+{_replication_line(replication)}
+
 ## 2. Evidence register
 
 - **Observed data:** {signal.get('stations_processed')} NOAA stations / {signal.get('station_years')} station-years; UNOSAT Sentinel-1 flood extent for {backtest.get('event_date')}; observed flood area {_n(backtest.get('observed_flood_km2'), '.2f')} km².
 - **Model output:** GEV return levels {signal.get('return_levels_mm')} with bootstrap intervals {signal.get('return_levels_ci95')}; landslide {(ls.get('presentation') or 'rainfall classifier')} with held-out AUC {ls.get('auc')} on {ls.get('n_events')} events; modeled flood area {_n(backtest.get('modeled_flood_km2'), '.2f')} km².
 - **Hazard method:** {haz_note}. This is a **local-min HAND proxy calibrated on this event**, not Whitebox HAND or an independently validated hydrodynamic model.
 - **Calibration-event metrics:** {csi_line}.
+- **Validation table:**
+{_validation_block(backtest)}
 - **Counterfactual simulation:** {cf_line}
 - **Tail cross-check:** POT/GPD return levels {pot or "not available"} **[model output; different sample from the GEV headline]**.
 - **Data gap:** {imerg}
@@ -249,12 +317,15 @@ Priority follows the optimizer's selected order. Coordinates are candidate centr
 - Annual expected people-risk avoided: **{_n(t.get('people_protected'), '.1f')}** **[model output; not unique people or observed lives saved]**.
 - Ten-year carbon: **{_n(t.get('co2_t_10yr'))} tCO₂** **[model output from literature factors]**.
 - Annual livelihood-income potential: **${_n(t.get('income_usd_yr'))}** **[model output from per-hectare literature assumptions; not measured income, jobs, wages, or households reached]**.
+- Optimality: {gap_line}
 
 ## 5. Assumptions and evidence basis
 
 {factor_lines}
 
 The optimizer applies marginal greedy triple-return per dollar, per-cell EAL capping, and Monte-Carlo climate multipliers derived from the GEV 100-year confidence interval. **[model design assumption]**
+
+Equity weighting (verbatim from hazard/proof.py _grid_features): rural = landcover in cropland/grass/shrub AND no critical_assets; dense = population at or above the 70th percentile of cell pops; low_income_score = 1.0 if (rural and dense) else (0.55 if rural else 0.15); equity_weight = 1.0 + 0.5 * low_income_score (range 1.075-1.5x). eal_people is multiplied by equity_weight, so low-income rural exposure ranks higher in expected-loss. **[model design assumption]**
 
 No causal percentage is assigned to government, communities, or households. Implementation roles require local governance and community confirmation.
 
@@ -313,6 +384,8 @@ def render_pdf() -> bytes:
         content_id = page_id + 1
         page_ids.append(page_id)
         content = ["BT /F1 10 Tf 48 780 Td"]
+        content.append("(SCREENING-GRADE WATERMARK -- not engineering design) Tj")
+        content.append("0 -16 Td")
         for line_index, line in enumerate(page_lines):
             safe = line.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
             if line_index:

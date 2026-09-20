@@ -1,22 +1,26 @@
 const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const USE_CACHE = String(import.meta.env.VITE_USE_CACHE || "").toLowerCase() === "true";
 
 function cachePath(name: string, city = "koshi"): string {
+  const geo = new Set([
+    "hazard",
+    "flood_observed",
+    "flood_modeled",
+    "flood_observed_2017",
+    "flood_modeled_2017",
+    "risk_before",
+    "risk_with_plan",
+  ]);
   if (city !== "koshi") {
-    if (name === "hazard") return `/demo_cache/cities/${city}/hazard.geojson`;
-    if (name === "flood_observed") return `/demo_cache/cities/${city}/flood_observed.geojson`;
-    if (name === "flood_modeled") return `/demo_cache/cities/${city}/flood_modeled.geojson`;
-    if (name === "risk_before") return `/demo_cache/cities/${city}/risk_before.geojson`;
-    if (name === "risk_with_plan") return `/demo_cache/cities/${city}/risk_with_plan.geojson`;
+    if (geo.has(name)) return `/demo_cache/cities/${city}/${name}.geojson`;
     if (name === "preventive_measures_plan") {
       return `/demo_cache/cities/${city}/preventive_measures_plan.md`;
     }
+    if (name === "replication") return "/demo_cache/replication.json";
+    if (name === "noise") return "/demo_cache/noise.json";
     return `/demo_cache/cities/${city}/${name}.json`;
   }
-  if (name === "hazard") return "/demo_cache/hazard.geojson";
-  if (name === "flood_observed") return "/demo_cache/flood_observed.geojson";
-  if (name === "flood_modeled") return "/demo_cache/flood_modeled.geojson";
-  if (name === "risk_before") return "/demo_cache/risk_before.geojson";
-  if (name === "risk_with_plan") return "/demo_cache/risk_with_plan.geojson";
+  if (geo.has(name)) return `/demo_cache/${name}.geojson`;
   if (name === "preventive_measures_plan") return "/demo_cache/preventive_measures_plan.md";
   if (name === "scorecard") return "/demo_cache/government_scorecard.md";
   if (name === "citizenbrief") return "/demo_cache/citizen_brief.md";
@@ -45,6 +49,7 @@ async function fromApi(path: string, init?: RequestInit) {
 }
 
 export async function loadJson(name: string, city = "koshi") {
+  if (USE_CACHE) return fromCache(name, city);
   const q = `?city=${encodeURIComponent(city)}`;
   try {
     return await fromApi(`/${name}${q}`);
@@ -54,17 +59,38 @@ export async function loadJson(name: string, city = "koshi") {
 }
 
 export async function listCities() {
+  const builtin = [
+    { id: "koshi", name: "Koshi / Madhesh (Nepal)", ready: true },
+    { id: "bangalore", name: "Bengaluru (India)", ready: true },
+  ];
+  if (!USE_CACHE) {
+    try {
+      return await fromApi("/cities");
+    } catch {
+      /* fall through */
+    }
+  }
   try {
-    return await fromApi("/cities");
+    const payload = await fromCache("cities");
+    const extra = Array.isArray(payload?.cities) ? payload.cities : [];
+    const byId: Record<string, CityRowLike> = Object.fromEntries(
+      builtin.map((row) => [row.id, row])
+    );
+    for (const row of extra) {
+      if (row?.id) byId[String(row.id)] = { ...row, ready: row.ready !== false };
+    }
+    return { cities: Object.values(byId) };
   } catch {
     return {
       cities: [
-        { id: "koshi", name: "Koshi / Madhesh (Nepal)", ready: true },
-        { id: "bangalore", name: "Bengaluru (India)", ready: true },
+        ...builtin,
+        { id: "kathmandu", name: "Kathmandu (Nepal)", ready: true },
       ],
     };
   }
 }
+
+type CityRowLike = { id: string; name: string; ready?: boolean; [key: string]: unknown };
 
 export type OptimizationResult<T = unknown> = {
   plan: T;
@@ -77,6 +103,14 @@ export async function optimize<T = unknown>(
   mode: string,
   city = "koshi"
 ): Promise<OptimizationResult<T>> {
+  if (USE_CACHE) {
+    const plan = (await fromCache("plan", city)) as T & { budget_usd?: number; mode?: string };
+    return {
+      plan,
+      source: "cache",
+      cacheMatchesRequest: plan.budget_usd === budget && plan.mode === mode,
+    };
+  }
   try {
     const response = (await fromApi("/optimize", {
       method: "POST",
@@ -253,7 +287,7 @@ function cachedAnswer(question: string, grounding: AskGrounding) {
     query.includes("flood")
   ) {
     return {
-      answer: `The cached proof compares ${risk(backtest?.observed_flood_km2)} km² observed with ${risk(backtest?.modeled_flood_km2)} km² modeled. CSI is ${risk(backtest?.critical_success_index)}, POD ${risk(backtest?.hit_rate_pod)}, and FAR ${risk(backtest?.false_alarm_ratio)}. It is an in-sample event calibration, not an out-of-sample flood forecast.`,
+      answer: `The cached proof compares ${risk(backtest?.observed_flood_km2)} km² observed with ${risk(backtest?.modeled_flood_km2)} km² modeled. CSI is ${risk(backtest?.critical_success_index)}, POD ${risk(backtest?.hit_rate_pod)}, and FAR ${risk(backtest?.false_alarm_ratio)}. That CSI is an in-sample calibration fit. A second-event / transfer row is reported separately when present.`,
       sources: ["backtest.json"],
       invented: false,
       offline: true,
@@ -306,6 +340,7 @@ function cachedAnswer(question: string, grounding: AskGrounding) {
 }
 
 export async function ask(question: string, city = "koshi", grounding: AskGrounding = {}) {
+  if (USE_CACHE) return cachedAnswer(question, grounding);
   try {
     return await fromApi("/ask", {
       method: "POST",
@@ -319,10 +354,12 @@ export async function ask(question: string, city = "koshi", grounding: AskGround
 
 export async function markdownDoc(name: "conceptnote" | "scorecard" | "citizenbrief", city = "koshi"): Promise<string> {
   const path = name === "conceptnote" ? "/conceptnote" : name === "scorecard" ? "/scorecard" : "/citizenbrief";
+  if (!USE_CACHE) {
   try {
     return (await fromApi(`${path}?city=${encodeURIComponent(city)}`)) as string;
   } catch {
     /* cache */
+  }
   }
   try {
     return (await fromCache(name, city)) as string;
@@ -332,6 +369,9 @@ export async function markdownDoc(name: "conceptnote" | "scorecard" | "citizenbr
 }
 
 export async function conceptNote(city = "koshi"): Promise<string> {
+  if (USE_CACHE) {
+    return (await fromCache("preventive_measures_plan", city)) as string;
+  }
   try {
     return (await fromApi(
       `/preventive-measures-plan?city=${encodeURIComponent(city)}`

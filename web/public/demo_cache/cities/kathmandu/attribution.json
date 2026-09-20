@@ -1,0 +1,53 @@
+{
+  "government_pct": null,
+  "community_pct": null,
+  "household_pct": null,
+  "quantified_responsibility_split_available": false,
+  "government_levers": [
+    {
+      "lever": "wetland_restore",
+      "implementation_lead": "government",
+      "owner": "government",
+      "risk_share_pct": null,
+      "plan_spend_usd": 1872000.0,
+      "fix_cost_usd": 1872000.0,
+      "annual_expected_people_risk_avoided": 49642.526,
+      "people_protected": 49642.526,
+      "risk_driver": "flood",
+      "source": "Wetland attenuation of peak flows; high soil-carbon uptake (Ramsar / IPCC wetlands supplement)."
+    },
+    {
+      "lever": "drainage_and_glof_outlet",
+      "implementation_lead": "government",
+      "owner": "government",
+      "risk_share_pct": null,
+      "plan_spend_usd": null,
+      "fix_cost_usd": 0,
+      "annual_expected_people_risk_avoided": null,
+      "people_protected": null,
+      "risk_driver": "flood and GLOF",
+      "source": "Planning role only: zoning, drainage, and outlet works normally require public authority. No causal share or plan benefit is quantified."
+    }
+  ],
+  "community_levers": [
+    {
+      "lever": "afforestation",
+      "implementation_lead": "community",
+      "owner": "community",
+      "risk_share_pct": null,
+      "plan_spend_usd": 126000.0,
+      "fix_cost_usd": 126000.0,
+      "annual_expected_people_risk_avoided": 1462.25,
+      "people_protected": 1462.25,
+      "risk_driver": "landslide",
+      "source": "Catchment afforestation for slope stability and infiltration; sequestration from IPCC AFOLU defaults."
+    }
+  ],
+  "household_levers": [],
+  "driver_shares": null,
+  "provenance": {
+    "data_status": "planning assumptions plus model-output spend; no empirical causal attribution percentages",
+    "method": "intervention type mapped to a provisional implementation lead; roles require local confirmation",
+    "generated_utc": "2026-09-19T23:58:23Z"
+  }
+}

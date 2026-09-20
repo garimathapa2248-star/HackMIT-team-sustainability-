@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import random
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -10,9 +9,8 @@ import numpy as np
 
 from hazard.hand import hand
 from hazard.osm import fetch_assets, fetch_water
-from hazard.proof import _geojson_from_mask, _read_dem
+from hazard.proof import SCREENING_AREA_HA, _geojson_from_mask, _read_dem
 from optimize.counterfactual import apply as apply_counterfactual
-from optimize.economics import FACTORS
 from optimize.portfolio import optimize
 from regions.catalog import city_dir
 from regions.openmeteo import daily_precip
@@ -30,17 +28,14 @@ WORLDPOP_IND = (
 RES = 0.02  # ~2 km cells for a city pack
 
 
-def _worldpop(shape, transform):
-    """People per destination pixel. WorldPop 1km Aggregated is a count raster.
-
-    Average onto the finer DEM grid (people per ~1 km²), then scale by cell area
-    in `_cells`. Do not nansum the oversampled grid.
-    """
+def _worldpop(shape, transform, url: str | None = None, local_name: str | None = None):
+    """People per destination pixel. WorldPop 1km Aggregated is a count raster."""
     import rasterio
     from rasterio.warp import Resampling, reproject
     canvas = np.full(shape, np.nan, dtype=np.float32)
-    local = Path(__file__).resolve().parents[1] / "data/pop/ind_ppp_2020_1km_Aggregated.tif"
-    src_path = str(local) if local.exists() else "/vsicurl/" + WORLDPOP_IND
+    local = Path(__file__).resolve().parents[1] / "data/pop" / (local_name or "ind_ppp_2020_1km_Aggregated.tif")
+    src_url = url or WORLDPOP_IND
+    src_path = str(local) if local.exists() else "/vsicurl/" + src_url
     try:
         with rasterio.Env(GDAL_HTTP_TIMEOUT="60", GDAL_HTTP_USERAGENT="RootLedger/0.1"):
             with rasterio.open(src_path) as src:
@@ -64,7 +59,7 @@ def _worldpop(shape, transform):
         return None
 
 
-def _cells(elev, transform, flood, pop_grid, assets, water, rng):
+def _cells(elev, transform, flood, pop_grid, assets, water, prefix="blr"):
     h, w = elev.shape
     gy, gx = np.gradient(np.nan_to_num(elev, nan=float(np.nanmean(elev))))
     slope = np.degrees(np.arctan(np.hypot(gy, gx) / max(abs(transform.a) * 111_320, 1e-3)))
@@ -86,21 +81,23 @@ def _cells(elev, transform, flood, pop_grid, assets, water, rng):
                 cell_km = step * abs(transform.a) * 111.32
                 pop = int(max(50, dens * cell_km * cell_km))
             else:
-                pop = int(800 + 4000 * flooded + rng.randint(0, 200))
+                pop = int(max(50, round(800 + 4000 * flooded)))
             lakes = [a for a in water if west <= a["lon"] <= east and south <= a["lat"] <= north and a["kind"] == "lake"]
             drains = [a for a in water if west <= a["lon"] <= east and south <= a["lat"] <= north and a["kind"] == "drain"]
             cell_assets = [a["kind"] for a in assets if west <= a["lon"] <= east and south <= a["lat"] <= north][:4]
             if lakes:
                 cell_assets = (["lake"] + cell_assets)[:4]
-            depth100 = round(max(0.05, 1.8 * flooded + 0.25 * min(len(lakes), 4) + rng.uniform(0, 0.15)), 2)
-            eal = round(pop * (0.008 + 0.07 * flooded + 0.015 * (1 if lakes else 0)), 3)
+            depth100 = round(max(0.05, 1.8 * flooded + 0.25 * min(len(lakes), 4)), 2)
+            low_income = 0.4 if (pop > 4000 and "clinic" not in cell_assets) else 0.15
+            equity = round(1.0 + 0.5 * low_income, 3)
+            eal = round(pop * (0.008 + 0.07 * flooded + 0.015 * (1 if lakes else 0)) * equity, 3)
             feats.append({
                 "type": "Feature",
                 "geometry": {"type": "Polygon", "coordinates": [[
                     [west, south], [east, south], [east, north], [west, north], [west, south]
                 ]]},
                 "properties": {
-                    "cell_id": f"blr_{n:04d}",
+                    "cell_id": f"{prefix}_{n:04d}",
                     "flood_depth_m": {"rp10": round(0.4 * depth100, 2), "rp100": depth100},
                     "glof_depth_m": 0.0,
                     "landslide_prob": round(min(0.25, sl / 120), 3),
@@ -114,73 +111,90 @@ def _cells(elev, transform, flood, pop_grid, assets, water, rng):
                     "slope_deg": round(sl, 1),
                     "n_lakes": len(lakes),
                     "n_drains": len(drains),
-                    "low_income_score": 0.4 if (pop > 4000 and "clinic" not in cell_assets) else 0.15,
+                    "low_income_score": round(low_income, 2),
+                    "equity_weight": equity,
                 },
             })
             n += 1
     return feats
 
 
-def _candidates(features, rng):
+def _candidate_type(properties: dict) -> tuple[str, str]:
+    """First matching deterministic rule. No RNG."""
+    if properties["n_lakes"] > 0 or properties["modeled_flood_frac"] > 0.25:
+        return "wetland_restore", "wetland"
+    if properties["n_drains"] > 0:
+        return "riverbank_bio", "urban"
+    if properties["slope_deg"] > 4:
+        return "afforestation", "shrub"
+    return "wetland_restore", "urban"
+
+
+def _candidates(features, prefix="blr"):
     out = []
-    i = 1
-    for feat in features:
+    for i, feat in enumerate(features, start=1):
         p = feat["properties"]
         ring = feat["geometry"]["coordinates"][0]
         cx = sum(x for x, _ in ring[:-1]) / 4
         cy = sum(y for _, y in ring[:-1]) / 4
-        if p["n_lakes"] > 0 or p["modeled_flood_frac"] > 0.25:
-            ptype = rng.choice(["wetland_restore", "floodplain_restore"])
-            landcover = "wetland"
-        elif p["n_drains"] > 0:
-            ptype = "riverbank_bio"
-            landcover = "urban"
-        elif p["slope_deg"] > 4:
-            ptype = rng.choice(["afforestation", "vetiver_slope"])
-            landcover = "shrub"
-        else:
-            ptype = rng.choice(["wetland_restore", "afforestation", "bamboo_slope"])
-            landcover = "urban"
+        ptype, landcover = _candidate_type(p)
         out.append({
-            "parcel_id": f"blr_p_{i:04d}",
+            "parcel_id": f"{prefix}_p_{i:04d}",
             "type": ptype,
-            "area_ha": round(rng.uniform(0.6, 4.5), 2),
+            "area_ha": float(SCREENING_AREA_HA.get(ptype, 3.0)),
             "centroid": [round(cx, 5), round(cy, 5)],
             "cell_ids": [p["cell_id"]],
             "slope_deg": p["slope_deg"],
             "landcover": landcover,
         })
-        i += 1
-        if p["eal_people"] > 8 and i < 220:
-            out.append({
-                "parcel_id": f"blr_p_{i:04d}",
-                "type": rng.choice(list(FACTORS)),
-                "area_ha": round(rng.uniform(0.5, 3.5), 2),
-                "centroid": [round(cx + 0.008, 5), round(cy, 5)],
-                "cell_ids": [p["cell_id"]],
-                "slope_deg": p["slope_deg"],
-                "landcover": landcover,
-            })
-            i += 1
     return out
+
+
+def _write_unvalidated_backtest(dest: Path, flood, transform, stage: float, city_name: str) -> None:
+    backtest = {
+        "event_date": None,
+        "sar_scene": None,
+        "observed_flood_km2": None,
+        "modeled_flood_km2": round(float(flood.sum()) * abs(transform.a * transform.e) * 111.32 * 111.32, 2),
+        "hit_rate_pod": None,
+        "false_alarm_ratio": None,
+        "critical_success_index": None,
+        "stage_m": round(stage, 2),
+        "counterfactual": {"people_exposed_baseline": None, "people_exposed_with_plan": None, "reduction_pct": None},
+        "provenance": {
+            "data_status": (
+                f"unvalidated — no UNOSAT/Sentinel-1 scene wired for {city_name}; "
+                "CSI is null and will not be invented"
+            ),
+            "method": "HAND valley mask only",
+            "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        },
+    }
+    (dest / "backtest.json").write_text(json.dumps(backtest, indent=2) + "\n")
 
 
 def run(root: Path | None = None) -> Path:
     dest = city_dir("bangalore")
     dest.mkdir(parents=True, exist_ok=True)
-    rows = daily_precip(12.9716, 77.5946)
-    signal = fit_signal(rows, "bangalore", bootstrap_draws=200)
-    signal["provenance"]["datasets"] = [
-        "Open-Meteo archive ERA5-Land daily precipitation at Bengaluru (12.97N, 77.59E)",
-        "Copernicus GLO-30 DEM",
-        "OpenStreetMap lakes / drains / schools / clinics",
-        "WorldPop India 1km 2020 (if available)",
-    ]
-    signal["provenance"]["data_status"] = (
-        "model output — GEV on ERA5-Land daily precip at city centroid; not IMD gauge fusion"
-    )
-    signal["lake_growth"] = []
-    (dest / "signal.json").write_text(json.dumps(signal, indent=2) + "\n")
+    sig_path = dest / "signal.json"
+    if sig_path.exists():
+        signal = json.loads(sig_path.read_text())
+        print("reusing cached bangalore signal.json", flush=True)
+    else:
+        rows = daily_precip(12.9716, 77.5946)
+        signal = fit_signal(rows, "bangalore", bootstrap_draws=200)
+        signal.setdefault("provenance", {})
+        signal["provenance"]["datasets"] = [
+            "Open-Meteo archive ERA5-Land daily precipitation at Bengaluru (12.97N, 77.59E)",
+            "Copernicus GLO-30 DEM",
+            "OpenStreetMap lakes / drains / schools / clinics",
+            "WorldPop India 1km 2020 (if available)",
+        ]
+        signal["provenance"]["data_status"] = (
+            "model output — GEV on ERA5-Land daily precip at city centroid; not IMD gauge fusion"
+        )
+        signal["lake_growth"] = []
+        sig_path.write_text(json.dumps(signal, indent=2) + "\n")
 
     elev, transform = _read_dem(BBOX, out_res=0.002, urls=DEM_URLS)
 
@@ -192,8 +206,7 @@ def run(root: Path | None = None) -> Path:
     pop_grid = _worldpop(elev.shape, transform)
     assets = fetch_assets(BBOX)
     water = fetch_water(BBOX)
-    rng = random.Random(20260919)
-    cells = _cells(elev, transform, flood, pop_grid, assets, water, rng)
+    cells = _cells(elev, transform, flood, pop_grid, assets, water, prefix="blr")
     hazard = {
         "type": "FeatureCollection",
         "features": cells,
@@ -208,34 +221,22 @@ def run(root: Path | None = None) -> Path:
         },
     }
     (dest / "hazard.geojson").write_text(json.dumps(hazard))
-    cands = _candidates(cells, rng)
+    cands = _candidates(cells, prefix="blr")
     (dest / "candidates.json").write_text(json.dumps(cands))
     modeled = _geojson_from_mask(flood, transform)
     (dest / "flood_modeled.geojson").write_text(json.dumps(modeled))
     (dest / "flood_observed.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": []}))
-    backtest = {
-        "event_date": None,
-        "sar_scene": None,
-        "observed_flood_km2": None,
-        "modeled_flood_km2": round(float(flood.sum()) * abs(transform.a * transform.e) * 111.32 * 111.32, 2),
-        "hit_rate_pod": None,
-        "false_alarm_ratio": None,
-        "critical_success_index": None,
-        "stage_m": round(stage, 2),
-        "counterfactual": {"people_exposed_baseline": None, "people_exposed_with_plan": None, "reduction_pct": None},
-        "provenance": {
-            "data_status": "unvalidated — no UNOSAT/Sentinel-1 scene wired for Bengaluru; CSI is null and will not be invented",
-            "method": "HAND valley mask only",
-            "generated_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        },
-    }
-    (dest / "backtest.json").write_text(json.dumps(backtest, indent=2) + "\n")
+    _write_unvalidated_backtest(dest, flood, transform, stage, "Bengaluru")
 
     plan = optimize(budget=2_000_000, mode="expected", root=dest, draws=160)
     (dest / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
     apply_counterfactual(dest, plan)
     from agent.attribution import build as build_attr
     build_attr(dest)
+    from api import conceptnote, loader
+    loader.set_city("bangalore")
+    (dest / "preventive_measures_plan.md").write_text(conceptnote.render())
+    (dest / "preventive_measures_plan.pdf").write_bytes(conceptnote.render_pdf())
     print(f"bangalore pack: cells={len(cells)} parcels={len(cands)} lakes/drains={len(water)} "
           f"assets={len(assets)} CSI=null pop_grid={pop_grid is not None}")
     return dest

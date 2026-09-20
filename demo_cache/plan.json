@@ -3,29 +3,29 @@
   "mode": "expected",
   "selected": [
     {
-      "parcel_id": "p_c_00098_floodplain_restore",
+      "parcel_id": "p_c_00132_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
         87.14,
-        26.53
+        26.37
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.235,
+      "suitability_score": 0.313,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.013,
-        "observed_flood_fraction": 0.006,
-        "flood_depth_rp100_m": 0.12,
+        "modeled_flood_fraction": 0.117,
+        "observed_flood_fraction": 0.037,
+        "flood_depth_rp100_m": 0.37,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 407079,
+        "cell_population": 231882,
         "critical_assets": [],
-        "eal_people": 8478.438,
-        "eal_usd": 21196095.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 8096.885,
+        "eal_usd": 20242212.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -40,192 +40,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 2499.3286,
+      "avoided_eal_people": 2384.558,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 1,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00115_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.14,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.28,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.074,
-        "observed_flood_fraction": 0.012,
-        "flood_depth_rp100_m": 0.35,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 214347,
-        "critical_assets": [],
-        "eal_people": 6254.779,
-        "eal_usd": 15636948.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 1886.9204,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 2,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00080_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.06,
-        26.61
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.232,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.009,
-        "observed_flood_fraction": 0.004,
-        "flood_depth_rp100_m": 0.05,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 241176,
-        "critical_assets": [],
-        "eal_people": 4921.347,
-        "eal_usd": 12303368.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 1480.3011,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 3,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00116_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.22,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.23,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.006,
-        "observed_flood_fraction": 0.003,
-        "flood_depth_rp100_m": 0.05,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 216110,
-        "critical_assets": [],
-        "eal_people": 4318.688,
-        "eal_usd": 10796720.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 1320.8485,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 4,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00064_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.14,
-        26.69
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.228,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.0,
-        "observed_flood_fraction": 0.004,
-        "flood_depth_rp100_m": 0.05,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 141090,
-        "critical_assets": [],
-        "eal_people": 2706.812,
-        "eal_usd": 6767030.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 788.2456,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 5,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
     },
     {
       "parcel_id": "p_c_00097_floodplain_restore",
@@ -236,21 +58,21 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.28,
+      "suitability_score": 0.283,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.074,
+        "modeled_flood_fraction": 0.077,
         "observed_flood_fraction": 0.033,
-        "flood_depth_rp100_m": 0.36,
+        "flood_depth_rp100_m": 0.25,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 88036,
+        "cell_population": 241829,
         "critical_assets": [],
-        "eal_people": 2561.517,
-        "eal_usd": 6403792.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 7158.743,
+        "eal_usd": 17896858.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -265,82 +87,39 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 769.5615,
+      "avoided_eal_people": 2094.9808,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 6,
-      "selected_in_both_objectives": true
+      "priority_rank": 2,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
     },
     {
-      "parcel_id": "p_c_00047_floodplain_restore",
+      "parcel_id": "p_c_00098_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
         87.14,
-        26.77
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.251,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.002,
-        "observed_flood_fraction": 0.034,
-        "flood_depth_rp100_m": 0.16,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 119762,
-        "critical_assets": [],
-        "eal_people": 2336.931,
-        "eal_usd": 5842328.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 696.5112,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 7,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00096_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.98,
         26.53
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.257,
+      "suitability_score": 0.236,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.02,
-        "observed_flood_fraction": 0.043,
-        "flood_depth_rp100_m": 0.07,
+        "modeled_flood_fraction": 0.014,
+        "observed_flood_fraction": 0.006,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 82926,
+        "cell_population": 330634,
         "critical_assets": [],
-        "eal_people": 1811.104,
-        "eal_usd": 4527760.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 6942.074,
+        "eal_usd": 17355185.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -355,37 +134,39 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 528.6641,
+      "avoided_eal_people": 2049.418,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 8,
-      "selected_in_both_objectives": true
+      "priority_rank": 3,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
     },
     {
-      "parcel_id": "p_c_00063_floodplain_restore",
+      "parcel_id": "p_c_00115_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        87.06,
-        26.69
+        87.14,
+        26.45
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
       "suitability_score": 0.293,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.004,
-        "observed_flood_fraction": 0.091,
-        "flood_depth_rp100_m": 0.05,
+        "modeled_flood_fraction": 0.091,
+        "observed_flood_fraction": 0.012,
+        "flood_depth_rp100_m": 0.29,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 78663,
+        "cell_population": 209116,
         "critical_assets": [],
-        "eal_people": 1546.613,
-        "eal_usd": 3866532.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 6560.884,
+        "eal_usd": 16402210.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -400,12 +181,303 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 453.2845,
+      "avoided_eal_people": 1956.4679,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 4,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00100_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.3,
+        26.53
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.226,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.001,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 303617,
+        "critical_assets": [],
+        "eal_people": 5867.019,
+        "eal_usd": 14667548.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1756.3457,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 5,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00133_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.22,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.299,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.099,
+        "observed_flood_fraction": 0.042,
+        "flood_depth_rp100_m": 0.32,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 226922,
+        "critical_assets": [
+          "clinic"
+        ],
+        "eal_people": 5280.716,
+        "eal_usd": 13201790.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1539.1232,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 6,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00114_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.06,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.297,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.096,
+        "observed_flood_fraction": 0.028,
+        "flood_depth_rp100_m": 0.31,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 142460,
+        "critical_assets": [],
+        "eal_people": 4577.774,
+        "eal_usd": 11444435.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1359.8071,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 7,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00080_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.06,
+        26.61
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.227,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.003,
+        "observed_flood_fraction": 0.003,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 217015,
+        "critical_assets": [],
+        "eal_people": 4226.91,
+        "eal_usd": 10567275.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1245.5455,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 8,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00081_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.14,
+        26.61
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.229,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.005,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 285171,
+        "critical_assets": [
+          "clinic",
+          "school",
+          "school",
+          "school"
+        ],
+        "eal_people": 4049.642,
+        "eal_usd": 10124105.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1177.1589,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 9,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00116_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.22,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.231,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.008,
+        "observed_flood_fraction": 0.003,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 183770,
+        "critical_assets": [],
+        "eal_people": 3718.931,
+        "eal_usd": 9297328.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 1104.2182,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 10,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
     },
     {
       "parcel_id": "p_c_00069_floodplain_restore",
@@ -416,24 +488,24 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.236,
+      "suitability_score": 0.248,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.007,
-        "observed_flood_fraction": 0.014,
-        "flood_depth_rp100_m": 0.13,
+        "modeled_flood_fraction": 0.031,
+        "observed_flood_fraction": 0.013,
+        "flood_depth_rp100_m": 0.1,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 99065,
+        "cell_population": 173764,
         "critical_assets": [
           "school",
           "school"
         ],
-        "eal_people": 1433.954,
-        "eal_usd": 3584885.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 2914.489,
+        "eal_usd": 7286222.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -448,62 +520,450 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 417.1936,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 10,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00035_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.18,
-        26.77
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.24,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.0,
-        "observed_flood_fraction": 0.02,
-        "flood_depth_rp100_m": 0.15,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 93261,
-        "critical_assets": [
-          "school",
-          "school",
-          "school",
-          "school"
-        ],
-        "eal_people": 1282.269,
-        "eal_usd": 3205672.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 380.1105,
+      "avoided_eal_people": 858.7304,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 11,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00096_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.98,
+        26.53
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.238,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.007,
+        "observed_flood_fraction": 0.017,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 121230,
+        "critical_assets": [],
+        "eal_people": 2443.088,
+        "eal_usd": 6107720.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 720.7352,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 12,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00068_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.1,
+        26.61
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.28,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.073,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.23,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 110232,
+        "critical_assets": [
+          "clinic",
+          "clinic"
+        ],
+        "eal_people": 2291.927,
+        "eal_usd": 5729818.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 666.8116,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 13,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00064_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.14,
+        26.69
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.227,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.002,
+        "observed_flood_fraction": 0.002,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 109202,
+        "critical_assets": [],
+        "eal_people": 2122.682,
+        "eal_usd": 5306705.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 636.0754,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 14,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00047_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.14,
+        26.77
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.244,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.002,
+        "observed_flood_fraction": 0.026,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 95587,
+        "critical_assets": [],
+        "eal_people": 1865.201,
+        "eal_usd": 4663002.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 555.9143,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 15,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00134_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.3,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.298,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.098,
+        "observed_flood_fraction": 0.081,
+        "flood_depth_rp100_m": 0.31,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 70593,
+        "critical_assets": [
+          "school"
+        ],
+        "eal_people": 1634.237,
+        "eal_usd": 4085592.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 481.644,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 16,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00070_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.26,
+        26.61
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.235,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.013,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 85290,
+        "critical_assets": [
+          "clinic",
+          "clinic"
+        ],
+        "eal_people": 1273.071,
+        "eal_usd": 3182678.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 384.9839,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 17,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00063_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.06,
+        26.69
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.271,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.001,
+        "observed_flood_fraction": 0.061,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 64443,
+        "critical_assets": [],
+        "eal_people": 1239.843,
+        "eal_usd": 3099608.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 361.0523,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 18,
+      "selected_in_both_objectives": true,
+      "low_income_score": 1.0,
+      "equity_weight": 1.5
+    },
+    {
+      "parcel_id": "p_c_00110_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.74,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.295,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.083,
+        "observed_flood_fraction": 0.094,
+        "flood_depth_rp100_m": 0.27,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 50471,
+        "critical_assets": [
+          "clinic",
+          "school",
+          "school",
+          "school"
+        ],
+        "eal_people": 1098.216,
+        "eal_usd": 2745540.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 326.6459,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 19,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00135_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.38,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.276,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.068,
+        "observed_flood_fraction": 0.018,
+        "flood_depth_rp100_m": 0.22,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 44308,
+        "critical_assets": [],
+        "eal_people": 1064.04,
+        "eal_usd": 2660100.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 322.3028,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 20,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00093_floodplain_restore",
@@ -522,18 +982,18 @@
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 91371,
+        "cell_population": 74289,
         "critical_assets": [
           "clinic",
           "clinic",
           "school",
           "school"
         ],
-        "eal_people": 1254.318,
-        "eal_usd": 3135795.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 1019.821,
+        "eal_usd": 2549552.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -548,37 +1008,44 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 376.7363,
+      "avoided_eal_people": 300.6294,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 12,
-      "selected_in_both_objectives": true
+      "priority_rank": 21,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "p_c_00073_floodplain_restore",
+      "parcel_id": "p_c_00035_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.5,
-        26.61
+        86.18,
+        26.77
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.241,
+      "suitability_score": 0.24,
       "suitability_evidence": {
         "modeled_flood_fraction": 0.0,
-        "observed_flood_fraction": 0.021,
-        "flood_depth_rp100_m": 0.06,
+        "observed_flood_fraction": 0.02,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 65270,
-        "critical_assets": [],
-        "eal_people": 1252.205,
-        "eal_usd": 3130512.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "cell_population": 71924,
+        "critical_assets": [
+          "school",
+          "school",
+          "school",
+          "school"
+        ],
+        "eal_people": 988.901,
+        "eal_usd": 2472252.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -593,12 +1060,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 368.952,
+      "avoided_eal_people": 293.1457,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 13,
-      "selected_in_both_objectives": true
+      "priority_rank": 22,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00018_floodplain_restore",
@@ -613,22 +1082,22 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.0,
         "observed_flood_fraction": 0.011,
-        "flood_depth_rp100_m": 0.19,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 83454,
+        "cell_population": 67629,
         "critical_assets": [
           "clinic",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 1215.612,
-        "eal_usd": 3039030.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 985.101,
+        "eal_usd": 2462752.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -643,12 +1112,63 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 354.8416,
+      "avoided_eal_people": 287.5546,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 14,
-      "selected_in_both_objectives": true
+      "priority_rank": 23,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00051_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.1,
+        26.69
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.247,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.03,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.1,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 59302,
+        "critical_assets": [
+          "clinic"
+        ],
+        "eal_people": 985.57,
+        "eal_usd": 2463925.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 286.9409,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 24,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00052_floodplain_restore",
@@ -663,22 +1183,22 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.007,
         "observed_flood_fraction": 0.022,
-        "flood_depth_rp100_m": 0.12,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 83611,
+        "cell_population": 63689,
         "critical_assets": [
           "clinic",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 1209.36,
-        "eal_usd": 3023400.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 921.206,
+        "eal_usd": 2303015.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -693,12 +1213,61 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 352.0956,
+      "avoided_eal_people": 275.4855,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 15,
-      "selected_in_both_objectives": true
+      "priority_rank": 25,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00073_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.5,
+        26.61
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.241,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.0,
+        "observed_flood_fraction": 0.021,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 52454,
+        "critical_assets": [],
+        "eal_people": 855.38,
+        "eal_usd": 2138450.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 250.9953,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 26,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00094_floodplain_restore",
@@ -713,22 +1282,22 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.002,
         "observed_flood_fraction": 0.034,
-        "flood_depth_rp100_m": 0.09,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 74656,
+        "cell_population": 57421,
         "critical_assets": [
           "school",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 1037.599,
-        "eal_usd": 2593998.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 798.06,
+        "eal_usd": 1995150.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -743,12 +1312,155 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 301.9534,
+      "avoided_eal_people": 236.3732,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 16,
-      "selected_in_both_objectives": true
+      "priority_rank": 27,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00090_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.5,
+        26.53
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.237,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.0,
+        "observed_flood_fraction": 0.016,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 46864,
+        "critical_assets": [],
+        "eal_people": 763.625,
+        "eal_usd": 1909062.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 229.4173,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 28,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00118_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.38,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.238,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.017,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 41633,
+        "critical_assets": [],
+        "eal_people": 757.946,
+        "eal_usd": 1894865.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 220.6672,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 29,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00109_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.66,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.243,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.014,
+        "observed_flood_fraction": 0.024,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 39957,
+        "critical_assets": [],
+        "eal_people": 715.971,
+        "eal_usd": 1789928.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 208.7342,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 30,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00056_floodplain_restore",
@@ -767,18 +1479,18 @@
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 68135,
+        "cell_population": 53342,
         "critical_assets": [
           "school",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 939.735,
-        "eal_usd": 2349338.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 735.706,
+        "eal_usd": 1839265.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -793,37 +1505,44 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 281.0266,
+      "avoided_eal_people": 208.3726,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 17,
-      "selected_in_both_objectives": true
+      "priority_rank": 31,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "p_c_00118_floodplain_restore",
+      "parcel_id": "p_c_00111_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        87.38,
+        86.82,
         26.45
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.236,
+      "suitability_score": 0.265,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.014,
-        "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.19,
+        "modeled_flood_fraction": 0.051,
+        "observed_flood_fraction": 0.053,
+        "flood_depth_rp100_m": 0.16,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 46970,
-        "critical_assets": [],
-        "eal_people": 841.633,
-        "eal_usd": 2104082.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "cell_population": 37532,
+        "critical_assets": [
+          "clinic",
+          "school",
+          "school",
+          "school"
+        ],
+        "eal_people": 700.927,
+        "eal_usd": 1752318.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -838,12 +1557,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 246.9936,
+      "avoided_eal_people": 202.052,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 18,
-      "selected_in_both_objectives": true
+      "priority_rank": 32,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00017_floodplain_restore",
@@ -858,17 +1579,17 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.0,
         "observed_flood_fraction": 0.001,
-        "flood_depth_rp100_m": 0.1,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 49749,
+        "cell_population": 39009,
         "critical_assets": [],
-        "eal_people": 810.001,
-        "eal_usd": 2025002.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 635.135,
+        "eal_usd": 1587838.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -883,154 +1604,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 238.6266,
+      "avoided_eal_people": 187.111,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 19,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00110_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.74,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.297,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.087,
-        "observed_flood_fraction": 0.096,
-        "flood_depth_rp100_m": 0.39,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 34396,
-        "critical_assets": [
-          "clinic",
-          "school",
-          "school",
-          "school"
-        ],
-        "eal_people": 762.994,
-        "eal_usd": 1907485.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 225.2488,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 20,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00039_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.5,
-        26.77
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.233,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.0,
-        "observed_flood_fraction": 0.011,
-        "flood_depth_rp100_m": 0.15,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 42460,
-        "critical_assets": [],
-        "eal_people": 735.174,
-        "eal_usd": 1837935.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 220.8383,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 21,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00134_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.3,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.298,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.098,
-        "observed_flood_fraction": 0.082,
-        "flood_depth_rp100_m": 0.46,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 33153,
-        "critical_assets": [
-          "school"
-        ],
-        "eal_people": 767.496,
-        "eal_usd": 1918740.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 220.1899,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 22,
-      "selected_in_both_objectives": true
+      "priority_rank": 33,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00078_floodplain_restore",
@@ -1049,18 +1630,18 @@
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 51581,
+        "cell_population": 41773,
         "critical_assets": [
           "clinic",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 714.884,
-        "eal_usd": 1787210.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 578.95,
+        "eal_usd": 1447375.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1075,12 +1656,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 211.1509,
+      "avoided_eal_people": 174.1434,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 23,
-      "selected_in_both_objectives": true
+      "priority_rank": 34,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00095_floodplain_restore",
@@ -1091,26 +1674,26 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.308,
+      "suitability_score": 0.298,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.052,
-        "observed_flood_fraction": 0.111,
-        "flood_depth_rp100_m": 0.33,
+        "modeled_flood_fraction": 0.05,
+        "observed_flood_fraction": 0.098,
+        "flood_depth_rp100_m": 0.16,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 37890,
+        "cell_population": 29660,
         "critical_assets": [
           "school",
           "school",
           "school",
           "school"
         ],
-        "eal_people": 712.195,
-        "eal_usd": 1780488.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 550.326,
+        "eal_usd": 1375815.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1125,12 +1708,61 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 207.7498,
+      "avoided_eal_people": 166.8837,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 24,
-      "selected_in_both_objectives": true
+      "priority_rank": 35,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00039_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.5,
+        26.77
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.233,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.0,
+        "observed_flood_fraction": 0.011,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 31175,
+        "critical_assets": [],
+        "eal_people": 539.78,
+        "eal_usd": 1349450.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 162.1441,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 36,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00077_floodplain_restore",
@@ -1149,17 +1781,17 @@
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 43841,
+        "cell_population": 33308,
         "critical_assets": [
           "clinic",
           "school",
           "school"
         ],
-        "eal_people": 612.207,
-        "eal_usd": 1530518.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 465.121,
+        "eal_usd": 1162802.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1174,12 +1806,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 179.6407,
+      "avoided_eal_people": 135.7857,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 25,
-      "selected_in_both_objectives": true
+      "priority_rank": 37,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00076_floodplain_restore",
@@ -1194,19 +1828,19 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.0,
         "observed_flood_fraction": 0.004,
-        "flood_depth_rp100_m": 0.19,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 40206,
+        "cell_population": 31225,
         "critical_assets": [
           "clinic"
         ],
-        "eal_people": 564.04,
-        "eal_usd": 1410100.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 438.048,
+        "eal_usd": 1095120.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1221,59 +1855,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 170.5689,
+      "avoided_eal_people": 129.3836,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 26,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00079_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.98,
-        26.61
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.285,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.08,
-        "observed_flood_fraction": 0.049,
-        "flood_depth_rp100_m": 0.42,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 21735,
-        "critical_assets": [
-          "school"
-        ],
-        "eal_people": 466.368,
-        "eal_usd": 1165920.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 136.1497,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 27,
-      "selected_in_both_objectives": true
+      "priority_rank": 38,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00046_floodplain_restore",
@@ -1286,19 +1875,19 @@
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
       "suitability_score": 0.236,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.004,
-        "observed_flood_fraction": 0.015,
-        "flood_depth_rp100_m": 0.19,
+        "modeled_flood_fraction": 0.001,
+        "observed_flood_fraction": 0.014,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 26027,
+        "cell_population": 24002,
         "critical_assets": [],
-        "eal_people": 449.234,
-        "eal_usd": 1123085.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 407.396,
+        "eal_usd": 1018490.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1313,62 +1902,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 134.2866,
+      "avoided_eal_people": 121.7802,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 28,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00111_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.82,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.267,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.056,
-        "observed_flood_fraction": 0.054,
-        "flood_depth_rp100_m": 0.37,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 22858,
-        "critical_assets": [
-          "clinic",
-          "school",
-          "school",
-          "school"
-        ],
-        "eal_people": 436.558,
-        "eal_usd": 1091395.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 130.6876,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 29,
-      "selected_in_both_objectives": true
+      "priority_rank": 39,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00044_floodplain_restore",
@@ -1387,13 +1928,13 @@
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 20300,
+        "cell_population": 17387,
         "critical_assets": [],
-        "eal_people": 353.037,
-        "eal_usd": 882592.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 302.377,
+        "eal_usd": 755942.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1408,37 +1949,41 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 106.6068,
+      "avoided_eal_people": 91.309,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 30,
-      "selected_in_both_objectives": true
+      "priority_rank": 40,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
-      "parcel_id": "p_c_00109_floodplain_restore",
+      "parcel_id": "p_c_00079_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.66,
-        26.45
+        86.98,
+        26.61
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.243,
+      "suitability_score": 0.267,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.014,
-        "observed_flood_fraction": 0.024,
-        "flood_depth_rp100_m": 0.09,
+        "modeled_flood_fraction": 0.056,
+        "observed_flood_fraction": 0.039,
+        "flood_depth_rp100_m": 0.18,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 13824,
-        "critical_assets": [],
-        "eal_people": 246.714,
-        "eal_usd": 616785.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "cell_population": 12058,
+        "critical_assets": [
+          "school"
+        ],
+        "eal_people": 231.021,
+        "eal_usd": 577552.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1453,12 +1998,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 72.2,
+      "avoided_eal_people": 66.8874,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 31,
-      "selected_in_both_objectives": true
+      "priority_rank": 41,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00062_floodplain_restore",
@@ -1473,19 +2020,19 @@
       "suitability_evidence": {
         "modeled_flood_fraction": 0.007,
         "observed_flood_fraction": 0.038,
-        "flood_depth_rp100_m": 0.14,
+        "flood_depth_rp100_m": 0.05,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 17316,
+        "cell_population": 13637,
         "critical_assets": [
           "clinic"
         ],
-        "eal_people": 249.041,
-        "eal_usd": 622602.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 196.954,
+        "eal_usd": 492385.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1500,195 +2047,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 70.5354,
+      "avoided_eal_people": 57.7237,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 32,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00090_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.5,
-        26.53
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.237,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.0,
-        "observed_flood_fraction": 0.016,
-        "flood_depth_rp100_m": 0.09,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 13140,
-        "critical_assets": [],
-        "eal_people": 214.11,
-        "eal_usd": 535275.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 64.3952,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 33,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00135_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.38,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.269,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.059,
-        "observed_flood_fraction": 0.018,
-        "flood_depth_rp100_m": 0.23,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 8354,
-        "critical_assets": [],
-        "eal_people": 192.23,
-        "eal_usd": 480575.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 56.821,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 34,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00114_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.06,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.295,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.094,
-        "observed_flood_fraction": 0.028,
-        "flood_depth_rp100_m": 0.47,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 6910,
-        "critical_assets": [],
-        "eal_people": 187.251,
-        "eal_usd": 468128.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 54.2325,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 35,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00068_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.1,
-        26.61
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.226,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.001,
-        "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.11,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 11357,
-        "critical_assets": [
-          "clinic",
-          "clinic"
-        ],
-        "eal_people": 156.471,
-        "eal_usd": 391178.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 46.8875,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 36,
-      "selected_in_both_objectives": true
+      "priority_rank": 42,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
       "parcel_id": "p_c_00112_floodplain_restore",
@@ -1699,21 +2065,21 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.304,
+      "suitability_score": 0.298,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.106,
-        "observed_flood_fraction": 0.1,
-        "flood_depth_rp100_m": 0.47,
+        "modeled_flood_fraction": 0.09,
+        "observed_flood_fraction": 0.098,
+        "flood_depth_rp100_m": 0.29,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
-        "cell_population": 658,
+        "cell_population": 3475,
         "critical_assets": [],
-        "eal_people": 18.727,
-        "eal_usd": 46818.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 92.423,
+        "eal_usd": 231058.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -1728,284 +2094,61 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 5.5794,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 37,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00128_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.82,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.347,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.162,
-        "observed_flood_fraction": 0.057,
-        "flood_depth_rp100_m": 0.71,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.697,
-        "eal_usd": 1742.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.2079,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 38,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00131_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.06,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.31,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.113,
-        "observed_flood_fraction": 0.014,
-        "flood_depth_rp100_m": 0.48,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.584,
-        "eal_usd": 1460.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1734,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 39,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00132_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.14,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.313,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.117,
-        "observed_flood_fraction": 0.037,
-        "flood_depth_rp100_m": 0.53,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.594,
-        "eal_usd": 1485.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1729,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 40,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00127_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.74,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.305,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.107,
-        "observed_flood_fraction": 0.105,
-        "flood_depth_rp100_m": 0.39,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.572,
-        "eal_usd": 1430.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1677,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 41,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00126_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.66,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.305,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.107,
-        "observed_flood_fraction": 0.053,
-        "flood_depth_rp100_m": 0.42,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.571,
-        "eal_usd": 1427.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1646,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 42,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00133_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        87.22,
-        26.37
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.303,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.104,
-        "observed_flood_fraction": 0.042,
-        "flood_depth_rp100_m": 0.37,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [
-          "clinic"
-        ],
-        "eal_people": 0.476,
-        "eal_usd": 1190.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.14,
+      "avoided_eal_people": 27.1003,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 43,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00102_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.1,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.367,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.189,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.6,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.759,
+        "eal_usd": 1898.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.2261,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 44,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00125_floodplain_restore",
@@ -2016,21 +2159,21 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.272,
+      "suitability_score": 0.353,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.063,
+        "modeled_flood_fraction": 0.171,
         "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.38,
+        "flood_depth_rp100_m": 0.55,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
         "critical_assets": [],
-        "eal_people": 0.47,
-        "eal_usd": 1175.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.717,
+        "eal_usd": 1792.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2045,82 +2188,39 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1398,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 44,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00104_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.26,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.269,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.059,
-        "observed_flood_fraction": 0.007,
-        "flood_depth_rp100_m": 0.24,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.46,
-        "eal_usd": 1150.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1395,
+      "avoided_eal_people": 0.2173,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 45,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
-      "parcel_id": "p_c_00113_floodplain_restore",
+      "parcel_id": "p_c_00128_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.98,
-        26.45
+        86.82,
+        26.37
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.271,
+      "suitability_score": 0.344,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.061,
-        "observed_flood_fraction": 0.005,
-        "flood_depth_rp100_m": 0.34,
+        "modeled_flood_fraction": 0.159,
+        "observed_flood_fraction": 0.033,
+        "flood_depth_rp100_m": 0.51,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
         "critical_assets": [],
-        "eal_people": 0.465,
-        "eal_usd": 1162.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.691,
+        "eal_usd": 1727.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2135,40 +2235,39 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1387,
+      "avoided_eal_people": 0.2027,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 46,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
-      "parcel_id": "p_c_00121_floodplain_restore",
+      "parcel_id": "p_c_00120_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.26,
+        86.18,
         26.37
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.287,
+      "suitability_score": 0.343,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.083,
-        "observed_flood_fraction": 0.003,
-        "flood_depth_rp100_m": 0.3,
+        "modeled_flood_fraction": 0.157,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.5,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
-        "critical_assets": [
-          "clinic",
-          "clinic"
-        ],
-        "eal_people": 0.434,
-        "eal_usd": 1085.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "critical_assets": [],
+        "eal_people": 0.686,
+        "eal_usd": 1715.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2183,12 +2282,14 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.127,
+      "avoided_eal_people": 0.1968,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 47,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00085_floodplain_restore",
@@ -2199,21 +2300,21 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.25,
+      "suitability_score": 0.321,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.033,
+        "modeled_flood_fraction": 0.128,
         "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.24,
+        "flood_depth_rp100_m": 0.41,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
         "critical_assets": [],
-        "eal_people": 0.4,
-        "eal_usd": 1000.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.619,
+        "eal_usd": 1548.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2228,12 +2329,108 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1158,
+      "avoided_eal_people": 0.1862,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 48,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00131_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        87.06,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.311,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.115,
+        "observed_flood_fraction": 0.014,
+        "flood_depth_rp100_m": 0.37,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.589,
+        "eal_usd": 1472.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1741,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 49,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00126_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.66,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.307,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.109,
+        "observed_flood_fraction": 0.053,
+        "flood_depth_rp100_m": 0.35,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.576,
+        "eal_usd": 1440.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1719,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 50,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00129_floodplain_restore",
@@ -2244,21 +2441,21 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.239,
+      "suitability_score": 0.304,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.019,
+        "modeled_flood_fraction": 0.105,
         "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.08,
+        "flood_depth_rp100_m": 0.34,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
         "critical_assets": [],
-        "eal_people": 0.368,
-        "eal_usd": 920.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.566,
+        "eal_usd": 1415.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2273,130 +2470,44 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.1093,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 49,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00107_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.5,
-        26.45
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.233,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.001,
-        "observed_flood_fraction": 0.011,
-        "flood_depth_rp100_m": 0.05,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.33,
-        "eal_usd": 825.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0974,
-      "co2_t_10yr": 140.0,
-      "income_usd_yr": 1200.0,
-      "effect_fraction_assumed": 0.3,
-      "priority_rank": 50,
-      "selected_in_both_objectives": true
-    },
-    {
-      "parcel_id": "p_c_00086_floodplain_restore",
-      "type": "floodplain_restore",
-      "centroid": [
-        86.18,
-        26.53
-      ],
-      "area_ha": 4.0,
-      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.246,
-      "suitability_evidence": {
-        "modeled_flood_fraction": 0.028,
-        "observed_flood_fraction": 0.018,
-        "flood_depth_rp100_m": 0.15,
-        "glof_depth_m": 0.0,
-        "landcover": "cropland",
-        "channel_proximity": "not available at parcel scale",
-        "cell_population": 20,
-        "critical_assets": [
-          "clinic",
-          "clinic"
-        ],
-        "eal_people": 0.329,
-        "eal_usd": 822.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
-      },
-      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
-      "assumptions": [
-        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
-        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
-        "Intervention effectiveness is applied later from the cited screening factor table."
-      ],
-      "verification": [
-        "Survey parcel boundaries, tenure, and current land use.",
-        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
-        "Complete field ecology and community feasibility review."
-      ],
-      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
-      "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0969,
+      "avoided_eal_people": 0.1674,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 51,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
-      "parcel_id": "p_c_00087_floodplain_restore",
+      "parcel_id": "p_c_00119_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.26,
-        26.53
+        86.1,
+        26.37
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.227,
+      "suitability_score": 0.338,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.003,
+        "modeled_flood_fraction": 0.15,
         "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.14,
+        "flood_depth_rp100_m": 0.48,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
         "cell_population": 20,
-        "critical_assets": [],
-        "eal_people": 0.331,
-        "eal_usd": 828.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "critical_assets": [
+          "clinic",
+          "clinic",
+          "clinic",
+          "school"
+        ],
+        "eal_people": 0.565,
+        "eal_usd": 1412.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2411,27 +2522,123 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0962,
+      "avoided_eal_people": 0.1662,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
       "priority_rank": 52,
-      "selected_in_both_objectives": true
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "p_c_00103_floodplain_restore",
+      "parcel_id": "p_c_00127_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.18,
+        86.74,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.293,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.081,
+        "observed_flood_fraction": 0.091,
+        "flood_depth_rp100_m": 0.26,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.51,
+        "eal_usd": 1275.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1496,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 53,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00113_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.98,
         26.45
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.239,
+      "suitability_score": 0.277,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.019,
+        "modeled_flood_fraction": 0.069,
+        "observed_flood_fraction": 0.005,
+        "flood_depth_rp100_m": 0.22,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.483,
+        "eal_usd": 1208.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1441,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 54,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00121_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.26,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.303,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.104,
         "observed_flood_fraction": 0.003,
-        "flood_depth_rp100_m": 0.13,
+        "flood_depth_rp100_m": 0.33,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
@@ -2440,11 +2647,11 @@
           "clinic",
           "clinic"
         ],
-        "eal_people": 0.311,
-        "eal_usd": 778.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.477,
+        "eal_usd": 1192.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2459,12 +2666,61 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0921,
+      "avoided_eal_people": 0.141,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 53,
-      "selected_in_both_objectives": true
+      "priority_rank": 55,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00104_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.26,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.268,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.057,
+        "observed_flood_fraction": 0.006,
+        "flood_depth_rp100_m": 0.18,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.456,
+        "eal_usd": 1140.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1321,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 56,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     },
     {
       "parcel_id": "p_c_00130_floodplain_restore",
@@ -2475,11 +2731,11 @@
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.226,
+      "suitability_score": 0.291,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.001,
+        "modeled_flood_fraction": 0.088,
         "observed_flood_fraction": 0.0,
-        "flood_depth_rp100_m": 0.07,
+        "flood_depth_rp100_m": 0.28,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
         "channel_proximity": "not available at parcel scale",
@@ -2487,11 +2743,11 @@
         "critical_assets": [
           "clinic"
         ],
-        "eal_people": 0.277,
-        "eal_usd": 693.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.445,
+        "eal_usd": 1112.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2506,26 +2762,125 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0826,
+      "avoided_eal_people": 0.1309,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 54,
-      "selected_in_both_objectives": true
+      "priority_rank": 57,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
     },
     {
-      "parcel_id": "p_c_00124_floodplain_restore",
+      "parcel_id": "p_c_00103_floodplain_restore",
       "type": "floodplain_restore",
       "centroid": [
-        86.5,
+        86.18,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.271,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.061,
+        "observed_flood_fraction": 0.003,
+        "flood_depth_rp100_m": 0.2,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [
+          "clinic",
+          "clinic"
+        ],
+        "eal_people": 0.394,
+        "eal_usd": 985.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1175,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 58,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00087_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.26,
+        26.53
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.235,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.013,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.356,
+        "eal_usd": 890.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1036,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 59,
+      "selected_in_both_objectives": false,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00122_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.34,
         26.37
       ],
       "area_ha": 4.0,
       "risk_driver": "modelled_flood_exposure_and_rp100_depth",
-      "suitability_score": 0.236,
+      "suitability_score": 0.253,
       "suitability_evidence": {
-        "modeled_flood_fraction": 0.001,
-        "observed_flood_fraction": 0.014,
+        "modeled_flood_fraction": 0.037,
+        "observed_flood_fraction": 0.0,
         "flood_depth_rp100_m": 0.12,
         "glof_depth_m": 0.0,
         "landcover": "cropland",
@@ -2537,11 +2892,11 @@
           "clinic",
           "clinic"
         ],
-        "eal_people": 0.277,
-        "eal_usd": 693.0,
-        "population_data_status": "not specified in source cell",
-        "landcover_data_status": "not specified in source cell",
-        "flood_depth_data_status": "not specified in source cell"
+        "eal_people": 0.347,
+        "eal_usd": 867.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
       },
       "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
       "assumptions": [
@@ -2556,65 +2911,167 @@
       ],
       "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
       "cost_usd": 32000.0,
-      "avoided_eal_people": 0.0808,
+      "avoided_eal_people": 0.1032,
       "co2_t_10yr": 140.0,
       "income_usd_yr": 1200.0,
       "effect_fraction_assumed": 0.3,
-      "priority_rank": 55,
-      "selected_in_both_objectives": true
+      "priority_rank": 60,
+      "selected_in_both_objectives": false,
+      "low_income_score": 0.15,
+      "equity_weight": 1.075
+    },
+    {
+      "parcel_id": "p_c_00105_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.34,
+        26.45
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.23,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.007,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.341,
+        "eal_usd": 853.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1029,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 61,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
+    },
+    {
+      "parcel_id": "p_c_00123_floodplain_restore",
+      "type": "floodplain_restore",
+      "centroid": [
+        86.42,
+        26.37
+      ],
+      "area_ha": 4.0,
+      "risk_driver": "modelled_flood_exposure_and_rp100_depth",
+      "suitability_score": 0.23,
+      "suitability_evidence": {
+        "modeled_flood_fraction": 0.007,
+        "observed_flood_fraction": 0.0,
+        "flood_depth_rp100_m": 0.05,
+        "glof_depth_m": 0.0,
+        "landcover": "cropland",
+        "channel_proximity": "not available at parcel scale",
+        "cell_population": 20,
+        "critical_assets": [],
+        "eal_people": 0.343,
+        "eal_usd": 858.0,
+        "population_data_status": "WorldPop/GHSL raster aggregate",
+        "landcover_data_status": "ESA WorldCover cell median",
+        "flood_depth_data_status": "deterministic cell-scale proxy from modeled flood fraction and GLOF depth"
+      },
+      "rationale": "Modelled inundation/depth supports floodplain restoration screening; the coarse cell does not identify a parcel or prove connectivity.",
+      "assumptions": [
+        "Source hazard-cell geometry is an opportunity zone, not a parcel boundary.",
+        "4.0 ha type-level screening footprint assumption; not measured from raster or cadastral data",
+        "Intervention effectiveness is applied later from the cited screening factor table."
+      ],
+      "verification": [
+        "Survey parcel boundaries, tenure, and current land use.",
+        "Confirm hydraulic connectivity and no adverse upstream/downstream impact.",
+        "Complete field ecology and community feasibility review."
+      ],
+      "data_status": "screening-grade deterministic cell-level candidate; parcel location and feasible area require verification",
+      "cost_usd": 32000.0,
+      "avoided_eal_people": 0.1021,
+      "co2_t_10yr": 140.0,
+      "income_usd_yr": 1200.0,
+      "effect_fraction_assumed": 0.3,
+      "priority_rank": 62,
+      "selected_in_both_objectives": true,
+      "low_income_score": 0.55,
+      "equity_weight": 1.275
     }
   ],
   "totals": {
-    "cost_usd": 1760000.0,
-    "people_protected": 16058.307,
+    "cost_usd": 1984000.0,
+    "people_protected": 26306.075,
     "exposure_reduction_pct": 30.0,
-    "co2_t_10yr": 7700.0,
-    "income_usd_yr": 66000.0,
+    "co2_t_10yr": 8680.0,
+    "income_usd_yr": 74400.0,
     "households_benefiting": null,
     "households_note": "Unavailable: intervention-area livelihood beneficiaries require a field-tested employment/adoption model; exposed cell population is not a household count."
   },
   "frontier": [
     {
       "budget_usd": 333333.33,
-      "people_protected": 10840.859,
+      "people_protected": 16667.623,
       "co2_t_10yr": 1400.0
     },
     {
       "budget_usd": 666666.67,
-      "people_protected": 13967.444,
+      "people_protected": 21982.519,
       "co2_t_10yr": 2800.0
     },
     {
       "budget_usd": 1000000.0,
-      "people_protected": 15757.513,
+      "people_protected": 24780.835,
       "co2_t_10yr": 4340.0
     },
     {
       "budget_usd": 1333333.33,
-      "people_protected": 16056.686,
+      "people_protected": 26218.315,
       "co2_t_10yr": 5740.0
     },
     {
       "budget_usd": 1666666.67,
-      "people_protected": 16058.051,
+      "people_protected": 26304.848,
       "co2_t_10yr": 7280.0
     },
     {
       "budget_usd": 2000000.0,
-      "people_protected": 16058.307,
-      "co2_t_10yr": 7700.0
+      "people_protected": 26306.075,
+      "co2_t_10yr": 8680.0
     }
   ],
+  "optimality": {
+    "greedy_value_usd": 132708373.94,
+    "knapsack_upper_bound_usd": 132708373.94,
+    "gap_pct": -0.0,
+    "note": "Upper bound ignores per-cell overlap capping, so the true gap is smaller."
+  },
   "cvar": {
     "mode_available": true,
-    "tail_people_protected": 9585.961,
+    "tail_people_protected": 15961.738,
     "alpha": 0.1
   },
   "robustness": {
     "comparison_mode": "cvar",
-    "selected_in_both_count": 55,
-    "selected_count": 55,
-    "overlap_pct": 100.0,
+    "selected_in_both_count": 60,
+    "selected_count": 62,
+    "overlap_pct": 96.8,
     "interpretation": "Measures selected by both expected-value and CVaR objectives are robust to the choice of portfolio objective under the stated Monte-Carlo scenarios."
   },
   "provenance": {
