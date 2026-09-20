@@ -6,10 +6,31 @@ import { Fragment, ReactNode } from "react";
  * and anything it does not recognise falls through as plain text rather than being dropped.
  */
 
+/**
+ * The grounded model sometimes answers with LaTeX. We do not ship a maths typesetter, so
+ * unwrap the handful of constructs it actually uses into readable plain text rather than
+ * leaving "\\frac{TP}{TP + FP + FN}" on screen.
+ */
+const deLatex = (text: string) =>
+  text
+    .replace(/\\(?:text|mathrm|mathit|operatorname)\{([^{}]*)\}/g, "$1")
+    .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "($1) / ($2)")
+    .replace(/\\(?:times|cdot)\b/g, "\u00d7")
+    .replace(/\\(?:leq|le)\b/g, "\u2264")
+    .replace(/\\(?:geq|ge)\b/g, "\u2265")
+    .replace(/\\approx\b/g, "\u2248")
+    .replace(/\\,|\\!|\\;/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+/** A line that is only a display-math delimiter carries no content of its own. */
+const isMathDelimiter = (line: string) => /^\\[[\]()]$/.test(line) || /^\$\$$/.test(line);
+
 const inline = (text: string): ReactNode =>
   text.split(/(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) return <b key={i}>{part.slice(2, -2)}</b>;
     if (part.startsWith("`") && part.endsWith("`")) return <code key={i}>{part.slice(1, -1)}</code>;
+    if (/\\[a-zA-Z]+|\\[[\]()]/.test(part)) return <Fragment key={i}>{deLatex(part)}</Fragment>;
     if (part.length > 2 && part.startsWith("*") && part.endsWith("*")) {
       return <em key={i}>{part.slice(1, -1)}</em>;
     }
@@ -42,6 +63,12 @@ export default function Markdown({ text }: { text: string }) {
     const trimmed = line.trim();
 
     if (!trimmed) {
+      flushList();
+      continue;
+    }
+
+    // A bare \[ or \] line wraps display maths; drop it and render the body as a formula.
+    if (isMathDelimiter(trimmed)) {
       flushList();
       continue;
     }
@@ -112,6 +139,15 @@ export default function Markdown({ text }: { text: string }) {
     }
 
     flushList();
+    // A line that is entirely maths reads better set apart than inline in a paragraph.
+    if (/^\\?[\w\\{}]/.test(trimmed) && /\\(?:frac|text|mathrm)\b/.test(trimmed)) {
+      out.push(
+        <p className="formula" key={`f-${key++}`}>
+          {deLatex(trimmed)}
+        </p>
+      );
+      continue;
+    }
     out.push(<p key={`p-${key++}`}>{inline(trimmed)}</p>);
   }
   flushList();

@@ -1241,3 +1241,8 @@ a.btn { line-height: normal; } /* links inherit the page line-height; buttons do
 .solve-toggle input { margin: 2px 0 0; accent-color: #9a6b1a; width: 16px; height: 16px; flex: 0 0 auto; }
 .solve-toggle b { display: block; font-size: 13.5px; font-weight: 600; color: #855a12; }
 .solve-toggle small { display: block; margin-top: 3px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.md .formula {
+  margin: 4px 0 14px; padding: 10px 14px; border-radius: 10px;
+  background: var(--surface-2); border: 1px solid var(--line);
+  font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13.5px; color: var(--ink);
+}
