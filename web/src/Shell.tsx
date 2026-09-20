@@ -23,6 +23,13 @@ const LINKS: { id: View; label: string; icon: React.ReactNode }[] = [
   { id: "actors", label: "Who acts", icon: <Users size={15} /> },
 ];
 
+// The community hub is a separate page served by the API (api/static/community at /hub). Same base rule as api.ts:
+// production is same-origin, dev points at the local uvicorn. We pass our own address so the hub's "Overview"
+// button can bring people back here.
+const RAW_API = import.meta.env.VITE_API_URL;
+const API_BASE = RAW_API !== undefined && RAW_API !== null ? RAW_API : import.meta.env.PROD ? "" : "http://127.0.0.1:8000";
+const HUB_URL = `${API_BASE}/hub/?from=${encodeURIComponent(window.location.origin)}`;
+
 export function Nav() {
   const d = useDash();
   return (
@@ -54,12 +61,9 @@ export function Nav() {
           >
             <MessageSquare size={15} /> <span className="keep">AskSprout</span>
           </button>
-          <button
-            className={`btn brown small ${d.view === "branch" ? "on" : ""}`}
-            onClick={() => d.go("branch")}
-          >
+          <a className="btn brown small" href={HUB_URL} title="Open the community hub">
             <StillIcon data={people} className="nav-icon" /> <span className="keep">Branch</span>
-          </button>
+          </a>
           {/* Export: only on the Plan page, where it jumps to the export form at the bottom. */}
           {d.view === "plan" && (
             <button
