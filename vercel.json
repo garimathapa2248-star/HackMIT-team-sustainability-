@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "web/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "server.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "includeFiles": "{demo_cache/**,api/**,agent/**,optimize/**,regions/**,contracts/**}",
+        "maxDuration": 60
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(health|cities|signal|noise|hazard|backtest|attribution|plan|candidates|rankings|scenarios|replication|risk_before|risk_with_plan|flood_observed|flood_modeled|flood_observed_2017|flood_modeled_2017|optimize|ask|sms|scorecard|citizenbrief|conceptnote|conceptnote\\.pdf|preventive-measures-plan|preventive-measures-plan\\.pdf)/?",
+      "dest": "/server.py"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ Do not quote cached concept-note prose or `households_benefiting`.
 
 ## 90-second booth path (v1)
 
-Open `http://127.0.0.1:5173/?v=1`. Click **Play 90-second demo** (or press `D`). Read the cue bar; `→` advances.
+Open `http://127.0.0.1:5173`. Click **Play 90-second demo** (or press `D`). Read the cue bar; `→` advances.
 
 Spoken, compressed:
 

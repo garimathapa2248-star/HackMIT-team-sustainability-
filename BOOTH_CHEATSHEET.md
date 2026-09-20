@@ -5,7 +5,7 @@ RootLedger reads decades of weather + satellite data to find where a mountain va
 tells you exactly where to invest in **natural defenses** to protect the most lives, store the most carbon, and
 create the most local income per dollar — and it proves the plan against real past floods, including the misses.
 
-**v1 booth URL:** `http://127.0.0.1:5173/?v=1` → **Play 90-second demo** (or press `D`). Cues: Proof → 2017 → Noise → Tail → Plan → Ask → Export.
+**Booth URL:** `http://127.0.0.1:5173` → **Play 90-second demo** (or press `D`). Cues: Proof → 2017 → Noise → Tail → Plan → Ask → Export.
 Keyboard: `1`–`6` chapters, `→` next beat, `Esc` landing. Full words: `DEMO_SCRIPT.md`.
 
 **Analogy:** Google Maps + a financial advisor + a weather historian, working together to protect mountain towns —

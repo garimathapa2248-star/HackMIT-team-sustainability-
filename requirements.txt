@@ -1,0 +1,6 @@
+# Vercel serverless function (server.py -> api.main:app).
+# Deliberately minimal: nothing heavy loads at import time, and the hazard pipeline
+# (rasterio/scipy/whitebox) is never imported by the API.
+fastapi>=0.110
+pydantic>=2.0
+numpy>=1.24

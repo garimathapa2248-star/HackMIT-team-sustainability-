@@ -1,0 +1,13 @@
+# Secrets never ride along in the upload; OPENROUTER_API_KEY is set in the Vercel dashboard.
+.env
+.env.*
+
+# Large local-only inputs; the deployed API reads the committed demo_cache/ instead.
+artifacts/
+data/
+signals/data/
+vendor/
+web/node_modules/
+web/dist/
+**/__pycache__/
+*.zip

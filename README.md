@@ -20,12 +20,12 @@ python3 -m api.main          # http://127.0.0.1:8000
 cd web && npm install && npm run dev    # http://127.0.0.1:5173
 ```
 
-Open **http://127.0.0.1:5173/?v=1** (v1 = Koshi plan). v2 is a separate live world map behind the top-right toggle.
+Open **http://127.0.0.1:5173** (Koshi plan).
 
 ### 90-second judged path
 
 1. Landing: **Play 90-second demo** (or press `D`). Cues walk Proof 2024 → Proof 2017 → Noise → Tail → Plan → Ask → Export.
-2. Or skip landing: **http://127.0.0.1:5173/?v=1&console=1** (Proof) or `?v=1&demo=1` (auto-walk).
+2. Or skip landing: **http://127.0.0.1:5173/?console=1** (Proof) or `?demo=1` (auto-walk).
 3. Keyboard: `1`–`6` chapters, `→` / space next beat, `Esc` landing.
 4. On Ask, click a suggested question — answers are grounded in the cached artifacts.
 

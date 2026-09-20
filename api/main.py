@@ -5,9 +5,7 @@ import os
 import sys
 from pathlib import Path
 
-import asyncio
-
-from fastapi import FastAPI, Query, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel, Field
@@ -16,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from api import conceptnote, live, loader, notify  # noqa: E402
+from api import conceptnote, loader, notify  # noqa: E402
 from regions.catalog import city_dir, list_cities  # noqa: E402
 from agent import reports  # noqa: E402
 from agent.claude import answer as agent_answer  # noqa: E402
@@ -239,37 +237,6 @@ def post_sms():
     return notify.send_demo(
         "RootLedger demo: observed data, model output, assumptions, and simulations stay labeled."
     )
-
-
-# --- v2 live worldwide briefing (does not alter v1 artifact routes) ---
-@app.get("/live/health")
-async def live_health():
-    return {"ok": True, "product": "v2", "sources": ["open-meteo", "usgs", "nasa-eonet", "nominatim", "reliefweb"]}
-
-
-@app.get("/live/place")
-async def live_place(
-    lat: float = Query(..., ge=-90, le=90),
-    lng: float = Query(..., ge=-180, le=180),
-):
-    return await live.brief_place(lat, lng)
-
-
-@app.get("/live/rankings")
-async def get_live_rankings(
-    metric: str = Query("composite"),
-):
-    return await live.live_rankings(metric)
-
-
-@app.get("/live/search")
-async def live_search(q: str = Query("", min_length=0)):
-    return await live.search_places(q)
-
-
-@app.on_event("startup")
-async def _warmup_v2_rankings():
-    asyncio.create_task(live.warmup())
 
 
 def main() -> None:

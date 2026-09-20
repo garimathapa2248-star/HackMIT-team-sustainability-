@@ -1,305 +1,176 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { ALLOW_OPTIMIZE, ask, CACHE_ONLY, checkHealth, listCities, loadJson, loadPlan, optimize } from "./api";
-import ChapterDock from "./ChapterDock";
-import AskChapter from "./chapters/AskChapter";
-import ExportChapter from "./chapters/ExportChapter";
-import NoiseChapter from "./chapters/NoiseChapter";
-import PlantChapter from "./chapters/PlantChapter";
-import ProofChapter from "./chapters/ProofChapter";
-import TailChapter from "./chapters/TailChapter";
-import DemoCue from "./DemoCue";
-import { EmptyState, LoadingBlock } from "./EmptyState";
-import HazardMap from "./HazardMap";
-import Inspector from "./Inspector";
-import Landing from "./Landing";
-import { ASK_PROMPTS, DEMO_BEATS, isTypingTarget, parseChapter } from "./lib/demo";
-import { money, metric, risk } from "./lib/format";
-import { cityOwnedFlood, hasProofValidation } from "./lib/geo";
-import { describeMeasure } from "./lib/measure";
-import { planHeadline, planLede } from "./lib/planSummary";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ask, getJsonSoft, health, listCities, loadPlan, markdownDoc, runOptimize } from "./api";
+import { Dash, DashContext } from "./context";
+import { humanize, metric, money, risk, textValue } from "./format";
+import MeasureDrawer from "./MeasureDrawer";
+import RegionSelect from "./RegionSelect";
+import { Footer, Nav } from "./Shell";
 import type {
   Attribution,
   Backtest,
   CandidateSite,
-  Chapter,
   CityRow,
-  FloodAdaptPayload,
+  MeasureDetails,
+  Noise,
   OptimizationMode,
   OptimizerState,
-  Overlay,
+  OverlayMode,
   Plan,
   Rankings,
   Replication,
+  Scenarios,
   Signal,
   View,
-} from "./lib/types";
-import TopBar from "./TopBar";
+} from "./types";
+import ActorsView from "./views/ActorsView";
+import AskView from "./views/AskView";
+import BranchView from "./views/BranchView";
+import ExportView from "./views/ExportView";
+import NoiseView from "./views/NoiseView";
+import OverviewView from "./views/OverviewView";
+import PlanView from "./views/PlanView";
+import ProofView from "./views/ProofView";
+import SignalView from "./views/SignalView";
 
-function readParams() {
-  return new URLSearchParams(window.location.search);
-}
-
-function initialView(): View {
-  const params = readParams();
-  if (params.get("demo") === "1") return "console";
-  return params.get("console") === "1" ? "console" : "landing";
-}
-
-function initialCity(): string {
-  return readParams().get("city") || "koshi";
-}
-
-function initialChapter(): Chapter {
-  return parseChapter(readParams().get("chapter") || readParams().get("tab")) || "backtest";
-}
-
-function initialDemoBeat(): number | null {
-  return readParams().get("demo") === "1" ? 0 : null;
-}
-
-function writeQuery(next: {
-  view: View;
-  city: string;
-  chapter: Chapter;
-  demo: boolean;
-}) {
-  const params = readParams();
-  if (next.view === "console") params.set("console", "1");
-  else params.delete("console");
-  if (next.city && next.city !== "koshi") params.set("city", next.city);
-  else params.delete("city");
-  if (next.view === "console") params.set("chapter", next.chapter);
-  else params.delete("chapter");
-  if (next.demo) params.set("demo", "1");
-  else params.delete("demo");
-  if (!params.get("v")) params.set("v", "1");
-  const search = params.toString();
-  const url = `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`;
-  window.history.replaceState({}, "", url);
-}
+const VIEWS: View[] = [
+  "overview", "noise", "signal", "plan", "proof", "actors", "ask", "export", "branch",
+];
+// The region dropdown sits in the same top-right spot on every region-specific page (Overview has it in its hero).
+const REGION_LABEL: Partial<Record<View, string | undefined>> = {
+  signal: undefined,
+  plan: "Plan for",
+  proof: "Flood proof for",
+  actors: "Delivery roles for",
+  ask: "Asking about",
+  export: "Export for",
+};
+const viewFromHash = (): View => {
+  const hash = typeof window === "undefined" ? "" : window.location.hash.replace("#", "");
+  return (VIEWS as string[]).includes(hash) ? (hash as View) : "overview";
+};
 
 export default function App() {
-  const [view, setView] = useState<View>(initialView);
-  const [city, setCity] = useState(initialCity);
+  const [view, setView] = useState<View>(viewFromHash);
+  const [city, setCity] = useState("koshi");
   const [cities, setCities] = useState<CityRow[]>([
     { id: "koshi", name: "Koshi / Madhesh (Nepal)", ready: true },
   ]);
-  const [chapter, setChapter] = useState<Chapter>(initialChapter);
+  const [online, setOnline] = useState(true);
   const [signal, setSignal] = useState<Signal | null>(null);
+  const [noise, setNoise] = useState<Noise | null>(null);
   const [hazard, setHazard] = useState<GeoJSON.FeatureCollection | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [candidates, setCandidates] = useState<CandidateSite[]>([]);
   const [backtest, setBacktest] = useState<Backtest | null>(null);
   const [mode, setMode] = useState<OptimizationMode>("expected");
   const [optimizerState, setOptimizerState] = useState<OptimizerState>("checking");
-  const [overlay, setOverlay] = useState<Overlay>("both");
+  const [overlay, setOverlay] = useState<OverlayMode>("observed");
   const [observed, setObserved] = useState<GeoJSON.FeatureCollection | null>(null);
   const [modeled, setModeled] = useState<GeoJSON.FeatureCollection | null>(null);
   const [observed2017, setObserved2017] = useState<GeoJSON.FeatureCollection | null>(null);
   const [modeled2017, setModeled2017] = useState<GeoJSON.FeatureCollection | null>(null);
   const [proofEvent, setProofEvent] = useState<"2024" | "2017">("2024");
   const [replication, setReplication] = useState<Replication | null>(null);
-  const [stations, setStations] = useState<GeoJSON.FeatureCollection | null>(null);
   const [attribution, setAttribution] = useState<Attribution | null>(null);
+  const [rankings, setRankings] = useState<Rankings | null>(null);
+  const [scenarios, setScenarios] = useState<Scenarios | null>(null);
+  const [scorecard, setScorecard] = useState("");
+  const [citizenBrief, setCitizenBrief] = useState("");
+  const [liveSolve, setLiveSolve] = useState(false);
   const [riskBefore, setRiskBefore] = useState<GeoJSON.FeatureCollection | null>(null);
   const [riskWithPlan, setRiskWithPlan] = useState<GeoJSON.FeatureCollection | null>(null);
-  const [rankings, setRankings] = useState<Rankings | null>(null);
-  const [scenarios, setScenarios] = useState<FloodAdaptPayload | null>(null);
   const [riskView, setRiskView] = useState<"before" | "with_plan">("before");
   const [budget, setBudget] = useState(2_000_000);
   const [busy, setBusy] = useState(false);
-  const [packError, setPackError] = useState<string | null>(null);
-  const [reloadToken, setReloadToken] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
-  const [focusId, setFocusId] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [q, setQ] = useState("Why is the 100-year storm now a 7.75-year storm?");
   const [a, setA] = useState("");
+  const [answerSources, setAnswerSources] = useState<string[]>([]);
   const [answerMeta, setAnswerMeta] = useState("");
   const [asking, setAsking] = useState(false);
-  const [demoBeat, setDemoBeat] = useState<number | null>(initialDemoBeat);
-  const [demoAuto, setDemoAuto] = useState(() => readParams().get("demo") === "1");
-  const demoRef = useRef({ beat: demoBeat, auto: demoAuto, view, chapter });
-  const askedDemo = useRef(false);
-  demoRef.current = { beat: demoBeat, auto: demoAuto, view, chapter };
+  const [note, setNote] = useState("");
+
+  const go = useCallback((next: View) => {
+    setView(next);
+    setDrawerOpen(false);
+    window.history.replaceState(null, "", next === "overview" ? "#" : `#${next}`);
+    window.scrollTo({ top: 0 });
+  }, []);
 
   useEffect(() => {
+    const onHash = () => setView(viewFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  useEffect(() => {
+    health().then(setOnline);
     listCities()
-      .then((payload: { cities?: CityRow[] }) => {
-        const rows = (payload.cities || []).filter((row) => row.ready !== false);
+      .then((payload) => {
+        const rows = ((payload?.cities || []) as CityRow[]).filter((row) => row.ready !== false);
         if (rows.length) setCities(rows);
       })
       .catch(() => undefined);
   }, []);
 
   useEffect(() => {
-    writeQuery({
-      view,
-      city,
-      chapter,
-      demo: demoBeat != null,
-    });
-  }, [view, city, chapter, demoBeat]);
-
-  useEffect(() => {
-    let cancelled = false;
+    const koshi = city === "koshi";
     setBusy(true);
-    setPackError(null);
     setProofEvent("2024");
-    setOptimizerState("checking");
-    setSignal(null);
-    setPlan(null);
-    setBacktest(null);
-    setHazard(null);
-    setObserved(null);
-    setModeled(null);
-    setObserved2017(null);
-    setModeled2017(null);
-    setRiskBefore(null);
-    setRiskWithPlan(null);
-    setRankings(null);
-    setScenarios(null);
-    setReplication(null);
-    setAttribution(null);
-    setA("");
-    setAnswerMeta("");
-    setFocusId(null);
-
-    const koshiOnly = city === "koshi";
-    const keep = <T,>(setter: (value: T) => void) => (value: T) => {
-      if (!cancelled) setter(value);
-    };
-
+    setDrawerOpen(false);
+    // Koshi-only artifacts are cleared first: the API silently serves Koshi's copy for
+    // other cities, so stale layers would otherwise leak across a city switch.
+    if (!koshi) {
+      setObserved2017(null);
+      setModeled2017(null);
+      setReplication(null);
+      setRankings(null);
+      setScenarios(null);
+    }
     Promise.all([
-      checkHealth().catch(() => false),
-      loadJson("signal", city)
-        .then(keep(setSignal))
-        .catch(() => {
-          if (!cancelled) setSignal(null);
-        }),
-      loadJson("hazard", city)
-        .then(keep(setHazard))
-        .catch(() => {
-          if (!cancelled) setHazard(null);
-        }),
+      getJsonSoft<Signal>("/signal", city).then(setSignal),
+      getJsonSoft<GeoJSON.FeatureCollection>("/hazard", city).then(setHazard),
+      // GET, never POST: /optimize would overwrite plan.json, backtest.counterfactual
+      // and both risk layers on the server.
       loadPlan<Plan>(city)
-        .then((result) => {
-          if (cancelled) return;
-          setPlan(result.plan);
-          setBudget(result.plan.budget_usd);
-          setMode(result.plan.mode === "cvar" ? "cvar" : "expected");
-          const firstMeasure = result.plan.selected?.[0]?.parcel_id;
+        .then((value) => {
+          setPlan(value);
+          if (!value) return setOptimizerState("unavailable");
+          setBudget(value.budget_usd);
+          setMode(value.mode === "cvar" ? "cvar" : "expected");
+          setOptimizerState("frozen");
+          const firstMeasure = value.selected?.[0]?.parcel_id;
           if (firstMeasure) {
             setPicked(firstMeasure);
             setQ(`Why was preventive measure ${firstMeasure} selected?`);
           }
         })
-        .catch(() => {
-          if (!cancelled) setPlan(null);
-        }),
-      loadJson("candidates", city)
-        .then((value: CandidateSite[]) => {
-          if (!cancelled) setCandidates(Array.isArray(value) ? value : []);
-        })
-        .catch(() => {
-          if (!cancelled) setCandidates([]);
-        }),
-      loadJson("backtest", city)
-        .then(keep(setBacktest))
-        .catch(() => {
-          if (!cancelled) setBacktest(null);
-        }),
-      loadJson("flood_observed", city)
-        .then((value) => {
-          if (!cancelled) setObserved(cityOwnedFlood(value, city));
-        })
-        .catch(() => {
-          if (!cancelled) setObserved(null);
-        }),
-      loadJson("flood_modeled", city)
-        .then((value) => {
-          if (!cancelled) setModeled(cityOwnedFlood(value, city));
-        })
-        .catch(() => {
-          if (!cancelled) setModeled(null);
-        }),
-      koshiOnly
-        ? loadJson("flood_observed_2017", city)
-            .then((value) => {
-              if (!cancelled) setObserved2017(cityOwnedFlood(value, city));
-            })
-            .catch(() => {
-              if (!cancelled) setObserved2017(null);
-            })
-        : Promise.resolve(),
-      koshiOnly
-        ? loadJson("flood_modeled_2017", city)
-            .then((value) => {
-              if (!cancelled) setModeled2017(cityOwnedFlood(value, city));
-            })
-            .catch(() => {
-              if (!cancelled) setModeled2017(null);
-            })
-        : Promise.resolve(),
-      koshiOnly
-        ? loadJson("replication", city)
-            .then(keep(setReplication))
-            .catch(() => {
-              if (!cancelled) setReplication(null);
-            })
-        : Promise.resolve(),
-      koshiOnly
-        ? loadJson("stations_nepal")
-            .then(keep(setStations))
-            .catch(() => {
-              if (!cancelled) setStations(null);
-            })
-        : Promise.resolve().then(() => {
-            if (!cancelled) setStations(null);
-          }),
-      loadJson("attribution", city)
-        .then(keep(setAttribution))
-        .catch(() => {
-          if (!cancelled) setAttribution(null);
-        }),
-      loadJson("risk_before", city)
-        .then(keep(setRiskBefore))
-        .catch(() => {
-          if (!cancelled) setRiskBefore(null);
-        }),
-      loadJson("risk_with_plan", city)
-        .then(keep(setRiskWithPlan))
-        .catch(() => {
-          if (!cancelled) setRiskWithPlan(null);
-        }),
-      loadJson("rankings", city)
-        .then(keep(setRankings))
-        .catch(() => {
-          if (!cancelled) setRankings(null);
-        }),
-      loadJson("scenarios", city)
-        .then(keep(setScenarios))
-        .catch(() => {
-          if (!cancelled) setScenarios(null);
-        }),
+        .catch(() => setOptimizerState("unavailable")),
+      getJsonSoft<CandidateSite[]>("/candidates", city).then((v) => setCandidates(v || [])),
+      getJsonSoft<Backtest>("/backtest", city).then(setBacktest),
+      getJsonSoft<GeoJSON.FeatureCollection>("/flood_observed", city).then(setObserved),
+      getJsonSoft<GeoJSON.FeatureCollection>("/flood_modeled", city).then(setModeled),
+      getJsonSoft<Attribution>("/attribution", city).then(setAttribution),
+      getJsonSoft<GeoJSON.FeatureCollection>("/risk_before", city).then(setRiskBefore),
+      getJsonSoft<GeoJSON.FeatureCollection>("/risk_with_plan", city).then(setRiskWithPlan),
+      markdownDoc("preventive-measures-plan", city).then((v) => setNote(v || "")),
+      markdownDoc("scorecard", city).then((v) => setScorecard(v || "")),
+      markdownDoc("citizenbrief", city).then((v) => setCitizenBrief(v || "")),
+      // The Data page is explicitly about the Himalayan archive behind the Koshi finding
+      // (its own banner says so), so it always shows that archive rather than a blank page.
+      getJsonSoft<Noise>("/noise", "koshi").then(setNoise),
+      koshi ? getJsonSoft<GeoJSON.FeatureCollection>("/flood_observed_2017", city).then(setObserved2017) : null,
+      koshi ? getJsonSoft<GeoJSON.FeatureCollection>("/flood_modeled_2017", city).then(setModeled2017) : null,
+      koshi ? getJsonSoft<Replication>("/replication", city).then(setReplication) : null,
+      koshi ? getJsonSoft<Rankings>("/rankings", city).then(setRankings) : null,
+      koshi ? getJsonSoft<Scenarios>("/scenarios", city).then(setScenarios) : null,
     ])
-      .then(([health]) => {
-        if (cancelled) return;
-        setOptimizerState(CACHE_ONLY || !ALLOW_OPTIMIZE ? "frozen" : health ? "live" : "frozen");
-      })
       .catch(() => {
-        if (!cancelled) {
-          setOptimizerState("unavailable");
-          setPackError("This city pack did not finish loading. Cached Koshi evidence is still on disk.");
-        }
+        // Individual artifacts render as unavailable; the judged flow remains usable.
       })
-      .finally(() => {
-        if (!cancelled) setBusy(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [city, reloadToken]);
+      .finally(() => setBusy(false));
+  }, [city]);
 
   const selectedIds = useMemo(
     () => new Set((plan?.selected || []).map((selected) => selected.parcel_id)),
@@ -307,228 +178,152 @@ export default function App() {
   );
   const pickedRow = plan?.selected.find((selected) => selected.parcel_id === picked);
   const pickedMeta = candidates.find((candidate) => candidate.parcel_id === picked);
-  const measureDetails = useMemo(
-    () => describeMeasure({ picked, pickedMeta, pickedRow, plan, backtest }),
-    [backtest, picked, pickedMeta, pickedRow, plan]
-  );
+  const pickedFactor = plan?.provenance?.factors?.find((factor) => factor.type === pickedMeta?.type);
 
-  const applyBeat = useCallback((index: number) => {
-    const beat = DEMO_BEATS[index];
-    if (!beat) return;
-    setChapter(beat.chapter);
-    if (beat.overlay) setOverlay(beat.overlay);
-    if (beat.proofEvent) setProofEvent(beat.proofEvent);
-    if (beat.riskView) setRiskView(beat.riskView);
-  }, []);
+  const measureDetails = useMemo<MeasureDetails | null>(() => {
+    if (!picked || !pickedMeta) return null;
+    const candidateFacts = [
+      pickedMeta.slope_deg == null ? "" : `${metric(pickedMeta.slope_deg)}° slope`,
+      pickedMeta.landcover ? `${humanize(pickedMeta.landcover)} land cover` : "",
+      pickedMeta.triggering_hazard || pickedMeta.primary_hazard
+        ? `${humanize(pickedMeta.triggering_hazard || pickedMeta.primary_hazard)} hazard`
+        : "",
+      pickedMeta.suitability_score == null
+        ? ""
+        : `suitability ${metric(pickedMeta.suitability_score, 3)}`,
+      pickedMeta.cell_ids.length ? `${pickedMeta.cell_ids.length} linked risk cell(s)` : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    const modeledBenefit = pickedRow
+      ? `${risk(pickedRow.avoided_eal_people)} annual people-risk avoided; ${metric(
+          pickedRow.co2_t_10yr
+        )} tCO₂ / 10 yr; ${money(pickedRow.income_usd_yr)} income / yr.`
+      : "This candidate intervention site is not selected in the current budgeted plan.";
+    const statedBenefit = pickedMeta.benefit ? `${pickedMeta.benefit} ` : "";
+    const reduction =
+      pickedFactor?.eal_reduction_frac == null
+        ? ""
+        : ` The screening factor assumes a ${(pickedFactor.eal_reduction_frac * 100).toFixed(
+            0
+          )}% local EAL reduction.`;
+    const proof =
+      backtest?.critical_success_index == null
+        ? "This site has not been field-verified; no flood CSI is available."
+        : `This site has not been field-verified. The portfolio hazard layer was checked against the ${
+            backtest.event_date || "calibration"
+          } scene (CSI ${backtest.critical_success_index.toFixed(
+            3
+          )}), which is an in-sample calibration fit.`;
 
-  const stopDemo = useCallback(() => {
-    setDemoBeat(null);
-    setDemoAuto(false);
-  }, []);
+    return {
+      id: picked,
+      what:
+        pickedMeta.what ||
+        pickedMeta.description ||
+        `${humanize(pickedMeta.type)} at a ${metric(pickedMeta.area_ha, 2)} ha candidate intervention site.`,
+      why:
+        pickedMeta.why ||
+        pickedMeta.rationale ||
+        pickedMeta.suitability_reason ||
+        pickedMeta.suitability ||
+        (pickedRow
+          ? `Selected by the ${
+              plan?.mode || "screening"
+            } optimizer for modeled people-risk, carbon, and income return under the budget, with cell-level benefit capping.${
+              candidateFacts ? ` Candidate data: ${candidateFacts}.` : ""
+            }`
+          : `Feasible under the screening rules, but not selected in the current budgeted portfolio.${
+              candidateFacts ? ` Candidate data: ${candidateFacts}.` : ""
+            }`),
+      cost: pickedRow ? money(pickedRow.cost_usd) : money(pickedMeta.cost_usd),
+      benefit: `${statedBenefit}${modeledBenefit}`.trim(),
+      assumption:
+        textValue(pickedMeta.assumption) ||
+        textValue(pickedMeta.assumptions) ||
+        `${pickedFactor?.source || pickedMeta.source || "Literature screening factors; not a field trial."}${reduction}`,
+      verification:
+        textValue(pickedMeta.verification) ||
+        textValue(pickedMeta.required_verification) ||
+        pickedMeta.monitoring ||
+        pickedMeta.evidence ||
+        proof,
+    };
+  }, [backtest, picked, pickedFactor, pickedMeta, pickedRow, plan?.mode]);
 
-  const goConsole = useCallback(
-    (nextCity = "koshi", nextChapter: Chapter = "plan") => {
-      setCity(nextCity);
-      setView("console");
-      setChapter(nextChapter);
-      if (nextChapter === "backtest") setOverlay("both");
-      stopDemo();
-    },
-    [stopDemo]
-  );
-
-  const playDemo = useCallback(() => {
-    askedDemo.current = false;
-    setPicked(null);
-    setFocusId(null);
-    setCity("koshi");
-    setView("console");
-    setDemoBeat(0);
-    setDemoAuto(true);
-    applyBeat(0);
-  }, [applyBeat]);
-
-  const stepDemo = useCallback(
-    (delta: number, fromAuto = false) => {
-      if (!fromAuto) setDemoAuto(false);
-      setDemoBeat((current) => {
-        const start = current ?? 0;
-        const next = start + delta;
-        if (next < 0) return current;
-        if (next >= DEMO_BEATS.length) {
-          setDemoAuto(false);
-          return null;
-        }
-        applyBeat(next);
-        return next;
-      });
-    },
-    [applyBeat]
-  );
-
-  const onSelect = useCallback(
-    (id: string | null) => {
+  const openMeasure = useCallback((id: string | null) => {
+    if (id) {
       setPicked(id);
-      setFocusId(id);
-      if (id) {
-        setChapter("plan");
-        setQ(`Why was preventive measure ${id} selected before the next-best candidate site?`);
-        setA("");
-        setAnswerMeta("");
-        if (view === "landing") setView("console");
-        stopDemo();
+      setDrawerOpen(true);
+      setQ(`Why was preventive measure ${id} selected before the next-best candidate site?`);
+      setA("");
+      setAnswerMeta("");
+    } else {
+      setDrawerOpen(false);
+    }
+  }, []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+
+  const rerun = useCallback(
+    async (nextBudget: number, nextMode: OptimizationMode = mode) => {
+      if (!liveSolve) return; // read-only until the user opts in explicitly
+      setBusy(true);
+      try {
+        const { plan: solved, solved: ok } = await runOptimize<Plan>(nextBudget, nextMode, city);
+        setPlan(solved);
+        setOptimizerState(ok ? "live" : "frozen");
+        setBudget(ok ? nextBudget : solved.budget_usd);
+        setMode(ok ? nextMode : solved.mode === "cvar" ? "cvar" : "expected");
+      } catch {
+        setOptimizerState("unavailable");
+      } finally {
+        setBusy(false);
       }
     },
-    [stopDemo, view]
+    [city, mode, liveSolve]
   );
 
-  async function recalculate() {
-    if (optimizerState !== "live") return;
-    setBusy(true);
-    try {
-      const result = await optimize<Plan>(budget, mode, city);
-      setPlan(result.plan);
-      if (result.source === "cache") {
-        setOptimizerState("frozen");
-        setBudget(result.plan.budget_usd);
-        setMode(result.plan.mode === "cvar" ? "cvar" : "expected");
-      }
-    } catch {
-      setOptimizerState("unavailable");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function askQuestion(question: string) {
-    const trimmed = question.trim();
-    if (!trimmed) return;
-    setQ(trimmed);
+  async function onAsk(event: React.FormEvent) {
+    event.preventDefault();
     setAsking(true);
+    setA("");
+    setAnswerSources([]);
+    setAnswerMeta("");
     try {
-      const response = await ask(trimmed, city, {
-        signal,
-        plan,
-        backtest,
-        selectedMeasure: measureDetails,
-        replication,
-      });
-      setA(response.answer);
+      const response = await ask(q, city);
+      // `invented` is the backend's own guard: never show an answer it flags as unsupported.
+      if (response.invented) {
+        setAnswerMeta("The backend flagged this answer as unsupported, so it is not shown.");
+        return;
+      }
+      setA(response.answer || "");
+      const sources = response.sources || [];
+      setAnswerSources(sources);
+      // Three shapes come back: tool names, artifact filenames, or a routed model id.
+      const model = sources.find((s) => s.startsWith("openrouter:"));
       setAnswerMeta(
-        `${response.offline ? "Cached artifact answer" : "Live grounded answer"} · ${
-          response.sources?.join(", ") || "no sources returned"
-        }`
+        model
+          ? `Answered by ${model.slice("openrouter:".length)} without opening a tool.`
+          : sources.length
+            ? ""
+            : "No sources were returned."
       );
+    } catch {
+      setAnswerMeta("The grounded-answer service did not respond. Nothing is shown rather than guessing.");
     } finally {
       setAsking(false);
     }
   }
 
-  async function onAsk(event: FormEvent) {
-    event.preventDefault();
-    await askQuestion(q);
+  function downloadNote() {
+    const blob = new Blob([note], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "rootledger-prevention-plan.md";
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
-
-  useEffect(() => {
-    if (demoBeat == null) {
-      askedDemo.current = false;
-      return;
-    }
-    if (DEMO_BEATS[demoBeat]?.chapter !== "ask" || askedDemo.current) return;
-    askedDemo.current = true;
-    const prompt = picked
-      ? `Why was preventive measure ${picked} selected before the next-best candidate site?`
-      : ASK_PROMPTS[0];
-    void askQuestion(prompt);
-  }, [demoBeat, picked]);
-
-  useEffect(() => {
-    if (demoBeat == null || DEMO_BEATS[demoBeat]?.chapter !== "plan") return;
-    const first = plan?.selected?.[0]?.parcel_id;
-    if (!first) return;
-    setPicked(first);
-    setFocusId(first);
-  }, [demoBeat, plan]);
-
-  useEffect(() => {
-    if (demoBeat == null || !demoAuto) return undefined;
-    const timer = window.setTimeout(() => stepDemo(1, true), 12000);
-    return () => window.clearTimeout(timer);
-  }, [demoAuto, demoBeat, stepDemo]);
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (isTypingTarget(event.target) || event.metaKey || event.ctrlKey || event.altKey) return;
-      const key = event.key.toLowerCase();
-      if (key === "d") {
-        event.preventDefault();
-        playDemo();
-        return;
-      }
-      if (key === "escape") {
-        event.preventDefault();
-        stopDemo();
-        setView("landing");
-        setCity("koshi");
-        return;
-      }
-      if (key === "arrowright" || key === " ") {
-        if (demoRef.current.beat != null) {
-          event.preventDefault();
-          stepDemo(1);
-        }
-        return;
-      }
-      if (key === "arrowleft") {
-        if (demoRef.current.beat != null) {
-          event.preventDefault();
-          stepDemo(-1);
-        }
-        return;
-      }
-      const index = Number(key) - 1;
-      if (index >= 0 && index <= 5) {
-        event.preventDefault();
-        const next = ["noise", "signal", "plan", "backtest", "ask", "report"][index] as Chapter;
-        setView("console");
-        setChapter(next);
-        stopDemo();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [playDemo, stepDemo, stopDemo]);
-
-  const cityName = cities.find((row) => row.id === city)?.name || city;
-  const hasCsi = backtest?.critical_success_index != null;
-  const hasValidation = city === "koshi" && hasProofValidation(backtest);
-  const showEra5 = city === "koshi" && replication != null;
-  const isLanding = view === "landing";
-  const showStations = !isLanding && city === "koshi" && (chapter === "noise" || chapter === "signal");
-  const showParcels = isLanding || (chapter !== "noise" && chapter !== "signal");
-  const mapOverlay: Overlay = isLanding
-    ? "both"
-    : chapter === "backtest"
-      ? overlay
-      : "none";
-  const activeObserved =
-    isLanding || (chapter === "backtest" && hasCsi)
-      ? proofEvent === "2017" && hasValidation
-        ? observed2017
-        : observed
-      : null;
-  const activeModeled =
-    isLanding || chapter === "backtest"
-      ? proofEvent === "2017" && hasValidation
-        ? modeled2017
-        : modeled
-      : null;
-  const mapHazard =
-    chapter === "backtest"
-      ? riskView === "with_plan"
-        ? riskWithPlan || hazard
-        : riskBefore || hazard
-      : hazard;
 
   const aucCopy =
     signal?.landslide_trigger.auc == null
@@ -536,338 +331,116 @@ export default function App() {
       : `Landslide is a held-out rainfall classifier (AUC ${signal.landslide_trigger.auc.toFixed(
           3
         )}, n=${signal.landslide_trigger.n_events}), not a physical Caine threshold.`;
+  const equityLine =
+    pickedRow?.low_income_score != null && pickedRow.low_income_score >= 0.55
+      ? `Serves a flagged low-income cell (weight ×${metric(pickedRow.equity_weight, 3)}).`
+      : null;
+  const cityName = cities.find((row) => row.id === city)?.name || city;
 
-  const rainfallHeadline = signal
-    ? signal.headline.new_return_period_yrs == null
-      ? city === "koshi"
-        ? "Loading the rainfall tail…"
-        : "City screening pack — flood CSI not invented"
-      : `The old 100-year rain depth now fits a ${metric(
-          signal.headline.new_return_period_yrs,
-          2
-        )}-year recurrence`
-    : busy
-      ? "Loading the rainfall tail…"
-      : "Rainfall tail unavailable in this pack";
-  const rainfallLede =
-    city === "koshi"
-      ? `This headline uses the Nepal-adjacent subset. The ${metric(
-          signal?.stations_processed,
-          0
-        )}-station High Mountain Asia pool is the scale and negative-control story; it did not identify a recurrence shift.`
-      : "This pack is a screening run on public DEM / OSM / ERA5-Land. Flood CSI is null unless a SAR scene is wired.";
-  const headline =
-    chapter === "plan"
-      ? planHeadline(plan)
-      : chapter === "report"
-        ? "Export the preventive plan"
-        : chapter === "ask"
-          ? "Ask why a preventive measure was selected"
-          : chapter === "backtest"
-            ? hasCsi
-              ? `Proof against radar · CSI ${metric(backtest?.critical_success_index, 3)}`
-              : "Proof · CSI not in this pack"
-            : chapter === "noise"
-              ? "The archive is noisy. We counted the gaps."
-              : rainfallHeadline;
-  const lede =
-    chapter === "plan"
-      ? planLede(plan)
-      : chapter === "report"
-        ? "Download the screening plan, government scorecard, or citizen brief a district can take to a funder."
-        : chapter === "ask"
-          ? "Answers are grounded in plan.json, candidates, and the proof artifacts — never invented."
-          : chapter === "backtest"
-            ? hasCsi
-              ? "Toggle observed vs modeled. Flip 2017 for the frozen transfer. We report the miss vs JRC."
-              : "This city pack has no SAR scene, so CSI stays null instead of borrowing Koshi’s score."
-            : chapter === "noise"
-              ? "498 stations across High Mountain Asia, parsed on Voloridge compute. Missing years are the point."
-              : rainfallLede;
-
-  const askPrompts = useMemo(() => {
-    const prompts = [...ASK_PROMPTS];
-    if (picked) {
-      prompts.unshift(`Why was preventive measure ${picked} selected before the next-best candidate site?`);
-    }
-    return prompts.slice(0, 4);
-  }, [picked]);
-
-  const chapterBody = (() => {
-    if (busy && !signal && !plan) {
-      return <LoadingBlock label={`Loading the ${cityName} evidence pack…`} />;
-    }
-    if (packError && !plan && !signal) {
-      return (
-        <EmptyState
-          title="Pack failed to load"
-          body={packError}
-          action="Retry"
-          onAction={() => setReloadToken((value) => value + 1)}
-        />
-      );
-    }
-    if (chapter === "noise") return <NoiseChapter />;
-    if (chapter === "signal") {
-      return signal ? (
-        <TailChapter
-          city={city}
-          cityName={cityName}
-          signal={signal}
-          replication={replication}
-          rankings={rankings}
-          showEra5={showEra5}
-        />
-      ) : (
-        <EmptyState
-          title="Tail not in this pack"
-          body="signal.json did not load. Koshi still has the frozen rainfall-tail headline on disk."
-          action="Retry"
-          onAction={() => setReloadToken((value) => value + 1)}
-        />
-      );
-    }
-    if (chapter === "plan") {
-      return plan ? (
-        <PlantChapter
-          plan={plan}
-          candidates={candidates}
-          scenarios={scenarios}
-          budget={budget}
-          mode={mode}
-          optimizerState={optimizerState}
-          busy={busy}
-          picked={picked}
-          onBudget={setBudget}
-          onMode={setMode}
-          onRecalculate={recalculate}
-          onPick={(id) => {
-            setPicked(id);
-            setFocusId(id);
-            setQ(`Why was preventive measure ${id} selected?`);
-            setA("");
-            setAnswerMeta("");
-            stopDemo();
-          }}
-        />
-      ) : (
-        <EmptyState
-          title="Plan not loaded"
-          body="The $2M screening portfolio lives in demo_cache/plan.json. Retry, or stay on Koshi."
-          action="Retry"
-          onAction={() => setReloadToken((value) => value + 1)}
-        />
-      );
-    }
-    if (chapter === "backtest") {
-      return (
-        <ProofChapter
-          backtest={backtest}
-          overlay={overlay}
-          proofEvent={hasValidation ? proofEvent : "2024"}
-          riskView={riskView}
-          hasValidation={hasValidation}
-          hasCsi={hasCsi}
-          onOverlay={setOverlay}
-          onProofEvent={setProofEvent}
-          onRiskView={setRiskView}
-        />
-      );
-    }
-    if (chapter === "ask") {
-      return (
-        <AskChapter
-          q={q}
-          a={a}
-          answerMeta={answerMeta}
-          asking={asking}
-          attribution={attribution}
-          selected={measureDetails}
-          prompts={askPrompts}
-          onQ={setQ}
-          onAsk={onAsk}
-          onAskPrompt={askQuestion}
-        />
-      );
-    }
-    if (chapter === "report") {
-      return (
-        <ExportChapter
-          city={city}
-          live={optimizerState === "live"}
-          sites={plan?.selected.length}
-          spend={plan?.totals.cost_usd}
-          peopleRisk={plan?.totals.people_protected}
-          carbon={plan?.totals.co2_t_10yr}
-        />
-      );
-    }
-    return null;
-  })();
-
-  const activeBeat = demoBeat != null ? DEMO_BEATS[demoBeat] : null;
+  const dash: Dash = {
+    view,
+    go,
+    city,
+    cityName,
+    cities,
+    setCity,
+    loading: busy,
+    online,
+    isKoshi: city === "koshi",
+    signal,
+    noise,
+    hazard,
+    riskBefore,
+    riskWithPlan,
+    plan,
+    candidates,
+    backtest,
+    replication,
+    attribution,
+    rankings,
+    scenarios,
+    note,
+    scorecard,
+    citizenBrief,
+    overlay,
+    setOverlay,
+    proofEvent,
+    setProofEvent,
+    riskView,
+    setRiskView,
+    observed: proofEvent === "2017" ? observed2017 : observed,
+    modeled: proofEvent === "2017" ? modeled2017 : modeled,
+    budget,
+    setBudget,
+    mode,
+    optimizerState,
+    rerun,
+    liveSolve,
+    setLiveSolve,
+    selectedIds,
+    picked,
+    pickedRow,
+    measureDetails,
+    equityLine,
+    drawerOpen,
+    openMeasure,
+    closeDrawer,
+    q,
+    setQ,
+    a,
+    answerSources,
+    answerMeta,
+    asking,
+    onAsk,
+    downloadNote,
+    aucCopy,
+  };
 
   return (
-    <div className={`app ${isLanding ? "landing-mode" : "console-mode"} ${demoBeat != null ? "demo-mode" : ""}`}>
-      <div className="map-wrap">
-        <HazardMap
-          city={isLanding ? "koshi" : city}
-          hazard={mapHazard}
-          candidates={
-            isLanding ? candidates.filter((row) => selectedIds.has(row.parcel_id)) : candidates
-          }
-          selectedIds={selectedIds}
-          focusId={isLanding ? null : focusId}
-          onSelect={onSelect}
-          observed={activeObserved}
-          modeled={activeModeled}
-          stations={stations}
-          overlay={mapOverlay}
-          showStations={showStations}
-          showParcels={showParcels}
-          showHazard={!isLanding}
-          hazardOpacity={chapter === "noise" || chapter === "signal" ? 0.16 : 0.4}
-          emphasis={isLanding}
-          chrome={!isLanding}
-        />
-        {!isLanding && (
-          <div className="map-legend">
-            {chapter === "backtest"
-              ? `Risk surface = ${
-                  riskView === "with_plan" ? "with-plan counterfactual" : "current model"
-                }. Blue fill = observed water · gold outline = modeled flood${
-                  proofEvent === "2017" && hasValidation
-                    ? " (2017 transfer event)."
-                    : hasCsi
-                      ? " (2024 calibration event)."
-                      : " (pack modeled extent only)."
-                }`
-              : showStations
-                ? "Gold dots = Nepal-adjacent NOAA ISD stations used for the rainfall-tail headline. Hazard at low opacity."
-                : "Coloured dots are selected preventive measures; pale dots are candidate intervention sites."}
-          </div>
-        )}
-        {busy && !isLanding && (
-          <div className="map-busy" role="status">
-            Loading {cityName}…
-          </div>
-        )}
+    <DashContext.Provider value={dash}>
+      <div className="site" data-theme="business">
+        <Nav />
+        <main key={online ? view : "offline"}>
+          {!online && (
+            <div className="offline-screen" role="alert">
+              <div className="offline">
+                <b>Backend offline.</b>
+                <p>
+                  RootLedger only shows numbers the API returns. Rather than fall back to a saved
+                  copy and risk showing you something stale, it shows nothing at all.
+                </p>
+                <p>
+                  Start the API with <code>python3 -m api.main</code> from{" "}
+                  <code>rootledger/</code>, then reload this page.
+                </p>
+                <button className="btn primary" onClick={() => window.location.reload()}>
+                  Reload
+                </button>
+              </div>
+            </div>
+          )}
+          {online && (
+            <>
+          {view !== "overview" && view !== "noise" && view !== "branch" && (
+            <div className="region-bar">
+              <RegionSelect label={REGION_LABEL[view]} />
+            </div>
+          )}
+          {view === "overview" && <OverviewView />}
+          {view === "noise" && <NoiseView />}
+          {view === "signal" && <SignalView />}
+          {view === "plan" && <PlanView />}
+          {view === "proof" && <ProofView />}
+          {view === "actors" && <ActorsView />}
+          {view === "ask" && <AskView />}
+          {view === "export" && <ExportView />}
+          {view === "branch" && <BranchView />}
+            </>
+          )}
+        </main>
+        <Footer />
+        <MeasureDrawer />
       </div>
-
-      {isLanding ? (
-        <Landing
-          signal={signal}
-          backtest={backtest}
-          plan={plan}
-          cities={cities}
-          busy={busy}
-          onEnter={(nextCity) => goConsole(nextCity, "plan")}
-          onPlayDemo={playDemo}
-        />
-      ) : (
-        <>
-          <TopBar
-            city={city}
-            cities={cities}
-            optimizerState={optimizerState}
-            onCity={(next) => {
-              setCity(next);
-              stopDemo();
-            }}
-            onHome={() => {
-              stopDemo();
-              setCity("koshi");
-              setView("landing");
-            }}
-            onPlayDemo={playDemo}
-          />
-          <ChapterDock
-            chapter={chapter}
-            onChapter={(next) => {
-              setChapter(next);
-              stopDemo();
-            }}
-            headline={headline}
-            lede={lede}
-            banner={
-              chapter === "plan" ? (
-                <div className={`optimizer-status ${optimizerState === "live" ? "live" : "frozen"}`}>
-                  {optimizerState === "live" ? (
-                    <>
-                      <b>Live optimizer.</b> Recalculate is enabled — this can overwrite the booth plan.
-                    </>
-                  ) : (
-                    <>
-                      <b>Frozen pack.</b> Budget slider and Recalculate are locked so a booth click cannot POST /optimize.
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className="banner">
-                  <strong>Screening-grade and explicit.</strong> {aucCopy}{" "}
-                  {!hasCsi
-                    ? "Flood CSI is unavailable in this pack; it is not replaced with the Koshi score."
-                    : `The HAND proxy scores CSI ${backtest?.critical_success_index?.toFixed(3)} on the ${
-                        backtest?.event_date || "calibration"
-                      } scene (in-sample). ${
-                        hasValidation && backtest?.validation?.critical_success_index != null
-                          ? `Frozen out-of-sample / transfer CSI ${backtest.validation.critical_success_index.toFixed(3)}.`
-                          : ""
-                      }`}
-                </div>
-              )
-            }
-          >
-            {chapterBody}
-          </ChapterDock>
-          {measureDetails && chapter === "plan" && demoBeat == null && (
-            <Inspector
-              details={measureDetails}
-              selected={Boolean(pickedRow)}
-              onAsk={() => {
-                setChapter("ask");
-                stopDemo();
-              }}
-              onClose={() => {
-                setPicked(null);
-                setFocusId(null);
-              }}
-            />
-          )}
-          {activeBeat && (
-            <DemoCue
-              beat={demoBeat ?? 0}
-              total={DEMO_BEATS.length}
-              title={activeBeat.title}
-              cue={activeBeat.cue}
-              auto={demoAuto}
-              onPrev={() => stepDemo(-1)}
-              onNext={() => stepDemo(1)}
-              onStop={stopDemo}
-              onToggleAuto={() => setDemoAuto((value) => !value)}
-            />
-          )}
-          <div className="ticker glass">
-            <span className="ev model">model output</span>
-            <span>
-              Plan <b>{plan ? `${metric(plan.selected.length, 0)} measures` : "—"}</b>
-            </span>
-            <span>
-              Spend <b>{plan ? money(plan.totals.cost_usd) : "—"}</b>
-            </span>
-            <span>
-              People-risk <b>{plan ? risk(plan.totals.people_protected) : "—"}</b>
-            </span>
-            <span>
-              tCO₂ / 10 yr <b>{plan ? metric(plan.totals.co2_t_10yr, 0) : "—"}</b>
-            </span>
-            <span>
-              Income / yr <b>{plan ? money(plan.totals.income_usd_yr) : "—"}</b>
-            </span>
-            <span className="ticker-hint">1–6 chapters · D demo · Esc landing</span>
-          </div>
-        </>
-      )}
-    </div>
+    </DashContext.Provider>
   );
 }
