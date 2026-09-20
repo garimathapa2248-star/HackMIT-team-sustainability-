@@ -8,6 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, Response
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -237,6 +238,10 @@ def post_sms():
     return notify.send_demo(
         "RootLedger demo: observed data, model output, assumptions, and simulations stay labeled."
     )
+
+
+# Community hub: plain HTML/JS in api/static/community, served at /hub (not /community: that prefix is the API's).
+app.mount("/hub", StaticFiles(directory=ROOT / "api" / "static" / "community", html=True), name="hub")
 
 
 def main() -> None:
