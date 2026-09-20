@@ -43,6 +43,19 @@ class AskBody(BaseModel):
     city: str = Field("koshi")
 
 
+class LocationAnalysisBody(BaseModel):
+    """A browser map point resolved against an already-generated model pack.
+
+    This endpoint deliberately does not claim to run the hazard model for every
+    click. It returns the stored model cell containing (or nearest to) the
+    coordinate, and says when that coordinate lies outside the pack coverage.
+    """
+
+    latitude: float = Field(..., ge=-90, le=90)
+    longitude: float = Field(..., ge=-180, le=180)
+    city: str = Field("koshi")
+
+
 @app.middleware("http")
 async def bind_city(request: Request, call_next):
     city = request.query_params.get("city") or request.headers.get("x-rootledger-city") or "koshi"
@@ -60,6 +73,43 @@ def _payload(name: str):
     if data is None:
         return JSONResponse({"error": f"{name} not found", "data_status": "missing"}, status_code=200)
     return data
+
+
+def _ring_contains(point: tuple[float, float], ring: list) -> bool:
+    """Ray-casting point-in-polygon for the Polygon artifacts we publish."""
+    x, y = point
+    inside = False
+    if len(ring) < 3:
+        return False
+    previous = ring[-1]
+    for current in ring:
+        x1, y1 = float(previous[0]), float(previous[1])
+        x2, y2 = float(current[0]), float(current[1])
+        crosses = (y1 > y) != (y2 > y)
+        if crosses and x < (x2 - x1) * (y - y1) / ((y2 - y1) or 1e-12) + x1:
+            inside = not inside
+        previous = current
+    return inside
+
+
+def _centroid(feature: dict) -> tuple[float, float] | None:
+    try:
+        ring = feature["geometry"]["coordinates"][0]
+        points = ring[:-1] if len(ring) > 1 and ring[0] == ring[-1] else ring
+        return (
+            sum(float(point[0]) for point in points) / len(points),
+            sum(float(point[1]) for point in points) / len(points),
+        )
+    except (KeyError, IndexError, TypeError, ZeroDivisionError):
+        return None
+
+
+def _vulnerability_score(properties: dict) -> float:
+    """Expose the UI's documented combined display score at the API boundary."""
+    flood = float((properties.get("flood_depth_m") or {}).get("rp100") or 0)
+    glof = float(properties.get("glof_depth_m") or 0)
+    landslide = float(properties.get("landslide_prob") or 0)
+    return round(min(100.0, glof / 3 * 42 + flood / 3.2 * 34 + landslide * 35), 1)
 
 
 @app.get("/health")
@@ -80,6 +130,64 @@ def get_noise():
 @app.get("/hazard")
 def get_hazard():
     return _payload("hazard")
+
+
+@app.post("/location-analysis")
+def post_location_analysis(body: LocationAnalysisBody):
+    """Resolve a map click to an existing precomputed hazard-model cell."""
+    city = body.city or "koshi"
+    loader.set_city(city)
+    hazard = loader.load("hazard", city)
+    if not isinstance(hazard, dict) or not isinstance(hazard.get("features"), list):
+        return {
+            "coverage": "unavailable",
+            "city": city,
+            "message": "No generated hazard pack is available for this location.",
+        }
+
+    point = (body.longitude, body.latitude)
+    containing = None
+    nearest = None
+    nearest_distance = float("inf")
+    for feature in hazard["features"]:
+        geometry = feature.get("geometry") or {}
+        if geometry.get("type") != "Polygon":
+            continue
+        rings = geometry.get("coordinates") or []
+        if rings and _ring_contains(point, rings[0]):
+            containing = feature
+            break
+        center = _centroid(feature)
+        if center:
+            distance = (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2
+            if distance < nearest_distance:
+                nearest, nearest_distance = feature, distance
+
+    if containing is None:
+        return {
+            "coverage": "unavailable",
+            "city": city,
+            "selected_coordinate": {"latitude": body.latitude, "longitude": body.longitude},
+            "message": "This point is outside the current generated model coverage. No vulnerability result was created.",
+        }
+
+    properties = containing.get("properties") or {}
+    cell_id = str(properties.get("cell_id", ""))
+    candidates = loader.load("candidates", city) or []
+    linked_candidates = [
+        candidate for candidate in candidates
+        if isinstance(candidate, dict) and cell_id in (candidate.get("cell_ids") or [])
+    ]
+    return {
+        "coverage": "covered",
+        "city": city,
+        "selected_coordinate": {"latitude": body.latitude, "longitude": body.longitude},
+        "feature": containing,
+        "vulnerability_score": _vulnerability_score(properties),
+        "score_method": "0.42 × normalized GLOF depth + 0.34 × normalized 100-year flood depth + 0.35 × landslide probability; display score capped at 100.",
+        "linked_candidates": linked_candidates,
+        "data_status": (hazard.get("provenance") or {}).get("data_status", "model output"),
+    }
 
 
 @app.get("/backtest")

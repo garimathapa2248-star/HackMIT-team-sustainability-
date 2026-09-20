@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AgentDrawer } from './components/AgentDrawer';
 import { AfforestationPanel } from './components/AfforestationPanel';
 import { LoginPage } from './components/LoginPage';
@@ -6,9 +6,10 @@ import { JudgePath } from './components/JudgePath';
 import { GovernmentLoginPage } from './components/GovernmentLoginPage';
 import { LocationConsentPage } from './components/LocationConsentPage';
 import { RiskPointDialog } from './components/RiskPointDialog';
-import { RiskTimeline } from './components/RiskTimeline';
 import { SearchPage } from './components/SearchPage';
-import { loadJson, loadModelArtifact } from './lib/api';
+import { GoogleMapCanvas } from './components/GoogleMapCanvas';
+import { LocationAnalysisStory } from './components/LocationAnalysisStory';
+import { analyzeLocation, loadJson, loadModelArtifact, type LocationAnalysis } from './lib/api';
 import { loadNearbyHelp, loginCitizen, registerCitizen, requestCommunityConnection, storeLocationConsent, type CommunitySession, type NearbyMatch } from './lib/communityApi';
 import { cityPacks, type CityPack } from './lib/judgeStory';
 import { useApp } from './store';
@@ -69,6 +70,9 @@ function App() {
   const [displayScore, setDisplayScore] = useState(0);
   const [locationState, setLocationState] = useState<'idle' | 'locating' | 'located' | 'unavailable'>('idle');
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
+  const [locationAnalysis, setLocationAnalysis] = useState<LocationAnalysis<HazardFeature, Candidate> | null>(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [activeConnection, setActiveConnection] = useState<string | null>(null);
   const workspaceRef = useRef<HTMLElement>(null);
   const lastLiveLocationRef = useRef<{ longitude: number; latitude: number; updatedAt: number } | null>(null);
@@ -160,12 +164,12 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  const selected = useMemo(() => hazard?.features.find((feature) => feature.properties.cell_id === selectedId) ?? hazard?.features[0], [hazard, selectedId]);
-  const selectedScore = selected ? scoreFor(selected, layer) : 0;
+  const selected = useMemo(() => locationAnalysis?.feature ?? hazard?.features.find((feature) => feature.properties.cell_id === selectedId) ?? hazard?.features[0], [hazard, locationAnalysis, selectedId]);
+  const selectedScore = locationAnalysis?.vulnerability_score ?? (selected ? scoreFor(selected, layer) : 0);
   const frozenPlan = import.meta.env.VITE_USE_CACHE === 'true' || !import.meta.env.VITE_API_BASE_URL;
   const budgetRatio = budget / (plan?.budget_usd ?? 2_000_000);
   const protectedPeople = Math.round((plan?.totals.people_protected ?? 24_000) * budgetRatio);
-  const availableCandidates = useMemo(() => [...candidates]
+  const availableCandidates = useMemo(() => [...(locationAnalysis?.linked_candidates?.length ? locationAnalysis.linked_candidates : candidates)]
     .sort((a, b) => (b.suitability_score ?? 0) - (a.suitability_score ?? 0))
     .slice(0, Math.max(1, Math.min(candidates.length, Math.floor(budget / 750_000) + 1))), [budget, candidates]);
   const selectedCandidate = useMemo(() => candidates.find((candidate) => candidate.parcel_id === selectedCandidateId) ?? availableCandidates[0], [availableCandidates, candidates, selectedCandidateId]);
@@ -181,6 +185,26 @@ function App() {
     return { x: ((lng - 80) / 8.3) * 100, y: ((30.4 - lat) / 4.1) * 100 };
   }, [selected]);
   const selectRegion = (id: string) => { setSelectedId(id); setMapFocused(true); };
+  const analyzeMapLocation = useCallback(async ({ latitude, longitude }: { latitude: number; longitude: number }) => {
+    setAnalysisLoading(true);
+    setAnalysisError(null);
+    setLocationAnalysis(null);
+    try {
+      const result = await analyzeLocation<HazardFeature, Candidate>({ latitude, longitude, city: city.id });
+      setLocationAnalysis(result);
+      if (result.coverage === 'covered' && result.feature) {
+        setSelectedId(result.feature.properties.cell_id);
+        setMapFocused(true);
+      } else {
+        setMapFocused(false);
+      }
+    } catch (error) {
+      setMapFocused(false);
+      setAnalysisError('The stored model pack could not be reached. Start the RootLedger API on port 8000 to analyze a selected location.');
+    } finally {
+      setAnalysisLoading(false);
+    }
+  }, [city.id]);
   const updateCoordinates = (event: React.PointerEvent<SVGSVGElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect();
     const lng = 80 + ((event.clientX - bounds.left) / bounds.width) * 8.3;
@@ -322,24 +346,21 @@ function App() {
     return () => navigator.geolocation.clearWatch(watcher);
   }, [communitySession, liveLocationSharing, locationPreferences]);
 
-  const sceneLabels = audience === 'government'
-    ? ['01 Overview', '02 Analyze', '03 Intervene', '04 Allocate', '05 Project']
-    : ['01 Locate', '02 Understand', '03 Connect', '04 Respond', '05 Community'];
   const isGovernment = audience === 'government';
 
   return <main className="app-shell" data-scene={activeScene} data-experience={audience}>
     <header className="topbar floating-topbar">
       <div className="brand-wrap"><div className="brand-mark" aria-hidden="true">R</div><div><p className="eyebrow">RootLedger</p><h1>{isGovernment ? 'Environmental investment planning.' : 'Climate action, made local.'}</h1></div></div>
       <label className="location-search"><span aria-hidden="true">⌕</span><input type="search" readOnly value={searchQuery} onClick={() => setSearchOpen(true)} onFocus={() => setSearchOpen(true)} placeholder="Search a location in Nepal" aria-label="Search a location in Nepal" /></label>
-      <div className="header-actions"><div className="audience-switch" aria-label="Choose experience"><button type="button" className={audience === 'citizen' ? 'active' : ''} onClick={() => setAudience('citizen')}><b>Citizen</b><small>Local risk & help</small></button><button type="button" className={audience === 'government' ? 'active' : ''} onClick={openGovernment}><b>Government</b><small>Plan investment</small></button></div>{!isGovernment && <button type="button" className={`header-live-location ${liveLocationSharing ? 'active' : ''}`} onClick={openLiveSharing}>{liveLocationSharing ? 'Live sharing on' : 'Share live location'}</button>}{isGovernment ? <div className="signed-in"><span>{governmentOrganization}</span><button type="button" onClick={leaveGovernment}>Exit</button></div> : signedInUser ? <div className="signed-in"><span>{signedInUser}</span><button type="button" onClick={signOut}>Sign out</button></div> : <button type="button" className="login-button" onClick={() => setLoginOpen(true)}>Log in</button>}</div>
+      <div className="header-actions">{locationAnalysis?.coverage === 'covered' && <><div className="audience-switch" aria-label="Choose experience"><button type="button" className={audience === 'citizen' ? 'active' : ''} onClick={() => setAudience('citizen')}><b>Citizen</b><small>Local risk & help</small></button><button type="button" className={audience === 'government' ? 'active' : ''} onClick={openGovernment}><b>Government</b><small>Plan investment</small></button></div>{!isGovernment && <button type="button" className={`header-live-location ${liveLocationSharing ? 'active' : ''}`} onClick={openLiveSharing}>{liveLocationSharing ? 'Live sharing on' : 'Share live location'}</button>}{isGovernment ? <div className="signed-in"><span>{governmentOrganization}</span><button type="button" onClick={leaveGovernment}>Exit</button></div> : signedInUser ? <div className="signed-in"><span>{signedInUser}</span><button type="button" onClick={signOut}>Sign out</button></div> : <button type="button" className="login-button" onClick={() => setLoginOpen(true)}>Log in</button>}</>}</div>
     </header>
-    <nav className="scene-nav" aria-label={`${audience} experience steps`}>{sceneLabels.map((label, index) => <span key={label} className={activeScene === Math.min(index, 2) ? 'active' : ''}>{label}</span>)}</nav>
 
     <section ref={workspaceRef} className={`workspace explore-canvas scroll-scene ${mapFocused ? 'is-focused' : ''}`} data-scene="0" style={{ '--map-exit': mapExit, '--focus-x': `${focusPoint.x}%`, '--focus-y': `${focusPoint.y}%` } as React.CSSProperties} aria-label="RootLedger nationwide vulnerability map">
       <section className={`map-card ${mapExit > 0.92 ? 'map-released' : ''}`}>
-        <div className="map-head"><div><p className="section-kicker">{isGovernment ? '01 / Planning jurisdiction' : '01 / Your local context'}</p><h2>{isGovernment ? 'Where should investment go?' : locationState === 'located' ? 'Your location is connected.' : 'Where are you?'}</h2><p className="experience-caption">{isGovernment ? 'Compare risk and restoration opportunity across the same landscape.' : 'Use your location to understand nearby risk and relevant help.'}</p></div><div className="risk-key" aria-label="Risk severity legend"><span>Low</span><i /><i /><i /><i /><span>Critical</span></div></div>
-        <div className="layer-tabs" role="tablist" aria-label="Environmental layer">{(Object.keys(layerNames) as HazardLayer[]).filter((key) => isGovernment || key !== 'vegetation').map((key) => <button key={key} type="button" className={layer === key ? 'active' : ''} onClick={() => setLayer(key)}>{layerNames[key]}</button>)}</div>
+        <div className="map-head"><div><p className="section-kicker">{locationAnalysis?.coverage === 'covered' ? (isGovernment ? 'Planning jurisdiction' : 'Selected model area') : 'Explore the environment'}</p><h2>{locationAnalysis?.coverage === 'covered' ? (isGovernment ? 'Where should investment go?' : 'Your local model result.') : 'Explore Nepal.'}</h2><p className="experience-caption">{locationAnalysis?.coverage === 'covered' ? (isGovernment ? 'Compare risk and restoration opportunity across the same landscape.' : 'Use your location to understand nearby risk and relevant help.') : 'Select a point on the map to check whether a stored RootLedger model pack covers it.'}</p></div>{locationAnalysis?.coverage === 'covered' && <div className="risk-key" aria-label="Risk severity legend"><span>Low</span><i /><i /><i /><i /><span>Critical</span></div>}</div>
+        {locationAnalysis?.coverage === 'covered' && <div className="layer-tabs" role="tablist" aria-label="Environmental layer">{(Object.keys(layerNames) as HazardLayer[]).filter((key) => isGovernment || key !== 'vegetation').map((key) => <button key={key} type="button" className={layer === key ? 'active' : ''} onClick={() => setLayer(key)}>{layerNames[key]}</button>)}</div>}
         <div className="map-frame">
+          <GoogleMapCanvas selectedFeature={locationAnalysis?.feature} isLoading={analysisLoading} onSelect={analyzeMapLocation} />
           <svg className="terrain-map" viewBox="0 0 1000 620" role="img" onPointerMove={updateCoordinates} aria-label="Interactive map of vulnerability conditions across Nepal">
             <image href="/nepal-satellite-map.jpg" width="1000" height="620" preserveAspectRatio="xMidYMid slice" />
             <rect width="1000" height="620" fill="#2d1854" opacity=".18" />
@@ -351,6 +372,8 @@ function App() {
           <div className="map-instruction"><span className="pulse" />{isGovernment ? 'Select a risk field or restoration site to analyze an intervention' : 'Select an area or use your location to understand local risk'}</div><div className="map-scale">0 <b /> 5 km</div>
         </div>
         <p className="map-source">Satellite base: <a href="https://commons.wikimedia.org/wiki/File:Satellite_image_of_Nepal_in_October_2002.jpg" target="_blank" rel="noreferrer">NASA Visible Earth, public domain</a> · risk cells reflect 100-year flood, GLOF depth, and landslide probability.</p>
+        {!analysisLoading && locationAnalysis?.coverage === 'unavailable' && <p className="coverage-note">{locationAnalysis.message}</p>}
+        {analysisError && <p className="coverage-note error">{analysisError}</p>}
       </section>
       {hovered && hoveredPoint && !mapFocused && <div className="region-hover" style={{ left: `${hoveredPoint.x}%`, top: `${hoveredPoint.y}%` }}><strong>{hovered.properties.region_name}</strong><span>Vulnerability {Math.round(hoveredScore)}</span><b>{riskLabel(hoveredScore)}</b></div>}
       <div className="map-instrument" aria-live="polite"><span>NEPAL / SATELLITE</span><strong>{mapCoordinates}</strong><small>Move across the map to inspect coordinates</small></div>
@@ -362,7 +385,7 @@ function App() {
       {!isGovernment && locationState === 'located' && <div className="local-network" aria-label="Relevant help around your location"><div className="network-center">YOU ARE<br />HERE</div>{['Community', 'Government', 'Emergency', 'Local organizations'].map((connection) => <button key={connection} type="button" className={`node ${connection === 'Local organizations' ? 'organizations' : connection.toLowerCase()}`} onClick={() => setActiveConnection(connection)}>{connection}</button>)}</div>}
       {mapFocused && <button type="button" className="country-reset" onClick={() => setMapFocused(false)}>← Return to country view</button>}
       {mapFocused && <svg className="map-connector" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d={`M ${focusPoint.x} ${focusPoint.y} C ${(focusPoint.x + 78) / 2} ${focusPoint.y}, 72 50, 79 50`} /></svg>}
-      <aside className={`detail-panel map-report ${mapFocused || isGovernment || locationState === 'located' ? 'revealed' : ''}`} aria-live="polite">
+      <aside className={`detail-panel map-report ${locationAnalysis?.coverage === 'covered' ? 'revealed' : ''}`} aria-live="polite">
         <div className="detail-topline"><p className="section-kicker">{isGovernment ? 'Investment analysis' : 'Your local report'}</p><span className="data-status">Shared risk model</span></div>
         {isGovernment && <div className="budget-widget"><div><span>Available budget</span><strong>{compactCurrency(budget)}</strong><small>{frozenPlan ? 'Frozen cached plan · optimizer offline' : `${compactCurrency(Math.max(0, budget - allocatedBudget))} remaining`}</small></div><input type="range" min={500_000} max={4_000_000} step={250_000} value={budget} onChange={(event) => setBudget(Number(event.target.value))} disabled={frozenPlan} aria-label="Available investment budget" /></div>}
         {selected ? <><div className="location-row"><div><h2>{isGovernment && selectedCandidate ? selectedCandidate.parcel_id : selected.properties.region_name ?? selected.properties.cell_id}</h2><p>{isGovernment ? 'Mapped plantation intervention candidate' : locationState === 'located' ? 'Matched to your local risk area' : 'Select a place in Nepal'}</p></div><span className="risk-badge" style={{ '--risk': riskColor(selectedScore) } as React.CSSProperties}>{riskLabel(selectedScore)}</span></div>
@@ -371,7 +394,7 @@ function App() {
         <button className="evidence-button" type="button" onClick={() => setDrawerOpen(true)}>{isGovernment ? 'How was this allocation chosen?' : 'See the factors behind this reading'} <span>→</span></button>
       </aside>
     </section>
-    <section className="model-workspace scroll-scene" data-scene="1">{isGovernment ? <><RiskTimeline points={liveRisk?.points ?? []} onSelect={setSelectedForecast} /><AfforestationPanel candidates={availableCandidates} /></> : <><RiskTimeline points={liveRisk?.points ?? []} onSelect={setSelectedForecast} /><section className="citizen-action-flow"><p className="section-kicker">04 / Respond nearby</p><h2>{nearbyHelp ? `${nearbyHelp.services.length} services and ${nearbyHelp.community.length} opt-in neighbours matched.` : 'Help matched to your local conditions.'}</h2><p>{nearbyHelp?.services[0] ? `${nearbyHelp.services[0].name}: ${nearbyHelp.services[0].relevance}` : 'Community groups, local government, and emergency contacts become relevant when the selected area’s flood and slope conditions rise.'}</p>{nearbyHelp?.community.length ? <div className="nearby-members">{nearbyHelp.community.map((member) => <div key={member.memberId}><span><b>{member.displayName}</b><small>{member.distanceBand} · exact location hidden</small></span><button type="button" onClick={() => connectWithMember(member.memberId, member.displayName)}>Connect</button></div>)}</div> : null}{connectionStatus && <p className="connection-status">{connectionStatus}</p>}<button type="button" onClick={() => communitySession ? setLocationConsentOpen(true) : setLoginOpen(true)}>{communitySession ? 'Update location sharing' : 'Create an account to match help'}</button></section></>}</section>
+    {locationAnalysis?.coverage === 'covered' && selected && <><LocationAnalysisStory feature={selected} score={selectedScore} dataStatus={locationAnalysis.data_status} /><section className="model-workspace scroll-scene" data-scene="1">{isGovernment ? <><AfforestationPanel candidates={availableCandidates} /></> : <><section className="citizen-action-flow"><p className="section-kicker">Nearby assistance</p><h2>{nearbyHelp ? `${nearbyHelp.services.length} services and ${nearbyHelp.community.length} opt-in neighbours matched.` : 'Help matched to your local conditions.'}</h2><p>{nearbyHelp?.services[0] ? `${nearbyHelp.services[0].name}: ${nearbyHelp.services[0].relevance}` : 'Community groups, local government, and emergency contacts become relevant when the selected area’s flood and slope conditions rise.'}</p>{nearbyHelp?.community.length ? <div className="nearby-members">{nearbyHelp.community.map((member) => <div key={member.memberId}><span><b>{member.displayName}</b><small>{member.distanceBand} · exact location hidden</small></span><button type="button" onClick={() => connectWithMember(member.memberId, member.displayName)}>Connect</button></div>)}</div> : null}{connectionStatus && <p className="connection-status">{connectionStatus}</p>}<button type="button" onClick={() => communitySession ? setLocationConsentOpen(true) : setLoginOpen(true)}>{communitySession ? 'Update location sharing' : 'Create an account to match help'}</button></section></>}</section></>}
     <section className="outcomes scroll-scene" data-scene="2"><div><p className="section-kicker">{isGovernment ? '05 / Project impact' : '05 / Community'}</p><h2>{isGovernment ? 'One allocation, visible across the landscape.' : 'Your area is part of a wider risk network.'}</h2></div><article><span>{isGovernment ? 'Annual people-risk avoided' : 'Similar risk areas'}</span><strong>{isGovernment ? protectedPeople.toLocaleString() : '03'}</strong><small>{isGovernment ? 'modelled annual exposure units' : 'Karnali · Gandaki · Koshi'}</small></article><article><span>{isGovernment ? 'Exposure reduction' : 'Local connections'}</span><strong>{isGovernment ? `${Math.round((plan?.totals.exposure_reduction_pct ?? 41.2) * budgetRatio)}%` : '04'}</strong><small>{isGovernment ? 'counterfactual simulation' : 'community · government · emergency · organizations'}</small></article><article><span>{isGovernment ? 'Area restored' : 'Live outlook'}</span><strong>{isGovernment ? `${availableCandidates.reduce((total, candidate) => total + candidate.area_ha, 0).toFixed(1)} ha` : `${Math.round(liveRisk?.points.at(-1)?.risk_score ?? 0)}/100`}</strong><small>{isGovernment ? `${availableCandidates.length} mapped sites within frozen scenario` : 'your area’s latest model reading'}</small></article><article><span>{isGovernment ? 'CO₂ captured' : 'What to do'}</span><strong>{isGovernment ? `${Math.round((plan?.totals.co2_t_10yr ?? 1_800) * budgetRatio).toLocaleString()} t` : 'Connect'}</strong><small>{isGovernment ? 'literature screening factor · 10 years' : 'use the map nodes to find relevant help'}</small></article></section>
     <JudgePath city={city} onCityChange={setCity} cities={cityPacks} apiBase={import.meta.env.VITE_API_BASE_URL} />
     <RiskPointDialog point={selectedForecast} onClose={() => setSelectedForecast(null)} />
