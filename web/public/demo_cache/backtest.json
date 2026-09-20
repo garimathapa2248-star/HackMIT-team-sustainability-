@@ -1,0 +1,14 @@
+{
+  "event_date": "2024-09-28",
+  "sar_scene": "S1A_IW_GRDH_2024_09_28",
+  "observed_flood_km2": 29.8,
+  "modeled_flood_km2": 34.1,
+  "hit_rate_pod": 0.78,
+  "false_alarm_ratio": 0.22,
+  "critical_success_index": 0.66,
+  "counterfactual": {
+    "people_exposed_baseline": 24800,
+    "people_exposed_with_plan": 14200,
+    "reduction_pct": 42.7
+  }
+}

@@ -1,0 +1,5 @@
+[
+  { "parcel_id": "AF-KOSHI-014", "type": "afforestation", "area_ha": 12.6, "centroid": [86.47, 27.66], "cell_ids": ["np-koshi-01"], "slope_deg": 18.0, "landcover": "bare", "suitability_score": 0.92, "predicted_eal_reduction_pct": 17, "model_confidence": 0.89 },
+  { "parcel_id": "AF-GANDAKI-027", "type": "afforestation", "area_ha": 8.4, "centroid": [84.05, 28.08], "cell_ids": ["np-gandaki-01"], "slope_deg": 24.0, "landcover": "shrubland", "suitability_score": 0.81, "predicted_eal_reduction_pct": 12, "model_confidence": 0.86 },
+  { "parcel_id": "AF-KARNALI-031", "type": "afforestation", "area_ha": 6.1, "centroid": [81.50, 28.43], "cell_ids": ["np-karnali-01"], "slope_deg": 14.0, "landcover": "grassland", "suitability_score": 0.74, "predicted_eal_reduction_pct": 9, "model_confidence": 0.82 }
+]

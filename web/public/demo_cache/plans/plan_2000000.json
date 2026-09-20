@@ -1,0 +1,44 @@
+{
+  "budget_usd": 2000000,
+  "mode": "expected",
+  "selected": [
+    {
+      "parcel_id": "parcel-101",
+      "cost_usd": 540000,
+      "avoided_eal_people": 4300,
+      "co2_t_10yr": 220,
+      "income_usd_yr": 180000
+    },
+    {
+      "parcel_id": "parcel-204",
+      "cost_usd": 720000,
+      "avoided_eal_people": 5900,
+      "co2_t_10yr": 320,
+      "income_usd_yr": 220000
+    },
+    {
+      "parcel_id": "parcel-315",
+      "cost_usd": 740000,
+      "avoided_eal_people": 6100,
+      "co2_t_10yr": 360,
+      "income_usd_yr": 250000
+    }
+  ],
+  "totals": {
+    "cost_usd": 2000000,
+    "people_protected": 24000,
+    "exposure_reduction_pct": 41.2,
+    "co2_t_10yr": 1800,
+    "income_usd_yr": 420000,
+    "households_benefiting": 6200
+  },
+  "frontier": [
+    { "budget_usd": 0, "people_protected": 0, "co2_t_10yr": 0 },
+    { "budget_usd": 1000000, "people_protected": 12000, "co2_t_10yr": 900 },
+    { "budget_usd": 2000000, "people_protected": 24000, "co2_t_10yr": 1800 }
+  ],
+  "cvar": {
+    "mode_available": true,
+    "tail_people_protected": 18000
+  }
+}

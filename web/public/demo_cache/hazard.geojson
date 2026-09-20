@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "cell_id": "np-karnali-01", "region_name": "Karnali highlands", "flood_depth_m": { "rp10": 0.7, "rp100": 2.2 }, "glof_depth_m": 1.7, "landslide_prob": 0.48, "population": 8800, "critical_assets": ["health post", "mountain road"], "eal_people": 1210, "eal_usd": 720000 }, "geometry": { "type": "Polygon", "coordinates": [[[81.2, 28.2], [81.8, 28.2], [81.8, 28.7], [81.2, 28.7], [81.2, 28.2]]] } },
+    { "type": "Feature", "properties": { "cell_id": "np-gandaki-01", "region_name": "Gandaki mountain corridor", "flood_depth_m": { "rp10": 1.0, "rp100": 2.7 }, "glof_depth_m": 1.4, "landslide_prob": 0.57, "population": 17400, "critical_assets": ["school", "hydropower access road"], "eal_people": 2140, "eal_usd": 1380000 }, "geometry": { "type": "Polygon", "coordinates": [[[83.7, 27.8], [84.4, 27.8], [84.4, 28.4], [83.7, 28.4], [83.7, 27.8]]] } },
+    { "type": "Feature", "properties": { "cell_id": "np-koshi-01", "region_name": "Koshi foothills", "flood_depth_m": { "rp10": 1.2, "rp100": 3.0 }, "glof_depth_m": 2.1, "landslide_prob": 0.51, "population": 26300, "critical_assets": ["bridge", "clinic", "irrigation intake"], "eal_people": 3850, "eal_usd": 2610000 }, "geometry": { "type": "Polygon", "coordinates": [[[86.1, 27.3], [86.8, 27.3], [86.8, 28.0], [86.1, 28.0], [86.1, 27.3]]] } }
+  ]
+}

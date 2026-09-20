@@ -1,0 +1,54 @@
+{
+  "region": "Rolwaling",
+  "stations_processed": 128,
+  "station_years": 9840,
+  "return_levels_mm": {
+    "2": 82,
+    "5": 126,
+    "10": 181,
+    "25": 235,
+    "50": 304,
+    "100": 392
+  },
+  "return_levels_ci95": {
+    "2": [64, 98],
+    "5": [92, 150],
+    "10": [148, 210],
+    "25": [201, 274],
+    "50": [258, 352],
+    "100": [322, 466]
+  },
+  "headline": {
+    "statement": "100-year storm → 34-year storm",
+    "old_return_period_yrs": 100,
+    "new_return_period_yrs": 34,
+    "threshold_mm": 180
+  },
+  "trend": {
+    "metric": "annual max rainfall",
+    "slope_mm_per_decade": 8.4,
+    "p_value": 0.04
+  },
+  "landslide_trigger": {
+    "form": "logistic",
+    "a": 0.74,
+    "b": 1.18,
+    "n_events": 128,
+    "auc": 0.81
+  },
+  "lake_growth": [
+    {
+      "lake_id": "LK-01",
+      "name": "Tsho Rolpa",
+      "area_km2_first": 0.82,
+      "area_km2_last": 1.16,
+      "first_year": 1990,
+      "last_year": 2024,
+      "pct_growth": 41.5
+    }
+  ],
+  "provenance": {
+    "datasets": ["placeholder signal", "demo cache"],
+    "generated_utc": "2026-09-19T00:00:00Z"
+  }
+}

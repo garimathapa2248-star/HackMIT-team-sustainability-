@@ -1,0 +1,12 @@
+{
+  "generated_utc": "2026-09-19T14:00:00Z",
+  "region": "nepal",
+  "points": [
+    { "timestamp": "2026-09-19T08:00:00Z", "risk_score": 28, "rainfall_mm": 3.1, "soil_saturation_pct": 48, "discharge_m3s": 66, "model_confidence": 0.88 },
+    { "timestamp": "2026-09-19T10:00:00Z", "risk_score": 35, "rainfall_mm": 6.4, "soil_saturation_pct": 53, "discharge_m3s": 79, "model_confidence": 0.89 },
+    { "timestamp": "2026-09-19T12:00:00Z", "risk_score": 52, "rainfall_mm": 18.7, "soil_saturation_pct": 61, "discharge_m3s": 102, "model_confidence": 0.91 },
+    { "timestamp": "2026-09-19T14:00:00Z", "risk_score": 68, "rainfall_mm": 31.2, "soil_saturation_pct": 72, "discharge_m3s": 141, "model_confidence": 0.93 },
+    { "timestamp": "2026-09-19T16:00:00Z", "risk_score": 77, "rainfall_mm": 39.4, "soil_saturation_pct": 79, "discharge_m3s": 177, "model_confidence": 0.86 },
+    { "timestamp": "2026-09-19T18:00:00Z", "risk_score": 63, "rainfall_mm": 21.8, "soil_saturation_pct": 76, "discharge_m3s": 151, "model_confidence": 0.84 }
+  ]
+}
