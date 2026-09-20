@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
+import { TYPE_COLOR, TYPE_LABEL } from "./colors";
 
 type CandidateSite = {
   parcel_id: string;
@@ -19,24 +20,6 @@ type Props = {
 };
 
 type Basemap = "satellite" | "terrain" | "data";
-
-// One colour per nature-based intervention type.
-const TYPE_COLOR: Record<string, string> = {
-  vetiver_slope: "#3ee0c0",
-  bamboo_slope: "#7bd88f",
-  afforestation: "#4ade80",
-  floodplain_restore: "#4aa3ff",
-  wetland_restore: "#22d3ee",
-  riverbank_bio: "#f0c14b",
-};
-const TYPE_LABEL: Record<string, string> = {
-  vetiver_slope: "Vetiver slope",
-  bamboo_slope: "Bamboo slope",
-  afforestation: "Afforestation",
-  floodplain_restore: "Floodplain",
-  wetland_restore: "Wetland",
-  riverbank_bio: "Riverbank bio",
-};
 
 // Warm sequential ramp for expected people-risk that reads on satellite + dark.
 function ealColor(eal: number, max: number) {
