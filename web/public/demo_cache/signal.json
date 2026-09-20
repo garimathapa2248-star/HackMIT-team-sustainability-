@@ -1,143 +1,54 @@
 {
-  "region": "hma",
-  "return_levels_region": "hma",
-  "stations_processed": 498,
-  "station_years": 12066,
+  "region": "Rolwaling",
+  "stations_processed": 128,
+  "station_years": 9840,
   "return_levels_mm": {
-    "2": 29.359,
-    "5": 41.664,
-    "10": 49.032,
-    "25": 57.54,
-    "50": 63.321,
-    "100": 68.648
+    "2": 82,
+    "5": 126,
+    "10": 181,
+    "25": 235,
+    "50": 304,
+    "100": 392
   },
   "return_levels_ci95": {
-    "2": [
-      24.821,
-      35.525
-    ],
-    "5": [
-      34.902,
-      50.83
-    ],
-    "10": [
-      42.208,
-      57.082
-    ],
-    "25": [
-      48.437,
-      75.369
-    ],
-    "50": [
-      51.13,
-      94.577
-    ],
-    "100": [
-      52.984,
-      120.747
-    ]
+    "2": [64, 98],
+    "5": [92, 150],
+    "10": [148, 210],
+    "25": [201, 274],
+    "50": [258, 352],
+    "100": [322, 466]
   },
   "headline": {
-    "statement": "Across High Mountain Asia NOAA ISD (498 stations / 12066 station-years). Nepal-adjacent GEV: The early-period 1-in-100-year daily rainfall depth now has a fitted recurrence of 7.75 years in the late-period sample.",
+    "statement": "100-year storm → 34-year storm",
     "old_return_period_yrs": 100,
-    "new_return_period_yrs": 7.75,
-    "threshold_mm": 80.255,
-    "early_period": [
-      1979,
-      1999
-    ],
-    "late_period": [
-      2000,
-      2024
-    ],
-    "headline_region": "nepal_adjacent"
+    "new_return_period_yrs": 34,
+    "threshold_mm": 180
   },
   "trend": {
-    "metric": "annual_max_1day_precip_mm",
-    "slope_mm_per_decade": 5.229,
-    "p_value": 0.00035
+    "metric": "annual max rainfall",
+    "slope_mm_per_decade": 8.4,
+    "p_value": 0.04
   },
   "landslide_trigger": {
-    "form": "I = a * D^b",
-    "a": 2.965e-07,
-    "b": 3.196,
-    "n_events": 138,
-    "auc": 0.934,
-    "kind": "rainfall_classifier",
-    "presentation": "rainfall classifier, AUC out-of-sample \u2014 not a Caine-style I\u2013D threshold",
-    "note": "Fitted exponent b can be positive (inverse of classic Caine I = a\u00b7D^b with b<0). Do not present the power law as a physical intensity\u2013duration threshold; the claim that survives scrutiny is the held-out rainfall-classifier AUC.",
-    "train_period": [
-      2008,
-      2015
-    ],
-    "test_period": [
-      2016,
-      2017
-    ],
-    "skipped_far_from_station": 176,
-    "skipped_data_gap": 450,
-    "max_station_km": 50.0
+    "form": "logistic",
+    "a": 0.74,
+    "b": 1.18,
+    "n_events": 128,
+    "auc": 0.81
   },
   "lake_growth": [
     {
-      "lake_id": "imja",
-      "name": "Imja Tsho",
-      "area_km2_first": 0.6,
-      "area_km2_last": 1.28,
-      "first_year": 1990,
-      "last_year": 2024,
-      "pct_growth": 113.3
-    },
-    {
-      "lake_id": "thulagi",
-      "name": "Thulagi",
-      "area_km2_first": 0.76,
-      "area_km2_last": 0.99,
-      "first_year": 1990,
-      "last_year": 2024,
-      "pct_growth": 30.3
-    },
-    {
-      "lake_id": "tsho_rolpa",
+      "lake_id": "LK-01",
       "name": "Tsho Rolpa",
-      "area_km2_first": 1.39,
-      "area_km2_last": 1.76,
+      "area_km2_first": 0.82,
+      "area_km2_last": 1.16,
       "first_year": 1990,
       "last_year": 2024,
-      "pct_growth": 26.6
+      "pct_growth": 41.5
     }
   ],
   "provenance": {
-    "datasets": [
-      "NOAA Integrated Surface Database / Global Hourly",
-      "NASA Global Landslide Catalog / COOLR",
-      "ICIMOD glacial-lake inventory (annual areas)"
-    ],
-    "generated_utc": "2026-09-19T19:43:26Z",
-    "data_status": "model output \u2014 GEV fit to cleaned station observations; POT/GPD cross-check on tidy ISD daily max; IMERG not fused",
-    "method": "annual station maxima pooled by year using median; stationary GEV by era; non-parametric bootstrap",
-    "headline_note": "HMA-pooled late GEV did not identify a recurrence shift; headline uses Nepal-adjacent subset."
-  },
-  "pot_gpd": {
-    "threshold_mm": 70.875,
-    "n_excesses": 449,
-    "n_years": 45,
-    "shape": 0.0398,
-    "scale": 50.1324,
-    "return_levels_mm": {
-      "2": 230.253,
-      "5": 282.957,
-      "10": 324.123,
-      "25": 380.314,
-      "50": 424.203,
-      "100": 469.32
-    },
-    "method": "POT/GPD, 95th percentile, 3-day decluster of regional daily max",
-    "note": "Regional daily max is a different sample than GEV median-of-station-maxima; use as a tail cross-check, not a replacement headline."
-  },
-  "imerg": {
-    "available": false,
-    "product": "NASA/GPM_L3/IMERG_V07",
-    "reason": "Daily IMERG is not on an unauthenticated public URL. Use Google Earth Engine NASA/GPM_L3/IMERG_V07 or Earthdata if credentials exist. RootLedger's headline remains NOAA ISD GEV."
+    "datasets": ["placeholder signal", "demo cache"],
+    "generated_utc": "2026-09-19T00:00:00Z"
   }
 }
