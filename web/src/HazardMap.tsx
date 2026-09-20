@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
+import type { Overlay } from "./lib/types";
 
 type CandidateSite = {
   parcel_id: string;
@@ -9,18 +10,26 @@ type CandidateSite = {
 };
 
 type Props = {
+  city: string;
   hazard: GeoJSON.FeatureCollection | null;
   candidates: CandidateSite[];
   selectedIds: Set<string>;
+  focusId?: string | null;
   onSelect: (id: string | null) => void;
   observed?: GeoJSON.FeatureCollection | null;
   modeled?: GeoJSON.FeatureCollection | null;
-  overlay: "none" | "observed" | "modeled" | "both";
+  stations?: GeoJSON.FeatureCollection | null;
+  overlay: Overlay;
+  showStations?: boolean;
+  showParcels?: boolean;
+  showHazard?: boolean;
+  hazardOpacity?: number;
+  emphasis?: boolean;
+  chrome?: boolean;
 };
 
 type Basemap = "satellite" | "terrain" | "data";
 
-// One colour per nature-based intervention type.
 const TYPE_COLOR: Record<string, string> = {
   vetiver_slope: "#3ee0c0",
   bamboo_slope: "#7bd88f",
@@ -38,13 +47,11 @@ const TYPE_LABEL: Record<string, string> = {
   riverbank_bio: "Riverbank bio",
 };
 
-// Warm sequential ramp for expected people-risk that reads on satellite + dark.
+const EMPTY: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
+
 function ealColor(eal: number, max: number) {
   const t = max <= 0 ? 0 : Math.min(1, Math.sqrt(eal / max));
-  const r = 255;
-  const g = Math.round(224 - t * 190);
-  const b = Math.round(130 - t * 120);
-  return `rgb(${r},${g},${b})`;
+  return `rgb(255,${Math.round(224 - t * 190)},${Math.round(130 - t * 120)})`;
 }
 
 function baseStyle(): maplibregl.StyleSpecification {
@@ -93,31 +100,66 @@ function baseStyle(): maplibregl.StyleSpecification {
   };
 }
 
+function extendBounds(b: maplibregl.LngLatBounds, fc: GeoJSON.FeatureCollection | null | undefined) {
+  for (const feature of fc?.features || []) {
+    const g = feature.geometry;
+    if (!g) continue;
+    if (g.type === "Point") b.extend(g.coordinates as [number, number]);
+    else if (g.type === "Polygon") {
+      for (const pt of g.coordinates[0]) b.extend(pt as [number, number]);
+    } else if (g.type === "MultiPolygon") {
+      for (const poly of g.coordinates) {
+        for (const pt of poly[0]) b.extend(pt as [number, number]);
+      }
+    }
+  }
+}
+
 export default function HazardMap({
+  city,
   hazard,
   candidates,
   selectedIds,
+  focusId = null,
   onSelect,
   observed,
   modeled,
+  stations,
   overlay,
+  showStations = false,
+  showParcels = true,
+  showHazard = true,
+  hazardOpacity = 0.4,
+  emphasis = false,
+  chrome = true,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const popupRef = useRef<maplibregl.Popup | null>(null);
+  const fittedCity = useRef<string | null>(null);
+  const selectRef = useRef(onSelect);
+  selectRef.current = onSelect;
   const [basemap, setBasemap] = useState<Basemap>(() =>
     typeof navigator !== "undefined" && !navigator.onLine ? "data" : "satellite"
   );
+  const [mapFailed, setMapFailed] = useState(false);
 
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
-    const map = new maplibregl.Map({
-      container: ref.current,
-      style: baseStyle(),
-      center: [86.9, 26.75],
-      zoom: 8.2,
-      attributionControl: false,
-    });
+    let map: maplibregl.Map;
+    try {
+      map = new maplibregl.Map({
+        container: ref.current,
+        style: baseStyle(),
+        center: [86.9, 26.75],
+        zoom: 8.2,
+        attributionControl: false,
+      });
+    } catch {
+      setMapFailed(true);
+      setBasemap("data");
+      return;
+    }
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
@@ -128,6 +170,11 @@ export default function HazardMap({
     map.on("error", (event) => {
       const detail = event as { sourceId?: string; error?: Error };
       const message = detail.error?.message || "";
+      if (/webgl|context/i.test(message)) {
+        setMapFailed(true);
+        setBasemap("data");
+        return;
+      }
       if (
         detail.sourceId === "sat" ||
         detail.sourceId === "labels" ||
@@ -141,10 +188,10 @@ export default function HazardMap({
       ro.disconnect();
       map.remove();
       mapRef.current = null;
+      fittedCity.current = null;
     };
   }, []);
 
-  // Basemap switching.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -160,28 +207,24 @@ export default function HazardMap({
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !hazard) return;
+    if (!map) return;
 
     const maxEal = Math.max(
-      ...hazard.features.map((f) => {
-        const properties = f.properties as {
-          people_risk_eal?: number;
-          eal_people?: number;
-        };
+      ...(hazard?.features || []).map((f) => {
+        const properties = f.properties as { people_risk_eal?: number; eal_people?: number };
         return Number(properties?.people_risk_eal ?? properties?.eal_people ?? 0);
       }),
       1
     );
     const colored: GeoJSON.FeatureCollection = {
       type: "FeatureCollection",
-      features: hazard.features.map((f) => ({
+      features: (hazard?.features || []).map((f) => ({
         ...f,
         properties: {
           ...f.properties,
           fill: ealColor(
             Number(
-              (f.properties as { people_risk_eal?: number; eal_people?: number })
-                ?.people_risk_eal ??
+              (f.properties as { people_risk_eal?: number; eal_people?: number })?.people_risk_eal ??
                 (f.properties as { eal_people?: number })?.eal_people ??
                 0
             ),
@@ -190,37 +233,37 @@ export default function HazardMap({
         },
       })),
     };
-
     const pts: GeoJSON.FeatureCollection = {
       type: "FeatureCollection",
-      features: candidates.map((c) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: c.centroid },
-        properties: {
-          id: c.parcel_id,
-          selected: selectedIds.has(c.parcel_id) ? 1 : 0,
-          type: c.type,
-          color: TYPE_COLOR[c.type] || "#9fb2cc",
-          label: TYPE_LABEL[c.type] || c.type,
-          area: c.area_ha ?? 0,
-        },
-      })),
+      features: showParcels
+        ? candidates.map((c) => ({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: c.centroid },
+            properties: {
+              id: c.parcel_id,
+              selected: selectedIds.has(c.parcel_id) ? 1 : 0,
+              focused: focusId === c.parcel_id ? 1 : 0,
+              type: c.type,
+              color: TYPE_COLOR[c.type] || "#9fb2cc",
+              label: TYPE_LABEL[c.type] || c.type,
+              area: c.area_ha ?? 0,
+            },
+          }))
+        : [],
     };
-
-    const empty: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 
     const paint = () => {
       if (!map.getStyle()) return;
 
       if (map.getSource("hazard")) {
-        (map.getSource("hazard") as maplibregl.GeoJSONSource).setData(colored);
+        (map.getSource("hazard") as maplibregl.GeoJSONSource).setData(showHazard ? colored : EMPTY);
       } else {
-        map.addSource("hazard", { type: "geojson", data: colored });
+        map.addSource("hazard", { type: "geojson", data: showHazard ? colored : EMPTY });
         map.addLayer({
           id: "hazard-fill",
           type: "fill",
           source: "hazard",
-          paint: { "fill-color": ["get", "fill"], "fill-opacity": 0.4 },
+          paint: { "fill-color": ["get", "fill"], "fill-opacity": hazardOpacity },
         });
         map.addLayer({
           id: "hazard-line",
@@ -229,7 +272,6 @@ export default function HazardMap({
           paint: { "line-color": "rgba(255,255,255,0.12)", "line-width": 0.5 },
         });
         map.resize();
-
         map.on("mousemove", "hazard-fill", (e) => {
           const p = e.features?.[0]?.properties as
             | {
@@ -238,10 +280,15 @@ export default function HazardMap({
                 eal_people?: number;
                 landslide_prob?: number;
                 scenario?: string;
+                equity_weight?: number;
               }
             | undefined;
           if (!p) return;
           map.getCanvas().style.cursor = "pointer";
+          const equity =
+            p.equity_weight != null
+              ? `<br/>Equity weight ${Number(p.equity_weight).toFixed(2)}`
+              : "";
           popupRef.current
             ?.setLngLat(e.lngLat)
             .setHTML(
@@ -249,7 +296,7 @@ export default function HazardMap({
                 Number(p.population || 0)
               ).toLocaleString()}<br/>People-risk/yr ${Number(
                 p.people_risk_eal ?? p.eal_people ?? 0
-              ).toFixed(2)}<br/>Scenario ${p.scenario || "current_risk_model"}<br/>Landslide prob ${(
+              ).toFixed(2)}${equity}<br/>Scenario ${p.scenario || "current_risk_model"}<br/>Landslide prob ${(
                 Number(p.landslide_prob || 0) * 100
               ).toFixed(0)}%</div>`
             )
@@ -260,10 +307,12 @@ export default function HazardMap({
           popupRef.current?.remove();
         });
       }
+      if (map.getLayer("hazard-fill")) {
+        map.setPaintProperty("hazard-fill", "fill-opacity", showHazard ? hazardOpacity : 0);
+      }
 
-      // Flood overlays as native MapLibre layers (added once, above hazard).
       if (!map.getSource("obs")) {
-        map.addSource("obs", { type: "geojson", data: empty });
+        map.addSource("obs", { type: "geojson", data: EMPTY });
         map.addLayer({
           id: "obs-fill",
           type: "fill",
@@ -272,7 +321,7 @@ export default function HazardMap({
         });
       }
       if (!map.getSource("mod")) {
-        map.addSource("mod", { type: "geojson", data: empty });
+        map.addSource("mod", { type: "geojson", data: EMPTY });
         map.addLayer({
           id: "mod-line",
           type: "line",
@@ -282,11 +331,50 @@ export default function HazardMap({
       }
       const showObs = overlay === "observed" || overlay === "both";
       const showMod = overlay === "modeled" || overlay === "both";
-      (map.getSource("obs") as maplibregl.GeoJSONSource).setData(showObs && observed ? observed : empty);
-      (map.getSource("mod") as maplibregl.GeoJSONSource).setData(showMod && modeled ? modeled : empty);
+      (map.getSource("obs") as maplibregl.GeoJSONSource).setData(showObs && observed ? observed : EMPTY);
+      (map.getSource("mod") as maplibregl.GeoJSONSource).setData(showMod && modeled ? modeled : EMPTY);
+
+      if (!map.getSource("stations")) {
+        map.addSource("stations", { type: "geojson", data: EMPTY });
+        map.addLayer({
+          id: "stations-circles",
+          type: "circle",
+          source: "stations",
+          paint: {
+            "circle-radius": 4.2,
+            "circle-color": "#f0c14b",
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "#070b14",
+            "circle-opacity": 0.92,
+          },
+        });
+        map.on("mouseenter", "stations-circles", (e) => {
+          map.getCanvas().style.cursor = "pointer";
+          const p = e.features?.[0]?.properties as { name?: string; station?: string } | undefined;
+          const coords = (e.features?.[0]?.geometry as GeoJSON.Point | undefined)?.coordinates;
+          if (!p || !coords) return;
+          popupRef.current
+            ?.setLngLat(coords as [number, number])
+            .setHTML(
+              `<div class="pop"><b>${p.name || "NOAA ISD"}</b><br/>${p.station || ""}<br/>Nepal-adjacent gauge used for the headline</div>`
+            )
+            .addTo(map);
+        });
+        map.on("mouseleave", "stations-circles", () => {
+          map.getCanvas().style.cursor = "";
+          popupRef.current?.remove();
+        });
+      }
+      (map.getSource("stations") as maplibregl.GeoJSONSource).setData(
+        showStations && stations ? stations : EMPTY
+      );
 
       if (map.getSource("parcels")) {
         (map.getSource("parcels") as maplibregl.GeoJSONSource).setData(pts);
+        if (map.getLayer("parcels-sel")) {
+          map.setPaintProperty("parcels-sel", "circle-radius", emphasis ? 7.5 : 5.5);
+          map.setPaintProperty("parcels-halo", "circle-radius", emphasis ? 16 : 11);
+        }
       } else {
         map.addSource("parcels", { type: "geojson", data: pts });
         map.addLayer({
@@ -294,7 +382,7 @@ export default function HazardMap({
           type: "circle",
           source: "parcels",
           filter: ["==", ["get", "selected"], 0],
-          paint: { "circle-radius": 2.6, "circle-color": "#dbe6f5", "circle-opacity": 0.4 },
+          paint: { "circle-radius": emphasis ? 3.4 : 2.6, "circle-color": "#dbe6f5", "circle-opacity": 0.4 },
         });
         map.addLayer({
           id: "parcels-halo",
@@ -302,7 +390,7 @@ export default function HazardMap({
           source: "parcels",
           filter: ["==", ["get", "selected"], 1],
           paint: {
-            "circle-radius": 11,
+            "circle-radius": emphasis ? 16 : 11,
             "circle-color": ["get", "color"],
             "circle-opacity": 0.2,
             "circle-blur": 0.6,
@@ -314,14 +402,29 @@ export default function HazardMap({
           source: "parcels",
           filter: ["==", ["get", "selected"], 1],
           paint: {
-            "circle-radius": 5.5,
+            "circle-radius": emphasis ? 7.5 : 5.5,
             "circle-color": ["get", "color"],
             "circle-stroke-width": 1.4,
             "circle-stroke-color": "#0a0f1c",
           },
         });
+        map.addLayer({
+          id: "parcels-focus",
+          type: "circle",
+          source: "parcels",
+          filter: ["==", ["get", "focused"], 1],
+          paint: {
+            "circle-radius": 11,
+            "circle-color": "#ffffff",
+            "circle-opacity": 0,
+            "circle-stroke-width": 2.2,
+            "circle-stroke-color": "#ffffff",
+          },
+        });
         for (const lyr of ["parcels-sel", "parcels-all"]) {
-          map.on("click", lyr, (e) => onSelect((e.features?.[0]?.properties?.id as string) || null));
+          map.on("click", lyr, (e) =>
+            selectRef.current((e.features?.[0]?.properties?.id as string) || null)
+          );
           map.on("mouseenter", lyr, (e) => {
             map.getCanvas().style.cursor = "pointer";
             const p = e.features?.[0]?.properties as
@@ -344,35 +447,88 @@ export default function HazardMap({
         }
         map.on("click", (e) => {
           const feats = map.queryRenderedFeatures(e.point, { layers: ["parcels-sel", "parcels-all"] });
-          if (!feats.length) onSelect(null);
+          if (!feats.length) selectRef.current(null);
         });
       }
-
-      const b = new maplibregl.LngLatBounds();
-      for (const f of hazard.features) {
-        const g = f.geometry as GeoJSON.Polygon | undefined;
-        if (!g || g.type !== "Polygon") continue;
-        for (const pt of g.coordinates[0]) b.extend(pt as [number, number]);
-      }
-      const overlayFc = [observed, modeled];
-      for (const fc of overlayFc) {
-        for (const f of fc?.features || []) {
-          const g = f.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon | undefined;
-          if (!g) continue;
-          const rings = g.type === "Polygon" ? g.coordinates : g.coordinates.flat();
-          for (const ring of rings) {
-            for (const pt of ring) b.extend(pt as [number, number]);
-          }
-        }
-      }
-      if (!b.isEmpty()) map.fitBounds(b, { padding: 36, duration: 700 });
     };
 
     const kick = () => paint();
     if (map.loaded()) kick();
     else map.once("load", kick);
     map.once("idle", kick);
-  }, [hazard, candidates, selectedIds, onSelect, observed, modeled, overlay]);
+  }, [
+    hazard,
+    candidates,
+    selectedIds,
+    observed,
+    modeled,
+    stations,
+    overlay,
+    showStations,
+    showParcels,
+    showHazard,
+    hazardOpacity,
+    emphasis,
+    focusId,
+  ]);
+
+  useEffect(() => {
+    fittedCity.current = null;
+  }, [city]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || fittedCity.current === city) return;
+    const boundsFor = () => {
+      const b = new maplibregl.LngLatBounds();
+      extendBounds(b, hazard);
+      extendBounds(b, observed);
+      extendBounds(b, modeled);
+      return b;
+    };
+    const fit = () => {
+      const b = boundsFor();
+      if (b.isEmpty()) return;
+      fittedCity.current = city;
+      map.fitBounds(b, { padding: 48, duration: 700 });
+    };
+    if (map.loaded()) fit();
+    else map.once("load", fit);
+  }, [city, hazard, observed, modeled]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || focusId || overlay === "none") return;
+    const bounds = new maplibregl.LngLatBounds();
+    if (overlay === "observed" || overlay === "both") extendBounds(bounds, observed);
+    if (overlay === "modeled" || overlay === "both") extendBounds(bounds, modeled);
+    if (bounds.isEmpty()) return;
+    const fit = () => {
+      map.fitBounds(bounds, {
+        padding: { top: 88, left: 420, right: 48, bottom: 150 },
+        duration: 900,
+        maxZoom: 9.1,
+      });
+    };
+    if (map.loaded()) fit();
+    else map.once("load", fit);
+  }, [focusId, modeled, observed, overlay]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !focusId) return;
+    const site = candidates.find((row) => row.parcel_id === focusId);
+    if (!site?.centroid) return;
+    const fly = () => {
+      map.easeTo({
+        center: site.centroid as [number, number],
+        zoom: Math.max(map.getZoom(), 10.4),
+        duration: 800,
+      });
+    };
+    if (map.loaded()) fly();
+    else map.once("load", fly);
+  }, [candidates, focusId]);
 
   const usedTypes = Array.from(
     new Set(candidates.filter((c) => selectedIds.has(c.parcel_id)).map((c) => c.type))
@@ -381,17 +537,22 @@ export default function HazardMap({
   return (
     <div id="map-root">
       <div id="map" ref={ref} />
-      <div className="basemap-switch">
-        {(["satellite", "terrain", "data"] as Basemap[]).map((b) => (
-          <button key={b} className={basemap === b ? "on" : ""} onClick={() => setBasemap(b)}>
-            {b === "data" ? "data only" : b}
-          </button>
-        ))}
-      </div>
-      {basemap === "data" && (
-        <div className="map-status">Data-only map · no network tiles required</div>
+      {chrome && (
+        <div className="basemap-switch">
+          {(["satellite", "terrain", "data"] as Basemap[]).map((b) => (
+            <button key={b} className={basemap === b ? "on" : ""} onClick={() => setBasemap(b)}>
+              {b === "data" ? "data only" : b}
+            </button>
+          ))}
+        </div>
       )}
-      {usedTypes.length > 0 && (
+      {chrome && mapFailed && (
+        <div className="map-fallback" role="status">
+          <b>Map engine unavailable</b>
+          <span>WebGL did not start. Proof numbers, the plan, Ask, and Export still work in the dock.</span>
+        </div>
+      )}
+      {chrome && showParcels && usedTypes.length > 0 && (
         <div className="parcel-legend">
           <div className="pl-title">Selected preventive measures</div>
           {usedTypes.map((t) => (

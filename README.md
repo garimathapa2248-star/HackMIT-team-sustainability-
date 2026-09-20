@@ -2,6 +2,8 @@
 
 A decision engine for Himalayan flood / landslide / GLOF risk: pull the **tail** out of NOAA station rainfall with extreme-value theory, then spend a budget on a nature-based portfolio (annual expected people-risk avoided + modeled CO₂ + modeled livelihood-income potential).
 
+**One-liner for judges:** Everyone else builds the flood *warning*. RootLedger builds the *planting plan* — and proves it against radar, including the misses.
+
 **Headline (real EVT on Voloridge compute):** **498 stations / 12,066 station-years** of NOAA ISD across High Mountain Asia. Nepal-adjacent GEV: the early-period 1-in-100-year daily rainfall depth now has a fitted recurrence of **7.75 years** (1979–1999 vs 2000–2024). HMA-pooled late GEV did not identify a shift; that is stated in `provenance.headline_note`. ERA5-Land at 39 of the same 73 station coordinates **partially replicates** (16.72-year vs 7.75-year); see `artifacts/replication.json`.
 
 **Calibration evidence:** UNOSAT Sentinel-1 flood extent, Koshi/Madhesh, **27 Sep 2024**. Copernicus GLO-30 **local-min HAND proxy**, stage calibrated on this event: **CSI 0.053**, POD 0.212, FAR 0.935. Beats an area-matched elevation baseline (CSI 0.001); **does not beat** JRC seasonal-water climatology (CSI 0.067). These are in-sample calibration-event metrics, not Whitebox HAND.
@@ -10,7 +12,7 @@ A decision engine for Himalayan flood / landslide / GLOF risk: pull the **tail**
 
 The current spoken demo and Q&A are in [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md). Plume paste text is in [`PLUME.md`](PLUME.md).
 
-## Run the demo
+## Run the demo (about 2 minutes)
 
 ```bash
 python3 -m pip install -r optimize/requirements.txt -r api/requirements.txt
@@ -18,7 +20,18 @@ python3 -m api.main          # http://127.0.0.1:8000
 cd web && npm install && npm run dev    # http://127.0.0.1:5173
 ```
 
+Open **http://127.0.0.1:5173/?v=1** (v1 = Koshi plan). v2 is a separate live world map behind the top-right toggle.
+
+### 90-second judged path
+
+1. Landing: **Play 90-second demo** (or press `D`). Cues walk Proof 2024 → Proof 2017 → Noise → Tail → Plan → Ask → Export.
+2. Or skip landing: **http://127.0.0.1:5173/?v=1&console=1** (Proof) or `?v=1&demo=1` (auto-walk).
+3. Keyboard: `1`–`6` chapters, `→` / space next beat, `Esc` landing.
+4. On Ask, click a suggested question — answers are grounded in the cached artifacts.
+
 **Judging freeze (offline, does not call `/optimize`):**
+
+The Vite dev server also locks Recalculate unless `VITE_ALLOW_OPTIMIZE=true`, so a booth click cannot overwrite `plan.json`.
 
 ```bash
 bash scripts/sync_artifacts.sh
@@ -27,7 +40,7 @@ cd web && VITE_USE_CACHE=true npm run build
 python3 -m http.server 4173 -d dist
 ```
 
-`sync_artifacts.sh` includes `replication.json` and `cities.json`. The verifier compares SHA-256 hashes without creating, editing, or deleting files.
+`sync_artifacts.sh` includes `replication.json`, `cities.json`, `rankings.json`, and `scenarios.json`. The verifier compares SHA-256 hashes without creating, editing, or deleting files.
 
 City packs: `python3 -m regions.build_bangalore` and `python3 -m regions.build_any --city "Kathmandu"`. Catalog merges `artifacts/cities.json`.
 
@@ -55,6 +68,11 @@ bash scripts/sync_artifacts.sh
 - **2017 CSI 0.088** is a frozen transfer, not same-valley validation.
 - **ERA5** partially replicates; IMERG is not fused.
 - **Portfolio, carbon, and income** are model outputs that depend on literature assumptions. Equity weight is 1.0–1.5× on EAL.
+- **Appraisal / BCR / NPV** is screening-grade monetisation (people-risk + CO₂ + income, 3% discount, 2% O&M), not a field BCR, not a GCF run, and not CLIMADA.
+- **Adaptation pathways, exceedance, waterfall, and regret** are greedy-frontier / Monte-Carlo / capped GEV-multiplier products. Not a Deltares pathway solver and not SWMM.
+- **FloodAdapt scenarios** use Deltares Event × Projection × Strategy names on HAND + literature effects. Not SFINCS / Delft-FIAT. The intensified-tail 2×2 scales annual people-risk with a **capped** climate multiplier (≤5×).
+- **30-year “likely flooded” counts** use a 5 cm HAND-proxy threshold because depths are centimetre-scale — not a 50 cm building-damage threshold.
+- **Hazard classes, recs, and country ranks** are our fitted NOAA / landslide / lake products with screening country boxes, not GFDRR ThinkHazard layers or GFDRR recommendation text.
 - **Counterfactual exposure reduction** is a simulation, not an observed outcome.
 - **No household-reach or causal responsibility-percentage claim is supported.**
 - **Bengaluru / Kathmandu** packs have **CSI null** unless a SAR scene is wired.

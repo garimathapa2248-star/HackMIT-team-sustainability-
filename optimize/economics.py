@@ -22,6 +22,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "landslide",
         "co2_t_per_ha_10yr": 12.0,
         "income_usd_per_ha_yr": 600.0,
+        "lifetime_yr": 20,
+        "om_frac_of_capex_yr": 0.02,
         "source": "Vetiver hedgerows cut slope erosion >90% (Truong et al.); cost/income from ICIMOD bioengineering field costings.",
     },
     "bamboo_slope": {
@@ -30,6 +32,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "landslide",
         "co2_t_per_ha_10yr": 45.0,
         "income_usd_per_ha_yr": 850.0,
+        "lifetime_yr": 20,
+        "om_frac_of_capex_yr": 0.02,
         "source": "Bamboo root reinforcement for shallow landslides; bamboo is an established Nepali rural cash crop (INBAR).",
     },
     "floodplain_restore": {
@@ -38,6 +42,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "flood",
         "co2_t_per_ha_10yr": 35.0,
         "income_usd_per_ha_yr": 300.0,
+        "lifetime_yr": 20,
+        "om_frac_of_capex_yr": 0.02,
         "source": "NbS flood-depth reduction ~15-40% (UNEP); floodplain reconnection costs from World Bank NbS catalogue.",
     },
     "wetland_restore": {
@@ -46,6 +52,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "flood",
         "co2_t_per_ha_10yr": 60.0,
         "income_usd_per_ha_yr": 400.0,
+        "lifetime_yr": 25,
+        "om_frac_of_capex_yr": 0.02,
         "source": "Wetland attenuation of peak flows; high soil-carbon uptake (Ramsar / IPCC wetlands supplement).",
     },
     "afforestation": {
@@ -54,6 +62,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "landslide",
         "co2_t_per_ha_10yr": 80.0,
         "income_usd_per_ha_yr": 250.0,
+        "lifetime_yr": 30,
+        "om_frac_of_capex_yr": 0.01,
         "source": "Catchment afforestation for slope stability and infiltration; sequestration from IPCC AFOLU defaults.",
     },
     "riverbank_bio": {
@@ -62,6 +72,8 @@ FACTORS: dict[str, dict[str, object]] = {
         "primary_hazard": "flood",
         "co2_t_per_ha_10yr": 20.0,
         "income_usd_per_ha_yr": 500.0,
+        "lifetime_yr": 15,
+        "om_frac_of_capex_yr": 0.03,
         "source": "Bioengineered riverbank protection (live crib walls, brush layering) per ICIMOD/DSCWM manuals.",
     },
 }

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from .counterfactual import apply as apply_counterfactual
+from .floodadapt import write as write_scenarios
 from .portfolio import optimize
 
 
@@ -23,6 +24,7 @@ def main() -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(plan, indent=2) + "\n")
     apply_counterfactual(Path(args.root), plan)
+    write_scenarios(args.root, plan=plan)
     t = plan["totals"]
     print(f"plan.json written: {len(plan['selected'])} preventive measures, "
           f"${t['cost_usd']:,.0f}, {t['people_protected']:.1f} people-risk avoided, "

@@ -1,223 +1,90 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Area,
-  CartesianGrid,
-  ComposedChart,
-  Line,
-  ResponsiveContainer,
-  Scatter,
-  ScatterChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-  ZAxis,
-} from "recharts";
-import { ask, conceptNote, listCities, loadJson, optimize } from "./api";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { ALLOW_OPTIMIZE, ask, CACHE_ONLY, checkHealth, listCities, loadJson, loadPlan, optimize } from "./api";
+import ChapterDock from "./ChapterDock";
+import AskChapter from "./chapters/AskChapter";
+import ExportChapter from "./chapters/ExportChapter";
+import NoiseChapter from "./chapters/NoiseChapter";
+import PlantChapter from "./chapters/PlantChapter";
+import ProofChapter from "./chapters/ProofChapter";
+import TailChapter from "./chapters/TailChapter";
+import DemoCue from "./DemoCue";
+import { EmptyState, LoadingBlock } from "./EmptyState";
 import HazardMap from "./HazardMap";
-import NoisePanel from "./NoisePanel";
+import Inspector from "./Inspector";
+import Landing from "./Landing";
+import { ASK_PROMPTS, DEMO_BEATS, isTypingTarget, parseChapter } from "./lib/demo";
+import { money, metric, risk } from "./lib/format";
+import { cityOwnedFlood, hasProofValidation } from "./lib/geo";
+import { describeMeasure } from "./lib/measure";
+import { planHeadline, planLede } from "./lib/planSummary";
+import type {
+  Attribution,
+  Backtest,
+  CandidateSite,
+  Chapter,
+  CityRow,
+  FloodAdaptPayload,
+  OptimizationMode,
+  OptimizerState,
+  Overlay,
+  Plan,
+  Rankings,
+  Replication,
+  Signal,
+  View,
+} from "./lib/types";
+import TopBar from "./TopBar";
 
-type FlowStep = "noise" | "signal" | "plan" | "backtest" | "ask" | "report";
-type OptimizationMode = "expected" | "cvar";
+function readParams() {
+  return new URLSearchParams(window.location.search);
+}
 
-type Signal = {
-  stations_processed: number;
-  station_years: number;
-  return_levels_mm: Record<string, number>;
-  return_levels_ci95: Record<string, [number, number]>;
-  headline: {
-    statement: string;
-    new_return_period_yrs: number;
-    old_return_period_yrs: number;
-    early_period?: [number, number];
-    late_period?: [number, number];
-    headline_region?: string;
-  };
-  trend: { slope_mm_per_decade: number; p_value: number };
-  landslide_trigger: {
-    auc: number | null;
-    n_events: number;
-    presentation?: string;
-    kind?: string;
-    skipped_far_from_station?: number;
-    skipped_data_gap?: number;
-  };
-  lake_growth: { name: string; pct_growth: number }[];
-  provenance?: {
-    data_status?: string;
-    headline_note?: string;
-    method?: string;
-  };
-};
+function initialView(): View {
+  const params = readParams();
+  if (params.get("demo") === "1") return "console";
+  return params.get("console") === "1" ? "console" : "landing";
+}
 
-type SelectedMeasure = {
-  parcel_id: string;
-  type?: string;
-  priority_rank?: number;
-  selected_in_both_objectives?: boolean;
-  cost_usd: number;
-  avoided_eal_people: number;
-  co2_t_10yr: number;
-  income_usd_yr: number;
-  low_income_score?: number | null;
-  equity_weight?: number | null;
-};
+function initialCity(): string {
+  return readParams().get("city") || "koshi";
+}
 
-type ScreeningFactor = {
-  type: string;
-  cost_per_ha?: number;
-  eal_reduction_frac?: number;
-  primary_hazard?: string;
-  source?: string;
-};
+function initialChapter(): Chapter {
+  return parseChapter(readParams().get("chapter") || readParams().get("tab")) || "backtest";
+}
 
-type Plan = {
-  budget_usd: number;
-  mode: string;
-  selected: SelectedMeasure[];
-  totals: {
-    cost_usd: number;
-    people_protected: number;
-    co2_t_10yr: number;
-    income_usd_yr: number;
-    households_benefiting: number | null;
-    exposure_reduction_pct?: number;
-  };
-  frontier: { budget_usd: number; people_protected: number; co2_t_10yr: number }[];
-  cvar?: { mode_available?: boolean; tail_people_protected?: number; alpha?: number };
-  optimality?: {
-    greedy_value_usd?: number | null;
-    knapsack_upper_bound_usd?: number | null;
-    gap_pct?: number | null;
-    note?: string;
-  };
-  provenance?: {
-    data_status?: string;
-    candidates_note?: string;
-    method?: string;
-    factors?: ScreeningFactor[];
-  };
-};
+function initialDemoBeat(): number | null {
+  return readParams().get("demo") === "1" ? 0 : null;
+}
 
-type CandidateSite = {
-  parcel_id: string;
-  type: string;
-  centroid: [number, number];
-  area_ha: number;
-  cell_ids: string[];
-  slope_deg?: number;
-  landcover?: string;
-  what?: string;
-  description?: string;
-  why?: string;
-  rationale?: string;
-  suitability?: string;
-  suitability_reason?: string;
-  cost_usd?: number;
-  benefit?: string;
-  assumption?: string | string[];
-  assumptions?: string | string[];
-  monitoring?: string;
-  evidence?: string;
-  source?: string;
-  primary_hazard?: string;
-  triggering_hazard?: string;
-  risk_driver?: string;
-  suitability_score?: number;
-  suitability_evidence?: Record<string, unknown>;
-  data_status?: string;
-  required_verification?: string[];
-  verification?: string | string[];
-};
-
-type SkillRow = {
-  scale_deg: number;
-  approx_km?: number;
-  pod?: number;
-  far?: number;
-  csi?: number;
-};
-
-type SkillEvent = {
-  event_date?: string;
-  source?: string;
-  hit_rate_pod?: number | null;
-  false_alarm_ratio?: number | null;
-  critical_success_index?: number | null;
-  observed_flood_km2?: number | null;
-  modeled_flood_km2?: number | null;
-  note?: string;
-  skill_vs_scale?: SkillRow[];
-  baselines?: {
-    jrc_seasonal_water?: { csi?: number | null; definition?: string };
-    area_matched_elevation?: { csi?: number | null; definition?: string };
-  };
-};
-
-type Backtest = {
-  critical_success_index: number | null;
-  hit_rate_pod?: number | null;
-  false_alarm_ratio?: number | null;
-  observed_flood_km2?: number | null;
-  modeled_flood_km2?: number | null;
-  sar_scene?: string;
-  event_date?: string;
-  permanent_water_mask?: string;
-  evaluation_domain?: string;
-  skill_vs_scale?: SkillRow[];
-  baselines?: SkillEvent["baselines"];
-  validation?: SkillEvent;
-  spatial_holdout?: SkillEvent & { kind?: string; split?: string };
-  provenance?: { data_status?: string; method?: string };
-  counterfactual?: {
-    people_exposed_baseline?: number | null;
-    people_exposed_with_plan?: number | null;
-    reduction_pct?: number | null;
-    note?: string;
-  };
-};
-
-type Replication = {
-  verdict?: string;
-  verdict_note?: string;
-  isd_headline_new_return_yrs?: number;
-  era5_headline_new_return_yrs?: number | null;
-  era5_headline_statement?: string;
-  independence?: string;
-  agreement?: {
-    stations_compared?: number;
-    annmax_pearson_r?: number | null;
-    mean_bias_mm?: number | null;
-    scatter?: { station: string; isd_mm: number; era5_mm: number }[];
-  };
-};
-
-type CityRow = { id: string; name: string; ready?: boolean };
-
-type OptimizerState = "checking" | "live" | "frozen" | "unavailable";
-
-const money = (value: number | null | undefined) => {
-  if (value == null || !Number.isFinite(value)) return "—";
-  return value >= 1_000_000
-    ? `$${(value / 1_000_000).toFixed(2)}M`
-    : `$${Math.round(value).toLocaleString()}`;
-};
-
-const metric = (value: number | null | undefined, maximumFractionDigits = 1) =>
-  value == null || !Number.isFinite(value)
-    ? "—"
-    : value.toLocaleString(undefined, { maximumFractionDigits });
-
-const risk = (value: number | null | undefined) => metric(value, 1);
-const humanize = (value: string | undefined) => (value || "preventive measure").replace(/_/g, " ");
-const textValue = (value: string | string[] | undefined) =>
-  Array.isArray(value) ? value.join("; ") : value;
+function writeQuery(next: {
+  view: View;
+  city: string;
+  chapter: Chapter;
+  demo: boolean;
+}) {
+  const params = readParams();
+  if (next.view === "console") params.set("console", "1");
+  else params.delete("console");
+  if (next.city && next.city !== "koshi") params.set("city", next.city);
+  else params.delete("city");
+  if (next.view === "console") params.set("chapter", next.chapter);
+  else params.delete("chapter");
+  if (next.demo) params.set("demo", "1");
+  else params.delete("demo");
+  if (!params.get("v")) params.set("v", "1");
+  const search = params.toString();
+  const url = `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`;
+  window.history.replaceState({}, "", url);
+}
 
 export default function App() {
-  const [city, setCity] = useState("koshi");
+  const [view, setView] = useState<View>(initialView);
+  const [city, setCity] = useState(initialCity);
   const [cities, setCities] = useState<CityRow[]>([
     { id: "koshi", name: "Koshi / Madhesh (Nepal)", ready: true },
   ]);
-  const [tab, setTab] = useState<FlowStep>("backtest");
+  const [chapter, setChapter] = useState<Chapter>(initialChapter);
   const [signal, setSignal] = useState<Signal | null>(null);
   const [hazard, setHazard] = useState<GeoJSON.FeatureCollection | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
@@ -225,24 +92,35 @@ export default function App() {
   const [backtest, setBacktest] = useState<Backtest | null>(null);
   const [mode, setMode] = useState<OptimizationMode>("expected");
   const [optimizerState, setOptimizerState] = useState<OptimizerState>("checking");
-  const [overlay, setOverlay] = useState<"none" | "observed" | "modeled" | "both">("observed");
+  const [overlay, setOverlay] = useState<Overlay>("both");
   const [observed, setObserved] = useState<GeoJSON.FeatureCollection | null>(null);
   const [modeled, setModeled] = useState<GeoJSON.FeatureCollection | null>(null);
   const [observed2017, setObserved2017] = useState<GeoJSON.FeatureCollection | null>(null);
   const [modeled2017, setModeled2017] = useState<GeoJSON.FeatureCollection | null>(null);
   const [proofEvent, setProofEvent] = useState<"2024" | "2017">("2024");
   const [replication, setReplication] = useState<Replication | null>(null);
+  const [stations, setStations] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [attribution, setAttribution] = useState<Attribution | null>(null);
   const [riskBefore, setRiskBefore] = useState<GeoJSON.FeatureCollection | null>(null);
   const [riskWithPlan, setRiskWithPlan] = useState<GeoJSON.FeatureCollection | null>(null);
+  const [rankings, setRankings] = useState<Rankings | null>(null);
+  const [scenarios, setScenarios] = useState<FloodAdaptPayload | null>(null);
   const [riskView, setRiskView] = useState<"before" | "with_plan">("before");
   const [budget, setBudget] = useState(2_000_000);
   const [busy, setBusy] = useState(false);
+  const [packError, setPackError] = useState<string | null>(null);
+  const [reloadToken, setReloadToken] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
+  const [focusId, setFocusId] = useState<string | null>(null);
   const [q, setQ] = useState("Why is the 100-year storm now a 7.75-year storm?");
   const [a, setA] = useState("");
   const [answerMeta, setAnswerMeta] = useState("");
   const [asking, setAsking] = useState(false);
-  const [note, setNote] = useState("");
+  const [demoBeat, setDemoBeat] = useState<number | null>(initialDemoBeat);
+  const [demoAuto, setDemoAuto] = useState(() => readParams().get("demo") === "1");
+  const demoRef = useRef({ beat: demoBeat, auto: demoAuto, view, chapter });
+  const askedDemo = useRef(false);
+  demoRef.current = { beat: demoBeat, auto: demoAuto, view, chapter };
 
   useEffect(() => {
     listCities()
@@ -254,40 +132,174 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    writeQuery({
+      view,
+      city,
+      chapter,
+      demo: demoBeat != null,
+    });
+  }, [view, city, chapter, demoBeat]);
+
+  useEffect(() => {
+    let cancelled = false;
     setBusy(true);
+    setPackError(null);
     setProofEvent("2024");
+    setOptimizerState("checking");
+    setSignal(null);
+    setPlan(null);
+    setBacktest(null);
+    setHazard(null);
+    setObserved(null);
+    setModeled(null);
+    setObserved2017(null);
+    setModeled2017(null);
+    setRiskBefore(null);
+    setRiskWithPlan(null);
+    setRankings(null);
+    setScenarios(null);
+    setReplication(null);
+    setAttribution(null);
+    setA("");
+    setAnswerMeta("");
+    setFocusId(null);
+
+    const koshiOnly = city === "koshi";
+    const keep = <T,>(setter: (value: T) => void) => (value: T) => {
+      if (!cancelled) setter(value);
+    };
+
     Promise.all([
-      loadJson("signal", city).then((value: Signal) => setSignal(value)),
-      loadJson("hazard", city).then(setHazard),
-      optimize<Plan>(2_000_000, "expected", city)
+      checkHealth().catch(() => false),
+      loadJson("signal", city)
+        .then(keep(setSignal))
+        .catch(() => {
+          if (!cancelled) setSignal(null);
+        }),
+      loadJson("hazard", city)
+        .then(keep(setHazard))
+        .catch(() => {
+          if (!cancelled) setHazard(null);
+        }),
+      loadPlan<Plan>(city)
         .then((result) => {
+          if (cancelled) return;
           setPlan(result.plan);
           setBudget(result.plan.budget_usd);
           setMode(result.plan.mode === "cvar" ? "cvar" : "expected");
-          setOptimizerState(result.source === "api" ? "live" : "frozen");
           const firstMeasure = result.plan.selected?.[0]?.parcel_id;
           if (firstMeasure) {
             setPicked(firstMeasure);
             setQ(`Why was preventive measure ${firstMeasure} selected?`);
           }
         })
-        .catch(() => setOptimizerState("unavailable")),
-      loadJson("candidates", city).then((value: CandidateSite[]) => setCandidates(value)),
-      loadJson("backtest", city).then((value: Backtest) => setBacktest(value)),
-      loadJson("flood_observed", city).then(setObserved).catch(() => setObserved(null)),
-      loadJson("flood_modeled", city).then(setModeled).catch(() => setModeled(null)),
-      loadJson("flood_observed_2017", city).then(setObserved2017).catch(() => setObserved2017(null)),
-      loadJson("flood_modeled_2017", city).then(setModeled2017).catch(() => setModeled2017(null)),
-      loadJson("replication", city).then(setReplication).catch(() => setReplication(null)),
-      loadJson("risk_before", city).then(setRiskBefore).catch(() => setRiskBefore(null)),
-      loadJson("risk_with_plan", city).then(setRiskWithPlan).catch(() => setRiskWithPlan(null)),
-      conceptNote(city).then(setNote).catch(() => setNote("")),
+        .catch(() => {
+          if (!cancelled) setPlan(null);
+        }),
+      loadJson("candidates", city)
+        .then((value: CandidateSite[]) => {
+          if (!cancelled) setCandidates(Array.isArray(value) ? value : []);
+        })
+        .catch(() => {
+          if (!cancelled) setCandidates([]);
+        }),
+      loadJson("backtest", city)
+        .then(keep(setBacktest))
+        .catch(() => {
+          if (!cancelled) setBacktest(null);
+        }),
+      loadJson("flood_observed", city)
+        .then((value) => {
+          if (!cancelled) setObserved(cityOwnedFlood(value, city));
+        })
+        .catch(() => {
+          if (!cancelled) setObserved(null);
+        }),
+      loadJson("flood_modeled", city)
+        .then((value) => {
+          if (!cancelled) setModeled(cityOwnedFlood(value, city));
+        })
+        .catch(() => {
+          if (!cancelled) setModeled(null);
+        }),
+      koshiOnly
+        ? loadJson("flood_observed_2017", city)
+            .then((value) => {
+              if (!cancelled) setObserved2017(cityOwnedFlood(value, city));
+            })
+            .catch(() => {
+              if (!cancelled) setObserved2017(null);
+            })
+        : Promise.resolve(),
+      koshiOnly
+        ? loadJson("flood_modeled_2017", city)
+            .then((value) => {
+              if (!cancelled) setModeled2017(cityOwnedFlood(value, city));
+            })
+            .catch(() => {
+              if (!cancelled) setModeled2017(null);
+            })
+        : Promise.resolve(),
+      koshiOnly
+        ? loadJson("replication", city)
+            .then(keep(setReplication))
+            .catch(() => {
+              if (!cancelled) setReplication(null);
+            })
+        : Promise.resolve(),
+      koshiOnly
+        ? loadJson("stations_nepal")
+            .then(keep(setStations))
+            .catch(() => {
+              if (!cancelled) setStations(null);
+            })
+        : Promise.resolve().then(() => {
+            if (!cancelled) setStations(null);
+          }),
+      loadJson("attribution", city)
+        .then(keep(setAttribution))
+        .catch(() => {
+          if (!cancelled) setAttribution(null);
+        }),
+      loadJson("risk_before", city)
+        .then(keep(setRiskBefore))
+        .catch(() => {
+          if (!cancelled) setRiskBefore(null);
+        }),
+      loadJson("risk_with_plan", city)
+        .then(keep(setRiskWithPlan))
+        .catch(() => {
+          if (!cancelled) setRiskWithPlan(null);
+        }),
+      loadJson("rankings", city)
+        .then(keep(setRankings))
+        .catch(() => {
+          if (!cancelled) setRankings(null);
+        }),
+      loadJson("scenarios", city)
+        .then(keep(setScenarios))
+        .catch(() => {
+          if (!cancelled) setScenarios(null);
+        }),
     ])
-      .catch(() => {
-        // Individual artifacts render as unavailable; the judged flow remains usable.
+      .then(([health]) => {
+        if (cancelled) return;
+        setOptimizerState(CACHE_ONLY || !ALLOW_OPTIMIZE ? "frozen" : health ? "live" : "frozen");
       })
-      .finally(() => setBusy(false));
-  }, [city]);
+      .catch(() => {
+        if (!cancelled) {
+          setOptimizerState("unavailable");
+          setPackError("This city pack did not finish loading. Cached Koshi evidence is still on disk.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setBusy(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [city, reloadToken]);
 
   const selectedIds = useMemo(
     () => new Set((plan?.selected || []).map((selected) => selected.parcel_id)),
@@ -295,118 +307,91 @@ export default function App() {
   );
   const pickedRow = plan?.selected.find((selected) => selected.parcel_id === picked);
   const pickedMeta = candidates.find((candidate) => candidate.parcel_id === picked);
-  const pickedFactor = plan?.provenance?.factors?.find((factor) => factor.type === pickedMeta?.type);
+  const measureDetails = useMemo(
+    () => describeMeasure({ picked, pickedMeta, pickedRow, plan, backtest }),
+    [backtest, picked, pickedMeta, pickedRow, plan]
+  );
 
-  const measureDetails = useMemo(() => {
-    if (!picked || !pickedMeta) return null;
-    const candidateFacts = [
-      pickedMeta.slope_deg == null ? "" : `${metric(pickedMeta.slope_deg)}° slope`,
-      pickedMeta.landcover ? `${humanize(pickedMeta.landcover)} land cover` : "",
-      pickedMeta.triggering_hazard || pickedMeta.primary_hazard
-        ? `${humanize(pickedMeta.triggering_hazard || pickedMeta.primary_hazard)} hazard`
-        : "",
-      pickedMeta.suitability_score == null
-        ? ""
-        : `suitability ${metric(pickedMeta.suitability_score, 3)}`,
-      pickedMeta.cell_ids.length ? `${pickedMeta.cell_ids.length} linked risk cell(s)` : "",
-    ]
-      .filter(Boolean)
-      .join(" · ");
-    const modeledBenefit = pickedRow
-      ? `${risk(pickedRow.avoided_eal_people)} annual people-risk avoided; ${metric(
-          pickedRow.co2_t_10yr
-        )} tCO₂ / 10 yr; ${money(pickedRow.income_usd_yr)} income / yr.`
-      : "This candidate intervention site is not selected in the current budgeted plan.";
-    const statedBenefit = pickedMeta.benefit ? `${pickedMeta.benefit} ` : "";
-    const reduction =
-      pickedFactor?.eal_reduction_frac == null
-        ? ""
-        : ` The screening factor assumes a ${(pickedFactor.eal_reduction_frac * 100).toFixed(
-            0
-          )}% local EAL reduction.`;
-    const proof =
-      backtest?.critical_success_index == null
-        ? "This site has not been field-verified; no flood CSI is available."
-        : `This site has not been field-verified. The portfolio hazard layer was checked against the ${
-            backtest.event_date || "calibration"
-          } scene (CSI ${backtest.critical_success_index.toFixed(
-            3
-          )}), which is an in-sample calibration fit.`;
-
-    return {
-      id: picked,
-      what:
-        pickedMeta.what ||
-        pickedMeta.description ||
-        `${humanize(pickedMeta.type)} at a ${metric(pickedMeta.area_ha, 2)} ha candidate intervention site.`,
-      why:
-        pickedMeta.why ||
-        pickedMeta.rationale ||
-        pickedMeta.suitability_reason ||
-        pickedMeta.suitability ||
-        (pickedRow
-          ? `Selected by the ${
-              plan?.mode || "screening"
-            } optimizer for modeled people-risk, carbon, and income return under the budget, with cell-level benefit capping.${
-              candidateFacts ? ` Candidate data: ${candidateFacts}.` : ""
-            }`
-          : `Feasible under the screening rules, but not selected in the current budgeted portfolio.${
-              candidateFacts ? ` Candidate data: ${candidateFacts}.` : ""
-            }`),
-      cost: pickedRow ? money(pickedRow.cost_usd) : money(pickedMeta.cost_usd),
-      benefit: `${statedBenefit}${modeledBenefit}`.trim(),
-      assumption:
-        textValue(pickedMeta.assumption) ||
-        textValue(pickedMeta.assumptions) ||
-        `${pickedFactor?.source || pickedMeta.source || "Literature screening factors; not a field trial."}${reduction}`,
-      verification:
-        textValue(pickedMeta.verification) ||
-        textValue(pickedMeta.required_verification) ||
-        pickedMeta.monitoring ||
-        pickedMeta.evidence ||
-        proof,
-    };
-  }, [backtest, picked, pickedFactor, pickedMeta, pickedRow, plan?.mode]);
-
-  const rl = useMemo(() => {
-    if (!signal) return [];
-    return Object.keys(signal.return_levels_mm)
-      .map(Number)
-      .sort((left, right) => left - right)
-      .map((returnPeriod) => {
-        const interval = signal.return_levels_ci95[String(returnPeriod)];
-        return {
-          rp: returnPeriod,
-          mm: signal.return_levels_mm[String(returnPeriod)],
-          lo: interval?.[0],
-          hi: interval?.[1],
-        };
-      });
-  }, [signal]);
-
-  const onSelect = useCallback((id: string | null) => {
-    setPicked(id);
-    if (id) {
-      setTab("plan");
-      setQ(`Why was preventive measure ${id} selected before the next-best candidate site?`);
-      setA("");
-      setAnswerMeta("");
-    }
+  const applyBeat = useCallback((index: number) => {
+    const beat = DEMO_BEATS[index];
+    if (!beat) return;
+    setChapter(beat.chapter);
+    if (beat.overlay) setOverlay(beat.overlay);
+    if (beat.proofEvent) setProofEvent(beat.proofEvent);
+    if (beat.riskView) setRiskView(beat.riskView);
   }, []);
 
-  async function rerun(nextBudget: number, nextMode: OptimizationMode = mode) {
+  const stopDemo = useCallback(() => {
+    setDemoBeat(null);
+    setDemoAuto(false);
+  }, []);
+
+  const goConsole = useCallback(
+    (nextCity = "koshi", nextChapter: Chapter = "plan") => {
+      setCity(nextCity);
+      setView("console");
+      setChapter(nextChapter);
+      if (nextChapter === "backtest") setOverlay("both");
+      stopDemo();
+    },
+    [stopDemo]
+  );
+
+  const playDemo = useCallback(() => {
+    askedDemo.current = false;
+    setPicked(null);
+    setFocusId(null);
+    setCity("koshi");
+    setView("console");
+    setDemoBeat(0);
+    setDemoAuto(true);
+    applyBeat(0);
+  }, [applyBeat]);
+
+  const stepDemo = useCallback(
+    (delta: number, fromAuto = false) => {
+      if (!fromAuto) setDemoAuto(false);
+      setDemoBeat((current) => {
+        const start = current ?? 0;
+        const next = start + delta;
+        if (next < 0) return current;
+        if (next >= DEMO_BEATS.length) {
+          setDemoAuto(false);
+          return null;
+        }
+        applyBeat(next);
+        return next;
+      });
+    },
+    [applyBeat]
+  );
+
+  const onSelect = useCallback(
+    (id: string | null) => {
+      setPicked(id);
+      setFocusId(id);
+      if (id) {
+        setChapter("plan");
+        setQ(`Why was preventive measure ${id} selected before the next-best candidate site?`);
+        setA("");
+        setAnswerMeta("");
+        if (view === "landing") setView("console");
+        stopDemo();
+      }
+    },
+    [stopDemo, view]
+  );
+
+  async function recalculate() {
     if (optimizerState !== "live") return;
     setBusy(true);
     try {
-      const result = await optimize<Plan>(nextBudget, nextMode, city);
+      const result = await optimize<Plan>(budget, mode, city);
       setPlan(result.plan);
       if (result.source === "cache") {
         setOptimizerState("frozen");
         setBudget(result.plan.budget_usd);
         setMode(result.plan.mode === "cvar" ? "cvar" : "expected");
-      } else {
-        setBudget(nextBudget);
-        setMode(nextMode);
       }
     } catch {
       setOptimizerState("unavailable");
@@ -415,15 +400,18 @@ export default function App() {
     }
   }
 
-  async function onAsk(event: React.FormEvent) {
-    event.preventDefault();
+  async function askQuestion(question: string) {
+    const trimmed = question.trim();
+    if (!trimmed) return;
+    setQ(trimmed);
     setAsking(true);
     try {
-      const response = await ask(q, city, {
+      const response = await ask(trimmed, city, {
         signal,
         plan,
         backtest,
         selectedMeasure: measureDetails,
+        replication,
       });
       setA(response.answer);
       setAnswerMeta(
@@ -436,15 +424,111 @@ export default function App() {
     }
   }
 
-  function downloadNote() {
-    const blob = new Blob([note], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "rootledger-prevention-plan.md";
-    anchor.click();
-    URL.revokeObjectURL(url);
+  async function onAsk(event: FormEvent) {
+    event.preventDefault();
+    await askQuestion(q);
   }
+
+  useEffect(() => {
+    if (demoBeat == null) {
+      askedDemo.current = false;
+      return;
+    }
+    if (DEMO_BEATS[demoBeat]?.chapter !== "ask" || askedDemo.current) return;
+    askedDemo.current = true;
+    const prompt = picked
+      ? `Why was preventive measure ${picked} selected before the next-best candidate site?`
+      : ASK_PROMPTS[0];
+    void askQuestion(prompt);
+  }, [demoBeat, picked]);
+
+  useEffect(() => {
+    if (demoBeat == null || DEMO_BEATS[demoBeat]?.chapter !== "plan") return;
+    const first = plan?.selected?.[0]?.parcel_id;
+    if (!first) return;
+    setPicked(first);
+    setFocusId(first);
+  }, [demoBeat, plan]);
+
+  useEffect(() => {
+    if (demoBeat == null || !demoAuto) return undefined;
+    const timer = window.setTimeout(() => stepDemo(1, true), 12000);
+    return () => window.clearTimeout(timer);
+  }, [demoAuto, demoBeat, stepDemo]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (isTypingTarget(event.target) || event.metaKey || event.ctrlKey || event.altKey) return;
+      const key = event.key.toLowerCase();
+      if (key === "d") {
+        event.preventDefault();
+        playDemo();
+        return;
+      }
+      if (key === "escape") {
+        event.preventDefault();
+        stopDemo();
+        setView("landing");
+        setCity("koshi");
+        return;
+      }
+      if (key === "arrowright" || key === " ") {
+        if (demoRef.current.beat != null) {
+          event.preventDefault();
+          stepDemo(1);
+        }
+        return;
+      }
+      if (key === "arrowleft") {
+        if (demoRef.current.beat != null) {
+          event.preventDefault();
+          stepDemo(-1);
+        }
+        return;
+      }
+      const index = Number(key) - 1;
+      if (index >= 0 && index <= 5) {
+        event.preventDefault();
+        const next = ["noise", "signal", "plan", "backtest", "ask", "report"][index] as Chapter;
+        setView("console");
+        setChapter(next);
+        stopDemo();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [playDemo, stepDemo, stopDemo]);
+
+  const cityName = cities.find((row) => row.id === city)?.name || city;
+  const hasCsi = backtest?.critical_success_index != null;
+  const hasValidation = city === "koshi" && hasProofValidation(backtest);
+  const showEra5 = city === "koshi" && replication != null;
+  const isLanding = view === "landing";
+  const showStations = !isLanding && city === "koshi" && (chapter === "noise" || chapter === "signal");
+  const showParcels = isLanding || (chapter !== "noise" && chapter !== "signal");
+  const mapOverlay: Overlay = isLanding
+    ? "both"
+    : chapter === "backtest"
+      ? overlay
+      : "none";
+  const activeObserved =
+    isLanding || (chapter === "backtest" && hasCsi)
+      ? proofEvent === "2017" && hasValidation
+        ? observed2017
+        : observed
+      : null;
+  const activeModeled =
+    isLanding || chapter === "backtest"
+      ? proofEvent === "2017" && hasValidation
+        ? modeled2017
+        : modeled
+      : null;
+  const mapHazard =
+    chapter === "backtest"
+      ? riskView === "with_plan"
+        ? riskWithPlan || hazard
+        : riskBefore || hazard
+      : hazard;
 
   const aucCopy =
     signal?.landslide_trigger.auc == null
@@ -452,720 +536,338 @@ export default function App() {
       : `Landslide is a held-out rainfall classifier (AUC ${signal.landslide_trigger.auc.toFixed(
           3
         )}, n=${signal.landslide_trigger.n_events}), not a physical Caine threshold.`;
-  const counterfactual = backtest?.counterfactual;
-  const hasCounterfactual =
-    counterfactual?.people_exposed_baseline != null &&
-    counterfactual.people_exposed_with_plan != null;
-  const activeObserved = proofEvent === "2017" ? observed2017 : observed;
-  const activeModeled = proofEvent === "2017" ? modeled2017 : modeled;
-  const cityName = cities.find((row) => row.id === city)?.name || city;
-  const jrcCsi = backtest?.baselines?.jrc_seasonal_water?.csi;
-  const elevCsi = backtest?.baselines?.area_matched_elevation?.csi;
-  const modelBeatsJrc =
-    backtest?.critical_success_index != null &&
-    jrcCsi != null &&
-    backtest.critical_success_index > jrcCsi;
-  const skillRows = (proofEvent === "2017" ? backtest?.validation?.skill_vs_scale : backtest?.skill_vs_scale) || [];
-  const scatter = replication?.agreement?.scatter || [];
-  const knapsackPct =
-    plan?.optimality?.gap_pct == null ? null : Math.max(0, 100 - plan.optimality.gap_pct);
-  const equityLine =
-    pickedRow?.low_income_score != null && pickedRow.low_income_score >= 0.55
-      ? `Serves a flagged low-income cell (weight ×${metric(pickedRow.equity_weight, 3)}).`
-      : null;
 
-  const steps: { id: FlowStep; label: string }[] = [
-    { id: "noise", label: "1 · Noise" },
-    { id: "signal", label: "2 · Tail" },
-    { id: "plan", label: "3 · Plant" },
-    { id: "backtest", label: "4 · Proof" },
-    { id: "ask", label: "Ask" },
-    { id: "report", label: "Export" },
-  ];
+  const rainfallHeadline = signal
+    ? signal.headline.new_return_period_yrs == null
+      ? city === "koshi"
+        ? "Loading the rainfall tail…"
+        : "City screening pack — flood CSI not invented"
+      : `The old 100-year rain depth now fits a ${metric(
+          signal.headline.new_return_period_yrs,
+          2
+        )}-year recurrence`
+    : busy
+      ? "Loading the rainfall tail…"
+      : "Rainfall tail unavailable in this pack";
+  const rainfallLede =
+    city === "koshi"
+      ? `This headline uses the Nepal-adjacent subset. The ${metric(
+          signal?.stations_processed,
+          0
+        )}-station High Mountain Asia pool is the scale and negative-control story; it did not identify a recurrence shift.`
+      : "This pack is a screening run on public DEM / OSM / ERA5-Land. Flood CSI is null unless a SAR scene is wired.";
+  const headline =
+    chapter === "plan"
+      ? planHeadline(plan)
+      : chapter === "report"
+        ? "Export the preventive plan"
+        : chapter === "ask"
+          ? "Ask why a preventive measure was selected"
+          : chapter === "backtest"
+            ? hasCsi
+              ? `Proof against radar · CSI ${metric(backtest?.critical_success_index, 3)}`
+              : "Proof · CSI not in this pack"
+            : chapter === "noise"
+              ? "The archive is noisy. We counted the gaps."
+              : rainfallHeadline;
+  const lede =
+    chapter === "plan"
+      ? planLede(plan)
+      : chapter === "report"
+        ? "Download the screening plan, government scorecard, or citizen brief a district can take to a funder."
+        : chapter === "ask"
+          ? "Answers are grounded in plan.json, candidates, and the proof artifacts — never invented."
+          : chapter === "backtest"
+            ? hasCsi
+              ? "Toggle observed vs modeled. Flip 2017 for the frozen transfer. We report the miss vs JRC."
+              : "This city pack has no SAR scene, so CSI stays null instead of borrowing Koshi’s score."
+            : chapter === "noise"
+              ? "498 stations across High Mountain Asia, parsed on Voloridge compute. Missing years are the point."
+              : rainfallLede;
+
+  const askPrompts = useMemo(() => {
+    const prompts = [...ASK_PROMPTS];
+    if (picked) {
+      prompts.unshift(`Why was preventive measure ${picked} selected before the next-best candidate site?`);
+    }
+    return prompts.slice(0, 4);
+  }, [picked]);
+
+  const chapterBody = (() => {
+    if (busy && !signal && !plan) {
+      return <LoadingBlock label={`Loading the ${cityName} evidence pack…`} />;
+    }
+    if (packError && !plan && !signal) {
+      return (
+        <EmptyState
+          title="Pack failed to load"
+          body={packError}
+          action="Retry"
+          onAction={() => setReloadToken((value) => value + 1)}
+        />
+      );
+    }
+    if (chapter === "noise") return <NoiseChapter />;
+    if (chapter === "signal") {
+      return signal ? (
+        <TailChapter
+          city={city}
+          cityName={cityName}
+          signal={signal}
+          replication={replication}
+          rankings={rankings}
+          showEra5={showEra5}
+        />
+      ) : (
+        <EmptyState
+          title="Tail not in this pack"
+          body="signal.json did not load. Koshi still has the frozen rainfall-tail headline on disk."
+          action="Retry"
+          onAction={() => setReloadToken((value) => value + 1)}
+        />
+      );
+    }
+    if (chapter === "plan") {
+      return plan ? (
+        <PlantChapter
+          plan={plan}
+          candidates={candidates}
+          scenarios={scenarios}
+          budget={budget}
+          mode={mode}
+          optimizerState={optimizerState}
+          busy={busy}
+          picked={picked}
+          onBudget={setBudget}
+          onMode={setMode}
+          onRecalculate={recalculate}
+          onPick={(id) => {
+            setPicked(id);
+            setFocusId(id);
+            setQ(`Why was preventive measure ${id} selected?`);
+            setA("");
+            setAnswerMeta("");
+            stopDemo();
+          }}
+        />
+      ) : (
+        <EmptyState
+          title="Plan not loaded"
+          body="The $2M screening portfolio lives in demo_cache/plan.json. Retry, or stay on Koshi."
+          action="Retry"
+          onAction={() => setReloadToken((value) => value + 1)}
+        />
+      );
+    }
+    if (chapter === "backtest") {
+      return (
+        <ProofChapter
+          backtest={backtest}
+          overlay={overlay}
+          proofEvent={hasValidation ? proofEvent : "2024"}
+          riskView={riskView}
+          hasValidation={hasValidation}
+          hasCsi={hasCsi}
+          onOverlay={setOverlay}
+          onProofEvent={setProofEvent}
+          onRiskView={setRiskView}
+        />
+      );
+    }
+    if (chapter === "ask") {
+      return (
+        <AskChapter
+          q={q}
+          a={a}
+          answerMeta={answerMeta}
+          asking={asking}
+          attribution={attribution}
+          selected={measureDetails}
+          prompts={askPrompts}
+          onQ={setQ}
+          onAsk={onAsk}
+          onAskPrompt={askQuestion}
+        />
+      );
+    }
+    if (chapter === "report") {
+      return (
+        <ExportChapter
+          city={city}
+          live={optimizerState === "live"}
+          sites={plan?.selected.length}
+          spend={plan?.totals.cost_usd}
+          peopleRisk={plan?.totals.people_protected}
+          carbon={plan?.totals.co2_t_10yr}
+        />
+      );
+    }
+    return null;
+  })();
+
+  const activeBeat = demoBeat != null ? DEMO_BEATS[demoBeat] : null;
 
   return (
-    <div className="app">
+    <div className={`app ${isLanding ? "landing-mode" : "console-mode"} ${demoBeat != null ? "demo-mode" : ""}`}>
       <div className="map-wrap">
         <HazardMap
-          hazard={
-            tab === "backtest"
-              ? riskView === "with_plan"
-                ? riskWithPlan || hazard
-                : riskBefore || hazard
-              : hazard
+          city={isLanding ? "koshi" : city}
+          hazard={mapHazard}
+          candidates={
+            isLanding ? candidates.filter((row) => selectedIds.has(row.parcel_id)) : candidates
           }
-          candidates={candidates}
           selectedIds={selectedIds}
+          focusId={isLanding ? null : focusId}
           onSelect={onSelect}
           observed={activeObserved}
           modeled={activeModeled}
-          overlay={tab === "backtest" ? overlay : "none"}
+          stations={stations}
+          overlay={mapOverlay}
+          showStations={showStations}
+          showParcels={showParcels}
+          showHazard={!isLanding}
+          hazardOpacity={chapter === "noise" || chapter === "signal" ? 0.16 : 0.4}
+          emphasis={isLanding}
+          chrome={!isLanding}
         />
-        <div className="map-legend">
-          Risk cells: annual expected people-risk (darker = higher). Coloured dots are selected
-          preventive measures; pale dots are candidate intervention sites.
-          {tab === "backtest" && (
-            <>
-              <br />
-              Risk surface = {riskView === "with_plan" ? "with-plan counterfactual" : "current model"}.
-              Blue fill = observed water · gold outline = modeled flood
-              {proofEvent === "2017" ? " (2017 transfer event)." : " (2024 calibration event)."}
-            </>
-          )}
-        </div>
+        {!isLanding && (
+          <div className="map-legend">
+            {chapter === "backtest"
+              ? `Risk surface = ${
+                  riskView === "with_plan" ? "with-plan counterfactual" : "current model"
+                }. Blue fill = observed water · gold outline = modeled flood${
+                  proofEvent === "2017" && hasValidation
+                    ? " (2017 transfer event)."
+                    : hasCsi
+                      ? " (2024 calibration event)."
+                      : " (pack modeled extent only)."
+                }`
+              : showStations
+                ? "Gold dots = Nepal-adjacent NOAA ISD stations used for the rainfall-tail headline. Hazard at low opacity."
+                : "Coloured dots are selected preventive measures; pale dots are candidate intervention sites."}
+          </div>
+        )}
+        {busy && !isLanding && (
+          <div className="map-busy" role="status">
+            Loading {cityName}…
+          </div>
+        )}
       </div>
 
-      <aside className="side">
-        <p className="brand">
-          RootLedger · {cityName}
-          <select
-            className="city-select"
-            value={city}
-            onChange={(event) => setCity(event.target.value)}
-            aria-label="City pack"
+      {isLanding ? (
+        <Landing
+          signal={signal}
+          backtest={backtest}
+          plan={plan}
+          cities={cities}
+          busy={busy}
+          onEnter={(nextCity) => goConsole(nextCity, "plan")}
+          onPlayDemo={playDemo}
+        />
+      ) : (
+        <>
+          <TopBar
+            city={city}
+            cities={cities}
+            optimizerState={optimizerState}
+            onCity={(next) => {
+              setCity(next);
+              stopDemo();
+            }}
+            onHome={() => {
+              stopDemo();
+              setCity("koshi");
+              setView("landing");
+            }}
+            onPlayDemo={playDemo}
+          />
+          <ChapterDock
+            chapter={chapter}
+            onChapter={(next) => {
+              setChapter(next);
+              stopDemo();
+            }}
+            headline={headline}
+            lede={lede}
+            banner={
+              chapter === "plan" ? (
+                <div className={`optimizer-status ${optimizerState === "live" ? "live" : "frozen"}`}>
+                  {optimizerState === "live" ? (
+                    <>
+                      <b>Live optimizer.</b> Recalculate is enabled — this can overwrite the booth plan.
+                    </>
+                  ) : (
+                    <>
+                      <b>Frozen pack.</b> Budget slider and Recalculate are locked so a booth click cannot POST /optimize.
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="banner">
+                  <strong>Screening-grade and explicit.</strong> {aucCopy}{" "}
+                  {!hasCsi
+                    ? "Flood CSI is unavailable in this pack; it is not replaced with the Koshi score."
+                    : `The HAND proxy scores CSI ${backtest?.critical_success_index?.toFixed(3)} on the ${
+                        backtest?.event_date || "calibration"
+                      } scene (in-sample). ${
+                        hasValidation && backtest?.validation?.critical_success_index != null
+                          ? `Frozen out-of-sample / transfer CSI ${backtest.validation.critical_success_index.toFixed(3)}.`
+                          : ""
+                      }`}
+                </div>
+              )
+            }
           >
-            {cities.map((row) => (
-              <option key={row.id} value={row.id}>
-                {row.name}
-              </option>
-            ))}
-          </select>
-        </p>
-        <p className="result-scope">
-          {city === "koshi"
-            ? "Nepal-adjacent GEV · fitted comparison, not a forecast"
-            : "City screening pack · ERA5-Land at centroid, CSI not invented"}
-        </p>
-        <h1>
-          {signal
-            ? signal.headline.new_return_period_yrs == null
-              ? city === "koshi"
-                ? "Loading the rainfall tail…"
-                : "City screening pack — flood CSI not invented"
-              : `The old 100-year rain depth now fits a ${metric(
-                  signal.headline.new_return_period_yrs,
-                  2
-                )}-year recurrence`
-            : "Loading the rainfall tail…"}
-        </h1>
-        <p className="lede">
-          {city === "koshi"
-            ? `This headline uses the Nepal-adjacent subset. The ${metric(
-                signal?.stations_processed,
-                0
-              )}-station High Mountain Asia pool is the scale and negative-control story; it did not identify a recurrence shift.`
-            : "This pack is a screening run on public DEM / OSM / ERA5-Land. Flood CSI is null unless a SAR scene is wired."}
-        </p>
-
-        <div className="banner">
-          <strong>Screening-grade and explicit.</strong> {aucCopy}{" "}
-          {backtest?.critical_success_index == null
-            ? "Flood CSI is unavailable; it is not replaced with zero."
-            : `The HAND proxy scores CSI ${backtest.critical_success_index.toFixed(3)} on the ${
-                backtest.event_date || "calibration"
-              } scene (in-sample). ${
-                backtest.validation?.critical_success_index != null
-                  ? `Frozen out-of-sample / transfer CSI ${backtest.validation.critical_success_index.toFixed(3)}.`
-                  : ""
-              }`}
-        </div>
-
-        <div className="kpis">
-          <div className="kpi">
-            <span>Spend / budget</span>
-            <b>{plan ? `${money(plan.totals.cost_usd)} / ${money(plan.budget_usd)}` : "—"}</b>
-          </div>
-          <div className="kpi">
-            <span>Annual people-risk avoided</span>
-            <b>{plan ? risk(plan.totals.people_protected) : "—"}</b>
-          </div>
-          <div className="kpi">
-            <span>tCO₂ / 10 yr</span>
-            <b>{plan ? metric(plan.totals.co2_t_10yr, 0) : "—"}</b>
-          </div>
-          <div className="kpi">
-            <span>Income / yr</span>
-            <b>{plan ? money(plan.totals.income_usd_yr) : "—"}</b>
-          </div>
-        </div>
-
-        <div className="tabs" aria-label="Judged demo flow">
-          {steps.map((step) => (
-            <button
-              key={step.id}
-              className={tab === step.id ? "on" : ""}
-              onClick={() => setTab(step.id)}
-            >
-              {step.label}
-            </button>
-          ))}
-        </div>
-
-        {tab === "noise" && <NoisePanel />}
-
-        {tab === "signal" && signal && (
-          <>
-            {city === "koshi" ? (
-            <div className="claim-grid three">
-              <div className="claim-card primary">
-                <span>Nepal-adjacent decision region</span>
-                <b>
-                  {signal.headline.old_return_period_yrs}-yr depth →{" "}
-                  {metric(signal.headline.new_return_period_yrs, 2)}-yr recurrence
-                </b>
-                <small>
-                  {signal.headline.early_period?.join("–") || "early sample"} evaluated in{" "}
-                  {signal.headline.late_period?.join("–") || "late sample"}
-                </small>
-              </div>
-              <div className="claim-card control">
-                <span>HMA pooled negative control</span>
-                <b>No recurrence shift identified</b>
-                <small>
-                  We did not force the catchment headline onto all{" "}
-                  {metric(signal.stations_processed, 0)} stations.
-                </small>
-              </div>
-              {replication && (
-                <div className="claim-card oos">
-                  <span>Independent check · ERA5-Land</span>
-                  <b>
-                    {replication.verdict || "unavailable"} (
-                    {metric(replication.era5_headline_new_return_yrs, 2)}-yr vs{" "}
-                    {metric(replication.isd_headline_new_return_yrs, 2)}-yr)
-                  </b>
-                  <small>{replication.verdict_note || replication.independence}</small>
-                </div>
-              )}
-            </div>
-            ) : (
-            <div className="claim-grid">
-              <div className="claim-card primary">
-                <span>{cityName} screening GEV</span>
-                <b>
-                  {signal.headline.new_return_period_yrs == null
-                    ? "No credible intensification identified"
-                    : `${signal.headline.old_return_period_yrs}-yr depth → ${metric(
-                        signal.headline.new_return_period_yrs,
-                        2
-                      )}-yr recurrence`}
-                </b>
-                <small>
-                  ERA5-Land / public DEM pack. Flood CSI is null and is not invented.
-                </small>
-              </div>
-            </div>
-            )}
-
-            <p className="detail">
-              {city === "koshi"
-                ? `HMA scale: ${metric(signal.stations_processed, 0)} stations · ${metric(
-                    signal.station_years,
-                    0
-                  )} station-years. HMA-pooled annual-max trend:`
-                : `This pack: ${metric(signal.stations_processed, 0)} series · ${metric(
-                    signal.station_years,
-                    0
-                  )} station-years. Annual-max trend:`}{" "}
-              <b>
-                +{metric(signal.trend.slope_mm_per_decade, 3)} mm/decade (p=
-                {signal.trend.p_value.toLocaleString()})
-              </b>
-              {signal.lake_growth.length
-                ? ` · Lakes: ${signal.lake_growth
-                    .map((lake) => `${lake.name} +${metric(lake.pct_growth)}%`)
-                    .join(" · ")}`
-                : ""}
-            </p>
-
-            <div className="chart-head">
-              <b>{city === "koshi" ? "HMA-pooled return-level curve" : "City return-level curve"}</b>
-              <span>
-                {city === "koshi"
-                  ? "Negative control · not the catchment subset result"
-                  : "Screening GEV on this pack’s rainfall series"}
-              </span>
-            </div>
-            <div className="chart">
-              <ResponsiveContainer>
-                <ComposedChart data={rl} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="rgba(143,160,184,0.15)" />
-                  <XAxis dataKey="rp" stroke="#8fa0b8" tickFormatter={(value) => `${value}y`} />
-                  <YAxis stroke="#8fa0b8" />
-                  <Tooltip
-                    contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="hi"
-                    stroke="none"
-                    fill="#3ee0c0"
-                    fillOpacity={0.12}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="lo"
-                    stroke="none"
-                    fill="#070b14"
-                    fillOpacity={1}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="mm"
-                    stroke="#3ee0c0"
-                    strokeWidth={2}
-                    dot
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-            <p className="detail">
-              Pooled GEV return levels (mm) with bootstrap 95% interval.{" "}
-              {signal.provenance?.headline_note ||
-                "The pooled fit is shown separately from the catchment headline."}
-            </p>
-            {city === "koshi" && scatter.length > 0 && (
-              <>
-                <div className="chart-head">
-                  <b>ISD vs ERA5 mean annual maximum</b>
-                  <span>
-                    r={metric(replication?.agreement?.annmax_pearson_r, 3)} · bias{" "}
-                    {metric(replication?.agreement?.mean_bias_mm, 1)} mm ·{" "}
-                    {metric(replication?.agreement?.stations_compared, 0)} stations
-                  </span>
-                </div>
-                <div className="chart">
-                  <ResponsiveContainer>
-                    <ScatterChart margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(143,160,184,0.15)" />
-                      <XAxis
-                        dataKey="isd_mm"
-                        name="ISD"
-                        stroke="#8fa0b8"
-                        unit=" mm"
-                        type="number"
-                      />
-                      <YAxis
-                        dataKey="era5_mm"
-                        name="ERA5"
-                        stroke="#8fa0b8"
-                        unit=" mm"
-                        type="number"
-                      />
-                      <ZAxis range={[40, 40]} />
-                      <Tooltip
-                        contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
-                        formatter={(value) => [`${Number(value).toFixed(1)} mm`]}
-                      />
-                      <Scatter data={scatter} fill="#3ee0c0" />
-                    </ScatterChart>
-                  </ResponsiveContainer>
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {tab === "plan" && plan && (
-          <>
-            <div className={`optimizer-status ${optimizerState}`}>
-              {optimizerState === "live" && (
-                <>
-                  <b>Live optimizer connected.</b> Budget and objective changes recalculate the
-                  preventive portfolio through the API.
-                </>
-              )}
-              {optimizerState === "checking" && (
-                <>
-                  <b>Checking the optimizer…</b> Controls stay locked until a live response arrives.
-                </>
-              )}
-              {optimizerState === "frozen" && (
-                <>
-                  <b>Frozen offline plan.</b> The API is unavailable, so this cached{" "}
-                  {money(plan.budget_usd)} {plan.mode} result is shown unchanged. Budget and CVaR are
-                  disabled rather than pretending to recalculate.
-                </>
-              )}
-              {optimizerState === "unavailable" && (
-                <>
-                  <b>Optimizer unavailable.</b> No control can imply a result that was not computed.
-                </>
-              )}
-            </div>
-
-            <label className="row">
-              <span>
-                Budget {money(budget)} {busy ? "· optimizing…" : ""}
-              </span>
-              <span>
-                {metric(plan.selected.length, 0)} preventive measures · {plan.mode}
-              </span>
-            </label>
-            <input
-              className="slider"
-              type="range"
-              min={250000}
-              max={2000000}
-              step={50000}
-              value={budget}
-              disabled={optimizerState !== "live" || busy}
-              onChange={(event) => setBudget(Number(event.target.value))}
-              onPointerUp={(event) =>
-                rerun(Number((event.target as HTMLInputElement).value), mode)
-              }
-              onKeyUp={(event) => {
-                if (
-                  ["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(
-                    event.key
-                  )
-                ) {
-                  rerun(Number((event.target as HTMLInputElement).value), mode);
-                }
+            {chapterBody}
+          </ChapterDock>
+          {measureDetails && chapter === "plan" && demoBeat == null && (
+            <Inspector
+              details={measureDetails}
+              selected={Boolean(pickedRow)}
+              onAsk={() => {
+                setChapter("ask");
+                stopDemo();
+              }}
+              onClose={() => {
+                setPicked(null);
+                setFocusId(null);
               }}
             />
-            <label className="row">
-              <span>Portfolio objective</span>
-              <select
-                value={mode}
-                disabled={optimizerState !== "live" || busy}
-                onChange={(event) =>
-                  rerun(budget, event.target.value as OptimizationMode)
-                }
-              >
-                <option value="expected">Expected people-risk</option>
-                <option value="cvar">CVaR · worst 10% tail</option>
-              </select>
-            </label>
-            <p className="detail">
-              CVaR uses the same logic as a trading-book tail: prioritize measures that still work
-              in the worst 10% of modeled climate draws.
-              {plan.cvar?.tail_people_protected != null
-                ? ` Cached worst-tail annual people-risk avoided: ${risk(
-                    plan.cvar.tail_people_protected
-                  )}.`
-                : ""}
-            </p>
-
-            <p className="equity-chip">
-              Equity-weighted: cells flagged low-income carry up to 1.5× weight in expected-loss
-              ranking (`equity_weight` in hazard.geojson).
-            </p>
-            <div className="mix">
-              {Object.entries(
-                plan.selected.reduce<
-                  Record<string, { count: number; peopleRisk: number; cost: number }>
-                >((accumulator, selected) => {
-                  const kind =
-                    candidates.find(
-                      (candidate) => candidate.parcel_id === selected.parcel_id
-                    )?.type || "unknown";
-                  const row = accumulator[kind] || { count: 0, peopleRisk: 0, cost: 0 };
-                  row.count += 1;
-                  row.peopleRisk += selected.avoided_eal_people;
-                  row.cost += selected.cost_usd;
-                  accumulator[kind] = row;
-                  return accumulator;
-                }, {})
-              )
-                .sort((left, right) => right[1].peopleRisk - left[1].peopleRisk)
-                .map(([kind, row]) => (
-                  <div className="mix-row" key={kind}>
-                    <b>{humanize(kind)}</b>
-                    <span>
-                      {row.count} sites · {money(row.cost)} · {risk(row.peopleRisk)} annual
-                      people-risk avoided
-                    </span>
-                  </div>
-                ))}
-            </div>
-
-            <div className="chart">
-              <ResponsiveContainer>
-                <ComposedChart
-                  data={plan.frontier}
-                  margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
-                >
-                  <CartesianGrid stroke="rgba(143,160,184,0.15)" />
-                  <XAxis
-                    dataKey="budget_usd"
-                    stroke="#8fa0b8"
-                    tickFormatter={(value) => `$${value / 1e6}M`}
-                  />
-                  <YAxis stroke="#8fa0b8" tickFormatter={(value) => metric(value, 0)} />
-                  <Tooltip
-                    contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
-                    formatter={(value) => [
-                      risk(Number(value)),
-                      "Annual people-risk avoided",
-                    ]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="people_protected"
-                    stroke="#3ee0c0"
-                    strokeWidth={2}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-            {knapsackPct != null && (
-              <p className="detail">
-                Greedy achieves ≥{metric(knapsackPct, 1)}% of the relaxed knapsack upper bound
-                {plan.optimality?.note ? ` — ${plan.optimality.note}` : "."}
-              </p>
-            )}
-
-            {measureDetails && (
-              <section className="measure-card" aria-label={`Details for ${measureDetails.id}`}>
-                <div className="measure-title">
-                  <div>
-                    <span>
-                      {pickedRow
-                        ? "Selected preventive measure"
-                        : "Candidate intervention site"}
-                    </span>
-                    <h2>{measureDetails.id}</h2>
-                  </div>
-                  <button onClick={() => setTab("ask")}>Ask about this measure</button>
-                </div>
-                <dl>
-                  <div>
-                    <dt>What</dt>
-                    <dd>{measureDetails.what}</dd>
-                  </div>
-                  <div>
-                    <dt>Why here</dt>
-                    <dd>{measureDetails.why}</dd>
-                  </div>
-                  <div>
-                    <dt>Cost</dt>
-                    <dd>{measureDetails.cost}</dd>
-                  </div>
-                  <div>
-                    <dt>Modeled benefit</dt>
-                    <dd>{measureDetails.benefit}</dd>
-                  </div>
-                  <div>
-                    <dt>Assumption</dt>
-                    <dd>{measureDetails.assumption}</dd>
-                  </div>
-                  <div>
-                    <dt>Verification</dt>
-                    <dd>{measureDetails.verification}</dd>
-                  </div>
-                  {equityLine && (
-                    <div>
-                      <dt>Equity</dt>
-                      <dd>{equityLine}</dd>
-                    </div>
-                  )}
-                </dl>
-              </section>
-            )}
-          </>
-        )}
-
-        {tab === "backtest" && (
-          <>
-            <div className="proof-controls">
-              <div>
-                <b>Observed / modeled overlay</b>
-                <span>Control the map while reviewing proof</span>
-              </div>
-              <div className="segmented" role="group" aria-label="Flood overlay">
-                {(["none", "observed", "modeled", "both"] as const).map((value) => (
-                  <button
-                    key={value}
-                    className={overlay === value ? "on" : ""}
-                    onClick={() => setOverlay(value)}
-                  >
-                    {value}
-                  </button>
-                ))}
-              </div>
-              <div>
-                <b>Event</b>
-                <span>2024 in-sample vs 2017 frozen transfer</span>
-              </div>
-              <div className="segmented risk-scenario" role="group" aria-label="Proof event">
-                <button
-                  className={proofEvent === "2024" ? "on" : ""}
-                  onClick={() => setProofEvent("2024")}
-                >
-                  2024 calibration
-                </button>
-                <button
-                  className={proofEvent === "2017" ? "on" : ""}
-                  onClick={() => setProofEvent("2017")}
-                  disabled={!backtest?.validation}
-                >
-                  2017 transfer
-                </button>
-              </div>
-              <div>
-                <b>Preventive impact surface</b>
-                <span>Current modeled risk vs literature-effect counterfactual</span>
-              </div>
-              <div className="segmented risk-scenario" role="group" aria-label="Risk scenario">
-                <button
-                  className={riskView === "before" ? "on" : ""}
-                  onClick={() => setRiskView("before")}
-                >
-                  current risk
-                </button>
-                <button
-                  className={riskView === "with_plan" ? "on" : ""}
-                  onClick={() => setRiskView("with_plan")}
-                >
-                  with plan · simulated
-                </button>
-              </div>
-            </div>
-
-            <div className="claim-grid">
-              <div className="claim-card primary">
-                <span>Calibration · {backtest?.event_date || "in-sample"}</span>
-                <b>
-                  CSI {metric(backtest?.critical_success_index, 3)} · POD{" "}
-                  {metric(backtest?.hit_rate_pod, 3)} · FAR {metric(backtest?.false_alarm_ratio, 3)}
-                </b>
-                <small>In-sample: stage was fit on this event. Not independent validation.</small>
-              </div>
-              <div className="claim-card oos">
-                <span>Validation · {backtest?.validation?.event_date || "second event"}</span>
-                <b>
-                  {backtest?.validation?.critical_success_index == null
-                    ? "No second-event CSI"
-                    : `CSI ${metric(backtest.validation.critical_success_index, 3)} · POD ${metric(
-                        backtest.validation.hit_rate_pod,
-                        3
-                      )} · FAR ${metric(backtest.validation.false_alarm_ratio, 3)}`}
-                </b>
-                <small>
-                  {backtest?.validation?.note ||
-                    "Out-of-sample: frozen 2024 model, zero refit."}
-                </small>
-              </div>
-            </div>
-            <p className="detail">
-              {modelBeatsJrc
-                ? `Beats climatology baseline (JRC seasonal water): model CSI ${metric(
-                    backtest?.critical_success_index,
-                    3
-                  )} vs baseline ${metric(jrcCsi, 3)}.`
-                : `Does not beat JRC seasonal-water climatology on the calibration event (model CSI ${metric(
-                    backtest?.critical_success_index,
-                    3
-                  )} vs JRC ${metric(jrcCsi, 3)}; elevation baseline ${metric(elevCsi, 3)}). We report the miss.`}
-            </p>
-            {backtest?.spatial_holdout?.critical_success_index != null && (
-              <p className="detail">
-                2024 spatial holdout (west-fit / east-test on the Koshi grid): CSI{" "}
-                {metric(backtest.spatial_holdout.critical_success_index, 3)}. Same storm,
-                spatial split only — not a second event.
-              </p>
-            )}
-            {backtest?.permanent_water_mask && (
-              <p className="truth-note">{backtest.permanent_water_mask}</p>
-            )}
-            {skillRows.length > 0 && (
-              <>
-                <div className="chart-head">
-                  <b>Skill vs aggregation scale</b>
-                  <span>{proofEvent === "2017" ? "2017 transfer" : "2024 calibration"}</span>
-                </div>
-                <div className="chart">
-                  <ResponsiveContainer>
-                    <ComposedChart data={skillRows} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(143,160,184,0.15)" />
-                      <XAxis dataKey="approx_km" stroke="#8fa0b8" tickFormatter={(v) => `${v} km`} />
-                      <YAxis stroke="#8fa0b8" domain={[0, 1]} />
-                      <Tooltip
-                        contentStyle={{ background: "#10182a", border: "1px solid #2a3a55" }}
-                      />
-                      <Line type="monotone" dataKey="csi" stroke="#3ee0c0" strokeWidth={2} name="CSI" />
-                      <Line type="monotone" dataKey="pod" stroke="#38bdf8" strokeWidth={1.5} name="POD" />
-                      <Line type="monotone" dataKey="far" stroke="#f0c14b" strokeWidth={1.5} name="FAR" />
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                </div>
-              </>
-            )}
-
-            {hasCounterfactual ? (
-              <>
-                <div className="counterfactual">
-                  <div>
-                    <span>Before preventive plan</span>
-                    <b>{risk(counterfactual?.people_exposed_baseline)}</b>
-                    <small>modeled event people-exposure units</small>
-                  </div>
-                  <div className="arrow">→</div>
-                  <div>
-                    <span>With preventive plan</span>
-                    <b>{risk(counterfactual?.people_exposed_with_plan)}</b>
-                    <small>
-                      modeled · {metric(counterfactual?.reduction_pct)}% lower
-                    </small>
-                  </div>
-                </div>
-                <p className="truth-note">
-                  Counterfactual, not an observed outcome and not unique lives saved.{" "}
-                  {counterfactual?.note}
-                </p>
-              </>
-            ) : (
-              <div className="banner">
-                <strong>No counterfactual available.</strong> The UI will not substitute the
-                portfolio total or invent a before/after result.
-              </div>
-            )}
-          </>
-        )}
-
-        {tab === "ask" && (
-          <div className="chat">
-            <div className="msg">
-              {a ||
-                "Ask about the rainfall tail, plan, proof/CSI, counterfactual, or click a selected measure. Offline answers are composed only from the cached artifacts."}
-            </div>
-            {answerMeta && <p className="answer-meta">{answerMeta}</p>}
-            <form onSubmit={onAsk}>
-              <input value={q} onChange={(event) => setQ(event.target.value)} />
-              <button type="submit" disabled={asking || !q.trim()}>
-                {asking ? "Grounding…" : "Ask"}
-              </button>
-            </form>
+          )}
+          {activeBeat && (
+            <DemoCue
+              beat={demoBeat ?? 0}
+              total={DEMO_BEATS.length}
+              title={activeBeat.title}
+              cue={activeBeat.cue}
+              auto={demoAuto}
+              onPrev={() => stepDemo(-1)}
+              onNext={() => stepDemo(1)}
+              onStop={stopDemo}
+              onToggleAuto={() => setDemoAuto((value) => !value)}
+            />
+          )}
+          <div className="ticker glass">
+            <span className="ev model">model output</span>
+            <span>
+              Plan <b>{plan ? `${metric(plan.selected.length, 0)} measures` : "—"}</b>
+            </span>
+            <span>
+              Spend <b>{plan ? money(plan.totals.cost_usd) : "—"}</b>
+            </span>
+            <span>
+              People-risk <b>{plan ? risk(plan.totals.people_protected) : "—"}</b>
+            </span>
+            <span>
+              tCO₂ / 10 yr <b>{plan ? metric(plan.totals.co2_t_10yr, 0) : "—"}</b>
+            </span>
+            <span>
+              Income / yr <b>{plan ? money(plan.totals.income_usd_yr) : "—"}</b>
+            </span>
+            <span className="ticker-hint">1–6 chapters · D demo · Esc landing</span>
           </div>
-        )}
-
-        {tab === "report" && (
-          <>
-            <div className="export-actions">
-              <button className="dl" onClick={downloadNote}>
-                Download prevention plan
-              </button>
-              <a
-                className="dl"
-                href={
-                  city === "koshi"
-                    ? "/demo_cache/preventive_measures_plan.pdf"
-                    : `/demo_cache/cities/${city}/preventive_measures_plan.pdf`
-                }
-                download
-              >
-                Download cached PDF
-              </a>
-            </div>
-            <p className="detail">
-              The PDF is served from the local demo cache, so the hand-off still works without the
-              API or network.
-            </p>
-            <pre className="report">{note}</pre>
-          </>
-        )}
-      </aside>
+        </>
+      )}
     </div>
   );
 }

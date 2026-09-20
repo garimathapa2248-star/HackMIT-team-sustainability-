@@ -3,6 +3,22 @@
 This is the only current spoken demo script. It supersedes the older demo wording in `PLAN.md §11`.
 Do not quote cached concept-note prose or `households_benefiting`.
 
+## 90-second booth path (v1)
+
+Open `http://127.0.0.1:5173/?v=1`. Click **Play 90-second demo** (or press `D`). Read the cue bar; `→` advances.
+
+Spoken, compressed:
+
+1. **Proof 2024** — “Radar flood, 27 Sep 2024. CSI 0.053. We lose to JRC 0.067 and we say so.”
+2. **Proof 2017** — “Frozen model on a flood it never saw. Transfer CSI 0.088. Not the same valley.”
+3. **Noise** — “498 NOAA stations, 12,066 station-years, parsed on Voloridge compute. Gaps counted, not smoothed.”
+4. **Tail** — “Old 100-year rain now 7.75 years. Nepal ranks first in this decision region. HMA pool: no shift.”
+5. **Plan** — “$2M, 62 sites, 26,306 people-risk / yr. Screening BCR, NPV, a three-phase pathway. Equity in the objective.”
+6. **Ask** — a chip fires automatically. “Answers only from artifacts.”
+7. **Export** — “The screening plan a district takes to a funder.”
+
+Keyboard: `1`–`6` chapters, `Esc` landing. Full 3:20 script below if you have time.
+
 ## Value lock
 
 These values are locked to the current root artifacts:
@@ -26,7 +42,7 @@ Stage directions are in brackets and are not spoken. Rehearse to the timestamp b
 
 ### 0:00–0:20 — Hook
 
-[Map, 2024 UNOSAT observed layer.]
+[Optional 0:00–0:15 landing: “Plant 62 sites. Next flood, smaller.” Three numbers + Rain / Radar / Plant. CTA **See the plan** opens Plan. Judged path: `?console=1` skips landing onto Proof.]
 
 “On 27 September 2024 the Koshi flooded. Monsoon clouds blind optical satellites, so this is radar — UNOSAT’s
 Sentinel-1 flood extent. Everyone else builds the warning for next time. We built the plan for what to *plant*
@@ -34,7 +50,7 @@ so next time is smaller.”
 
 ### 0:20–0:50 — Proof, twice
 
-[Toggle modeled/observed; flip event toggle to 2017 transfer.]
+[Proof chapter (default). Toggle modeled/observed; flip event toggle to 2017 transfer.]
 
 “Our screening flood model was calibrated on this one event — in-sample CSI 0.053. It beats a naïve elevation
 baseline (CSI 0.001) and **does not beat** JRC seasonal-water climatology (CSI 0.067). We report the miss.
@@ -45,35 +61,40 @@ falls, it does not rise — the curve is on the Proof tab.”
 
 ### 0:50–1:20 — The signal
 
-[Signal tab, return-level curve, ERA5 card.]
+[Tail chapter, return-level curve, ERA5 card. Gold dots are the 73 real ISD coordinates.]
 
 “Upstream: 498 NOAA stations, 12,066 station-years, parsed on Voloridge’s 48-core box — sentinels, broken
 accumulation windows, duplicate days, all cleaned and counted. Extreme-value theory, the same tail math as
-VaR. Nepal-adjacent result: the old 1-in-100-year daily rainfall now fits a **7.75-year** recurrence. Two
+VaR. Nepal-adjacent result: the old 1-in-100-year daily rainfall now fits a **7.75-year** recurrence. Inside this
+decision region Nepal ranks first on rainfall-tail intensification; the HMA pool as a whole did not shift. Two
 controls: the full-HMA pool shows **no shift** — we published our own miss — and an independent re-fit on
 ERA5-Land at the same station coordinates **partially replicates** (16.72-year vs 7.75-year). Magnitudes
 disagree; we show the scatter instead of averaging it away. IMERG was not fused.”
 
 ### 1:20–1:35 — Evidence labels
 
-[Point at banner.]
+[Point at the top-bar evidence labels.]
 
 “Four categories, never mixed: observed data, model output, literature assumptions, counterfactual
 simulation.”
 
 ### 1:35–2:05 — The pivot + the plan
 
-[Plan tab, $2M.]
+[Plan chapter, top 5 of 62 sites. Recalculate stays disabled on the frozen `VITE_USE_CACHE=true` build.]
 
 “So what do we do with a fatter tail? Not an alert. A budget. At two million dollars the optimizer selects
 62 preventive measures — here, floodplain restoration on the Terai cells the evidence supports — 26,306
 annual expected people-risk avoided, 8,680 tonnes of CO₂ over ten years, 74,400 dollars per year of modeled
-livelihood income. Cells flagged low-income carry up to 1.5× weight — equity is in the objective function,
+livelihood income. Screening benefit-cost is the CLIMADA-style appraisal on the Plan tab — literature
+monetisation, not a field BCR. Same budget, four books — lives, carbon, income, and the blend. NPV at 3% and a
+three-phase adaptation pathway sit on the same card. FloodAdapt labels the before/after as no_measures versus
+nbs_blended_2M, and the 2×2 includes the intensified tail.
+Cells flagged low-income carry up to 1.5× weight — equity is in the objective function,
 not the slide deck.”
 
 ### 2:05–2:25 — Tail-risk mode
 
-[Point at CVaR copy and knapsack line. Offline freeze: do not drag live controls.]
+[Open the Budget / CVaR fold if judges ask. Offline freeze: do not drag live controls.]
 
 “Same discipline as a trading book: CVaR re-ranks for the worst 10% of climate draws. Greedy matches the
 relaxed knapsack upper bound — gap 0 percent. The bound ignores per-cell overlap capping, so the true gap
@@ -87,14 +108,14 @@ is smaller.”
 
 ### 2:45–3:00 — It generalizes
 
-[City dropdown → Bengaluru, then Kathmandu if asked. CSI-null banner must stay visible.]
+[City dropdown → Bengaluru, then Kathmandu if asked. CSI-null banner must stay visible; 2017/ERA5/Koshi overlays stay hidden.]
 
 “Same engine, any watershed: Bengaluru’s urban-lake pack from the same public stack, CSI null — we will not
 invent a score — and Kathmandu is pre-built the same way.”
 
 ### 3:00–3:20 — Close
 
-[Back to Koshi map. Export tab.]
+[Back to Koshi map. Export chapter — plan / scorecard / citizen brief.]
 
 “One click exports the screening plan a district can take to a funder. Noisy public rain → a fitted tail →
 a validated-against-radar flood model → a budget spent on prevention. RootLedger makes resilience a

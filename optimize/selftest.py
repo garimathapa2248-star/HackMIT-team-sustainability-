@@ -23,7 +23,10 @@ def _synth(root: Path, n_cells: int = 200, n_parcels: int = 500, seed: int = 7) 
         "geometry": {"type": "Point", "coordinates": [86.4 + i * 1e-3, 27.8 + i * 1e-3]},
         "properties": {"cell_id": f"c_{i:05d}", "eal_people": round(rng.uniform(0.5, 20.0), 2),
                        "eal_usd": round(rng.uniform(2000, 60000), 0), "population": rng.randint(20, 800),
-                       "observed_flood_frac": round(rng.uniform(0.0, 0.7), 3)},
+                       "observed_flood_frac": round(rng.uniform(0.0, 0.7), 3),
+                       "equity_weight": round(rng.choice([1.0, 1.075, 1.25, 1.5]), 3),
+                       "flood_depth_m": {"rp10": round(rng.uniform(0.02, 0.2), 2),
+                                         "rp100": round(rng.uniform(0.05, 0.6), 2)}},
     } for i in range(n_cells)]
     (root / "artifacts" / "hazard.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": features}))
     types = list(portfolio.economics.FACTORS)
@@ -35,7 +38,8 @@ def _synth(root: Path, n_cells: int = 200, n_parcels: int = 500, seed: int = 7) 
     } for i in range(n_parcels)]
     (root / "artifacts" / "candidates.json").write_text(json.dumps(candidates))
     (root / "artifacts" / "signal.json").write_text(json.dumps(
-        {"return_levels_mm": {"100": 175.6}, "return_levels_ci95": {"100": [148.2, 209.7]}}))
+        {"return_levels_mm": {"100": 175.6}, "return_levels_ci95": {"100": [148.2, 209.7]},
+         "headline": {"old_return_period_yrs": 100, "new_return_period_yrs": 7.75}}))
     (root / "artifacts" / "backtest.json").write_text(json.dumps({
         "event_date": "synthetic",
         "counterfactual": {"people_exposed_baseline": None},
@@ -67,6 +71,55 @@ def main() -> None:
         people = [f["people_protected"] for f in plan["frontier"]]
         assert budgets == sorted(budgets) and people == sorted(people), "frontier not monotone"
         assert plan["cvar"]["tail_people_protected"] <= t["people_protected"] + 1e-6, "tail > mean"
+
+        appraisal = plan["appraisal"]
+        assert appraisal["bcr"] is None or appraisal["bcr"] >= 0
+        assert appraisal["residual_people_risk"] >= -1e-6
+        assert appraisal["residual_people_risk"] <= appraisal["baseline_people_risk"] + 1e-6
+        ids_obj = {row["id"] for row in plan["objectives"]}
+        assert ids_obj == {"blended", "people", "carbon", "income"}
+        by_id = {row["id"]: row for row in plan["objectives"]}
+        assert by_id["people"]["people_protected"] + 1e-6 >= by_id["blended"]["people_protected"]
+        assert all("bcr" in row for row in plan["selected"])
+        assert all("bcr" in row for row in plan["frontier"])
+        npv = plan["appraisal"]["npv"]
+        assert npv["costs_npv_usd"] > 0
+        assert npv["bcr_npv"] is None or npv["bcr_npv"] >= 0
+        assert len(plan["pathways"]["phases"]) == 3
+        assert plan["waterfall"]["development_increment"] == 0
+        assert plan["regret"]["robust_pick"] in {"blended", "people", "carbon", "income"}
+        assert plan["exceedance"]["points"]
+        assert plan["measure_catalog"]
+        assert "people_likely_flooded_no_measures" in plan["infographic"]
+
+        from .floodadapt import build as build_scenarios
+        scenarios = build_scenarios(root, plan=plan)
+        names = {s["name"] for s in scenarios["strategies"]}
+        assert "no_measures" in names and "nbs_blended_2M" in names
+        assert scenarios["scenarios"][0]["strategy"] == "no_measures"
+        assert any(s["name"].endswith("intensified_tail_no_measures") for s in scenarios["scenarios"])
+        assert len(scenarios["compare"]) == 4
+
+        from signals.hazard_classes import classify
+        classes = classify({
+            "headline": {"new_return_period_yrs": 7.75, "old_return_period_yrs": 100},
+            "landslide_trigger": {"auc": 0.934, "n_events": 138},
+            "lake_growth": [{"name": "Imja Tsho", "pct_growth": 113.3}],
+        })
+        assert classes["flood"]["level"] == "high"
+        assert classes["glof"]["level"] == "high"
+
+        from signals.country_rank import assign_country, build as build_rank
+        assert assign_country(85.32, 27.72) == "NP"
+        ranking = build_rank(root)
+        assert ranking["control"]["rank"] is None
+        assert ranking["control"]["id"] == "HMA"
+        for row in ranking["places"]:
+            assert "fit" in row and "stations" in row
+        country_ranks = [p["rank"] for p in ranking["places"] if p["rank"] is not None]
+        assert country_ranks == sorted(set(country_ranks))
+        assert any(p["id"] == "NP" for p in ranking["places"])
+
 
         cvar = portfolio.optimize(budget=budget, mode="cvar", root=root, draws=300)
         assert cvar["cvar"]["tail_people_protected"] <= cvar["totals"]["people_protected"] + 1e-6

@@ -5,6 +5,8 @@ import os
 import sys
 from pathlib import Path
 
+import asyncio
+
 from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, Response
@@ -14,11 +16,12 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from api import conceptnote, loader, notify  # noqa: E402
+from api import conceptnote, live, loader, notify  # noqa: E402
 from regions.catalog import city_dir, list_cities  # noqa: E402
 from agent import reports  # noqa: E402
 from agent.claude import answer as agent_answer  # noqa: E402
 from optimize.counterfactual import apply as apply_counterfactual  # noqa: E402
+from optimize.floodadapt import write as write_scenarios  # noqa: E402
 from optimize.portfolio import optimize  # noqa: E402
 
 app = FastAPI(title="RootLedger", version="0.1.0")
@@ -138,6 +141,16 @@ def get_replication():
     return _payload("replication")
 
 
+@app.get("/rankings")
+def get_rankings():
+    return _payload("rankings")
+
+
+@app.get("/scenarios")
+def get_scenarios():
+    return _payload("scenarios")
+
+
 @app.get("/risk_before")
 def get_risk_before():
     return _payload("risk_before")
@@ -162,6 +175,10 @@ def post_optimize(body: OptimizeBody):
         plan = optimize(budget=body.budget, mode=mode, root=city_dir(city), draws=body.draws)
         loader.save_plan(plan, city)
         apply_counterfactual(city_dir(city), plan)
+        try:
+            write_scenarios(city_dir(city), plan=plan)
+        except Exception:
+            pass
         return plan
     except Exception as exc:  # stage must not 500
         cached = loader.load("plan", city)
@@ -222,6 +239,37 @@ def post_sms():
     return notify.send_demo(
         "RootLedger demo: observed data, model output, assumptions, and simulations stay labeled."
     )
+
+
+# --- v2 live worldwide briefing (does not alter v1 artifact routes) ---
+@app.get("/live/health")
+async def live_health():
+    return {"ok": True, "product": "v2", "sources": ["open-meteo", "usgs", "nasa-eonet", "nominatim", "reliefweb"]}
+
+
+@app.get("/live/place")
+async def live_place(
+    lat: float = Query(..., ge=-90, le=90),
+    lng: float = Query(..., ge=-180, le=180),
+):
+    return await live.brief_place(lat, lng)
+
+
+@app.get("/live/rankings")
+async def get_live_rankings(
+    metric: str = Query("composite"),
+):
+    return await live.live_rankings(metric)
+
+
+@app.get("/live/search")
+async def live_search(q: str = Query("", min_length=0)):
+    return await live.search_places(q)
+
+
+@app.on_event("startup")
+async def _warmup_v2_rankings():
+    asyncio.create_task(live.warmup())
 
 
 def main() -> None:

@@ -17,6 +17,16 @@
     "people_exposed_baseline": 77057.1,
     "people_exposed_with_plan": 54173.5,
     "reduction_pct": 29.7,
+    "flood_exceedance": {
+      "period_yr": 30,
+      "depth_threshold_m": 0.05,
+      "p30_rp10": 0.958,
+      "cells": 28,
+      "people_likely_flooded_no_measures": 1410838.0,
+      "people_likely_flooded_with_plan": 987586.6,
+      "p30_formula": "1-(1-1/RP)^30 on rp10 cells with HAND-proxy depth \u2265 threshold",
+      "note": "FloodAdapt LikelyFlooded analog. Counts modeled people in rp10 cells, not unique homes. Threshold is 5 cm because this HAND proxy is centimetre-scale."
+    },
     "note": "Counterfactual simulation: observed-flood-fraction \u00d7 population, reduced by literature-based effects for the selected preventive measures. Not unique lives and not an observed intervention trial.",
     "risk_layers": {
       "before": "risk_before.geojson",

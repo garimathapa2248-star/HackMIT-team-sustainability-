@@ -139,5 +139,97 @@
     "available": false,
     "product": "NASA/GPM_L3/IMERG_V07",
     "reason": "Daily IMERG is not on an unauthenticated public URL. Use Google Earth Engine NASA/GPM_L3/IMERG_V07 or Earthdata if credentials exist. RootLedger's headline remains NOAA ISD GEV."
-  }
+  },
+  "hazard_classes": {
+    "flood": {
+      "hazard": "flood",
+      "level": "high",
+      "new_return_period_yrs": 7.75,
+      "evidence": "Early 100-year daily rainfall depth now has a fitted recurrence of 7.75 years."
+    },
+    "landslide": {
+      "hazard": "landslide",
+      "level": "high",
+      "auc": 0.934,
+      "n_events": 138,
+      "evidence": "Rainfall classifier AUC 0.934 on 138 events (not a Caine intensity\u2013duration threshold)."
+    },
+    "glof": {
+      "hazard": "glof",
+      "level": "high",
+      "max_pct_growth": 113.3,
+      "lake": "Imja Tsho",
+      "evidence": "Imja Tsho area grew 113.3% in the compiled ICIMOD series."
+    },
+    "source": "RootLedger fitted products (NOAA ISD GEV, rainfall classifier, ICIMOD lakes)",
+    "not": "GFDRR ThinkHazard layers",
+    "recommendations": [
+      {
+        "hazard": "flood",
+        "level": "high",
+        "technical": "Avoid new occupancy on rp10 HAND-proxy cells. Prioritise floodplain and wetland restore; treat drainage as a government lever.",
+        "climate_change": "Design storms should use the late-sample GEV, not a 1975\u20131999 100-year depth.",
+        "linked_measure_types": [
+          "floodplain_restore",
+          "wetland_restore",
+          "riverbank_bio"
+        ],
+        "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+      },
+      {
+        "hazard": "landslide",
+        "level": "high",
+        "technical": "Vetiver or bamboo on bare/grass/cropland slopes. Do not cut the toe of slopes.",
+        "climate_change": "Heavier daily totals raise the rainfall-classifier trigger rate; plant before the next monsoon.",
+        "linked_measure_types": [
+          "vetiver_slope",
+          "bamboo_slope",
+          "afforestation"
+        ],
+        "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+      },
+      {
+        "hazard": "glof",
+        "level": "high",
+        "technical": "Outlet works and downstream zoning. Nature-based parcels do not stop a lake burst.",
+        "climate_change": "Lake-area growth is the watch metric; pair with the rainfall tail, do not substitute.",
+        "linked_measure_types": [],
+        "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "hazard": "flood",
+      "level": "high",
+      "technical": "Avoid new occupancy on rp10 HAND-proxy cells. Prioritise floodplain and wetland restore; treat drainage as a government lever.",
+      "climate_change": "Design storms should use the late-sample GEV, not a 1975\u20131999 100-year depth.",
+      "linked_measure_types": [
+        "floodplain_restore",
+        "wetland_restore",
+        "riverbank_bio"
+      ],
+      "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+    },
+    {
+      "hazard": "landslide",
+      "level": "high",
+      "technical": "Vetiver or bamboo on bare/grass/cropland slopes. Do not cut the toe of slopes.",
+      "climate_change": "Heavier daily totals raise the rainfall-classifier trigger rate; plant before the next monsoon.",
+      "linked_measure_types": [
+        "vetiver_slope",
+        "bamboo_slope",
+        "afforestation"
+      ],
+      "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+    },
+    {
+      "hazard": "glof",
+      "level": "high",
+      "technical": "Outlet works and downstream zoning. Nature-based parcels do not stop a lake burst.",
+      "climate_change": "Lake-area growth is the watch metric; pair with the rainfall tail, do not substitute.",
+      "linked_measure_types": [],
+      "source": "ThinkHazard-style recs on RootLedger classes; not GFDRR text"
+    }
+  ]
 }

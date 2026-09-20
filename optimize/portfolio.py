@@ -23,7 +23,7 @@ import json
 from pathlib import Path
 from typing import Iterable, Sequence
 
-from . import economics
+from . import economics, finance, oss_layer
 
 # --- Triple-return monetisation (screening-grade, documented, swappable) ------
 # One unit of "annual expected people-risk avoided" is monetised so lives,
@@ -95,6 +95,7 @@ def _index_hazard(geojson: dict) -> dict[str, dict]:
         cell = {
             "eal_people": float(props.get("eal_people", 0.0) or 0.0),
             "population": float(props.get("population", 0.0) or 0.0),
+            "flood_depth_m": props.get("flood_depth_m") or {},
         }
         if props.get("low_income_score") is not None:
             try:
@@ -182,8 +183,32 @@ def prepare(candidates: list[dict], cell_index: dict[str, int]) -> list[dict]:
     return prepared
 
 
+def monetized_benefit(people: float, co2: float, income: float) -> float:
+    """CLIMADA-style screening benefit: people-risk + CO2 + valued income stream."""
+    return (
+        float(people) * VALUE_PER_PERSON_YR
+        + float(co2) * PRICE_CO2_PER_T
+        + float(income) * INCOME_VALUE_YEARS
+    )
+
+
+def benefit_cost_ratio(benefit: float, cost: float) -> float | None:
+    if cost <= 0:
+        return None
+    return round(float(benefit) / float(cost), 3)
+
+
+OBJECTIVE_SPECS: tuple[tuple[str, str, tuple[float, float, float]], ...] = (
+    ("blended", "Triple return", (1.0, 1.0, 1.0)),
+    ("people", "People-first", (1.0, 0.0, 0.0)),
+    ("carbon", "Carbon-first", (0.0, 1.0, 0.0)),
+    ("income", "Income-first", (0.0, 0.0, 1.0)),
+)
+
+
 def _greedy(prepared: list[dict], n_cells: int, cell_expected, scenario_cell,
-            budget: float, mode: str, np) -> dict:
+            budget: float, mode: str, np,
+            weights: tuple[float, float, float] = (1.0, 1.0, 1.0)) -> dict:
     """Marginal greedy with per-cell capping.
 
     At every step each affordable parcel is scored by its *marginal* triple
@@ -219,9 +244,12 @@ def _greedy(prepared: list[dict], n_cells: int, cell_expected, scenario_cell,
             else:
                 marginal_vec = None
                 protection = expected_marginal
-            value = (protection * VALUE_PER_PERSON_YR
-                     + p["co2"] * PRICE_CO2_PER_T
-                     + p["income"] * INCOME_VALUE_YEARS)
+            w_people, w_carbon, w_income = weights
+            value = (
+                protection * VALUE_PER_PERSON_YR * w_people
+                + p["co2"] * PRICE_CO2_PER_T * w_carbon
+                + p["income"] * INCOME_VALUE_YEARS * w_income
+            )
             score = value / cost
             if score > best_score:
                 best_score = score
@@ -238,6 +266,7 @@ def _greedy(prepared: list[dict], n_cells: int, cell_expected, scenario_cell,
                 marginal_vec += scenario_cell[r] * cap
         portfolio += marginal_vec
         spent += cost
+        benefit = monetized_benefit(expected_marginal, best["co2"], best["income"])
         selected.append({
             "parcel_id": best["parcel_id"],
             "type": best["candidate"].get("type"),
@@ -254,6 +283,8 @@ def _greedy(prepared: list[dict], n_cells: int, cell_expected, scenario_cell,
             "avoided_eal_people": round(float(expected_marginal), 4),
             "co2_t_10yr": round(best["co2"], 2),
             "income_usd_yr": round(best["income"], 2),
+            "benefit_usd": round(benefit, 2),
+            "bcr": benefit_cost_ratio(benefit, cost),
             "effect_fraction_assumed": round(float(best["effect"]), 3),
         })
         pool.remove(best)
@@ -335,6 +366,45 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
         ),
     }
 
+    benefit = monetized_benefit(people_protected, totals["co2_t_10yr"], totals["income_usd_yr"])
+    residual = max(0.0, baseline_expected - people_protected)
+    freq_mult, freq_note = finance.climate_freq_mult(signal)
+    remaining_frac = result["remaining_frac"]
+    remaining_by_cell = {
+        cid: float(remaining_frac[i]) for cid, i in cell_index.items()
+    } if n_cells else {}
+    if scenario_cell.size and n_cells:
+        baseline_draws = scenario_cell.sum(axis=0)
+        residual_draws = (scenario_cell * remaining_frac[:, None]).sum(axis=0)
+    else:
+        baseline_draws = residual_draws = np.zeros(0)
+    appraisal = {
+        "benefit_usd": round(benefit, 2),
+        "bcr": benefit_cost_ratio(benefit, totals["cost_usd"]),
+        "residual_people_risk": round(residual, 3),
+        "residual_pct": round(100.0 * residual / baseline_expected, 2) if baseline_expected else 0.0,
+        "baseline_people_risk": round(baseline_expected, 3),
+        "climate_freq_mult": freq_mult,
+        "npv": finance.npv_block(
+            capex_usd=totals["cost_usd"],
+            people_protected=people_protected,
+            freq_mult=freq_mult,
+            value_per_person=VALUE_PER_PERSON_YR,
+        ),
+        "note": (
+            "Screening-grade CLIMADA-style appraisal: monetised people-risk + CO₂ + income "
+            "over cost using provenance.monetisation. Not a field BCR and not a CLIMADA run. "
+            + freq_note
+        ),
+    }
+
+    objectives = []
+    for oid, label, weights in OBJECTIVE_SPECS:
+        sub = result if oid == "blended" else _greedy(
+            prepared, n_cells, cell_expected, scenario_cell, float(budget), mode, np, weights=weights
+        )
+        objectives.append(_objective_row(oid, label, sub))
+
     frontier = _build_frontier(prepared, n_cells, cell_expected, scenario_cell, float(budget),
                                mode, np, frontier_points)
 
@@ -362,12 +432,33 @@ def optimize(budget: float = 2_000_000.0, mode: str = "expected",
         except Exception as exc:
             optimality["note"] = f"knapsack bound unavailable: {exc}"
 
+    extras = {
+        "pathways": oss_layer.pathways(frontier, selected, baseline_expected, float(budget)),
+        "exceedance": oss_layer.exceedance(baseline_draws, residual_draws),
+        "waterfall": oss_layer.waterfall(baseline_expected, people_protected, freq_mult),
+        "regret": oss_layer.regret(objectives, freq_mult),
+        "equity": oss_layer.equity_split(selected, remaining_by_cell, hazard),
+        "event_view": oss_layer.event_view(hazard, remaining_by_cell),
+        "infographic": oss_layer.flood_exceedance_30yr(hazard, remaining_by_cell),
+        "measure_catalog": oss_layer.measure_catalog(selected),
+    }
+
     return {
         "budget_usd": float(budget),
         "mode": mode,
         "selected": selected,
         "totals": totals,
-        "frontier": frontier,
+        "appraisal": appraisal,
+        "objectives": objectives,
+        "frontier": [{k: v for k, v in row.items() if k != "parcel_ids"} for row in frontier],
+        "pathways": extras["pathways"],
+        "exceedance": extras["exceedance"],
+        "waterfall": extras["waterfall"],
+        "regret": extras["regret"],
+        "equity": extras["equity"],
+        "event_view": extras["event_view"],
+        "infographic": extras["infographic"],
+        "measure_catalog": extras["measure_catalog"],
         "optimality": optimality,
         "cvar": {
             "mode_available": True,
@@ -437,6 +528,30 @@ def _candidates_note(root, candidates, totals, budget) -> dict:
     }
 
 
+def _objective_row(oid: str, label: str, result: dict) -> dict:
+    selected = result.get("selected") or []
+    portfolio = result.get("portfolio")
+    people = float(portfolio.mean()) if getattr(portfolio, "size", 0) else 0.0
+    try:
+        np = _numpy()
+        tail = _tail_mean(np, portfolio) if getattr(portfolio, "size", 0) else 0.0
+    except Exception:
+        tail = people
+    co2 = sum(float(s.get("co2_t_10yr") or 0) for s in selected)
+    income = sum(float(s.get("income_usd_yr") or 0) for s in selected)
+    return {
+        "id": oid,
+        "label": label,
+        "n_selected": len(selected),
+        "cost_usd": round(float(result.get("spent") or 0), 2),
+        "people_protected": round(people, 3),
+        "tail_people_protected": round(float(tail), 3),
+        "co2_t_10yr": round(co2, 2),
+        "income_usd_yr": round(income, 2),
+        "parcel_ids": [s["parcel_id"] for s in selected],
+    }
+
+
 def _build_frontier(prepared, n_cells, cell_expected, scenario_cell, budget, mode, np, points):
     """Efficient frontier: re-solve at a grid of budgets up to the requested one."""
     if points < 2 or budget <= 0:
@@ -445,9 +560,21 @@ def _build_frontier(prepared, n_cells, cell_expected, scenario_cell, budget, mod
     for step in range(1, points + 1):
         b = budget * step / points
         sub = _greedy(prepared, n_cells, cell_expected, scenario_cell, b, mode, np)
+        people = float(sub["portfolio"].mean()) if sub["portfolio"].size else 0.0
+        co2 = sum(s["co2_t_10yr"] for s in sub["selected"])
+        income = sum(s["income_usd_yr"] for s in sub["selected"])
+        benefit = monetized_benefit(people, co2, income)
+        spent = float(sub["spent"])
+        ids = [s["parcel_id"] for s in sub["selected"]]
         frontier.append({
             "budget_usd": round(b, 2),
-            "people_protected": round(float(sub["portfolio"].mean()) if sub["portfolio"].size else 0.0, 3),
-            "co2_t_10yr": round(sum(s["co2_t_10yr"] for s in sub["selected"]), 2),
+            "cost_usd": round(spent, 2),
+            "n_selected": len(ids),
+            "people_protected": round(people, 3),
+            "co2_t_10yr": round(co2, 2),
+            "income_usd_yr": round(income, 2),
+            "benefit_usd": round(benefit, 2),
+            "bcr": benefit_cost_ratio(benefit, spent),
+            "parcel_ids": ids,
         })
     return frontier

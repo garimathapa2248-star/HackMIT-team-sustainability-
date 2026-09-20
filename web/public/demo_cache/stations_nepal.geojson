@@ -1,0 +1,1248 @@
+{
+  "type": "FeatureCollection",
+  "name": "stations_nepal",
+  "title": "Nepal-adjacent NOAA ISD sites used for the 7.75-year headline",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.4,
+          26.017
+        ]
+      },
+      "properties": {
+        "station": "41852099999",
+        "name": "THAKURGAON",
+        "begin": 1973,
+        "end": 2005,
+        "elev_m": "-0999.9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.917,
+          25.75
+        ]
+      },
+      "properties": {
+        "station": "41858099999",
+        "name": "SAIDPUR",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0039.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          89.233,
+          25.733
+        ]
+      },
+      "properties": {
+        "station": "41859099999",
+        "name": "RANGPUR",
+        "begin": 1981,
+        "end": 2025,
+        "elev_m": "+0034.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.683,
+          25.65
+        ]
+      },
+      "properties": {
+        "station": "41863099999",
+        "name": "DINAJPUR",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0037.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.567,
+          30.55
+        ]
+      },
+      "properties": {
+        "station": "42116099999",
+        "name": "JOSHIMATH",
+        "begin": 1973,
+        "end": 2002,
+        "elev_m": "+1875.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.333,
+          30.4
+        ]
+      },
+      "properties": {
+        "station": "42117099999",
+        "name": "CHAMOLI",
+        "begin": 1999,
+        "end": 2020,
+        "elev_m": "+1160.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.25,
+          30.117
+        ]
+      },
+      "properties": {
+        "station": "42121099999",
+        "name": "MUNSYARI",
+        "begin": 2001,
+        "end": 2021,
+        "elev_m": "+3414.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.65,
+          29.467
+        ]
+      },
+      "properties": {
+        "station": "42147099999",
+        "name": "MUKTESHWAR KUMAON",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+2311.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.533,
+          29.85
+        ]
+      },
+      "properties": {
+        "station": "42151099999",
+        "name": "DHARCHULA",
+        "begin": 1983,
+        "end": 2023,
+        "elev_m": "+0817.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.0,
+          28.75
+        ]
+      },
+      "properties": {
+        "station": "42188099999",
+        "name": "RAMPUR",
+        "begin": 1999,
+        "end": 2021,
+        "elev_m": "+0191.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.451,
+          28.422
+        ]
+      },
+      "properties": {
+        "station": "42189099999",
+        "name": "BAREILLY",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0176.8"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.05,
+          27.233
+        ]
+      },
+      "properties": {
+        "station": "42265099999",
+        "name": "MAINPURI",
+        "begin": 1944,
+        "end": 2021,
+        "elev_m": "+0157.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.8,
+          27.9
+        ]
+      },
+      "properties": {
+        "station": "42270099999",
+        "name": "KHERI",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0147.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.167,
+          27.383
+        ]
+      },
+      "properties": {
+        "station": "42271099999",
+        "name": "HARDOI",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0142.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.6,
+          27.567
+        ]
+      },
+      "properties": {
+        "station": "42273099999",
+        "name": "BAHRAICH",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0124.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.967,
+          27.133
+        ]
+      },
+      "properties": {
+        "station": "42274099999",
+        "name": "GONDA",
+        "begin": 1973,
+        "end": 2017,
+        "elev_m": "+0110.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.417,
+          27.433
+        ]
+      },
+      "properties": {
+        "station": "42282099999",
+        "name": "NAUTANWA",
+        "begin": 1973,
+        "end": 2024,
+        "elev_m": "+0099.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.267,
+          27.05
+        ]
+      },
+      "properties": {
+        "station": "42295099999",
+        "name": "DARJEELING",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+2128.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.617,
+          27.333
+        ]
+      },
+      "properties": {
+        "station": "42299099999",
+        "name": "GANGTOK",
+        "begin": 1974,
+        "end": 2025,
+        "elev_m": "+1756.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.062,
+          26.921
+        ]
+      },
+      "properties": {
+        "station": "42364099999",
+        "name": "ETAWAH",
+        "begin": 2001,
+        "end": 2025,
+        "elev_m": "+0149.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.367,
+          26.433
+        ]
+      },
+      "properties": {
+        "station": "42366099999",
+        "name": "KANPUR",
+        "begin": 1945,
+        "end": 2018,
+        "elev_m": "+0125.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.41,
+          26.404
+        ]
+      },
+      "properties": {
+        "station": "42367099999",
+        "name": "KANPUR CHAKERI",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0123.4"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.933,
+          26.867
+        ]
+      },
+      "properties": {
+        "station": "42368099999",
+        "name": "LUCKNOW",
+        "begin": 1973,
+        "end": 2021,
+        "elev_m": "+0111.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.889,
+          26.761
+        ]
+      },
+      "properties": {
+        "station": "42369099999",
+        "name": "LUCKNOW / CHAUDHARY CHARAN SINGH INTL",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0125.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.163,
+          26.748
+        ]
+      },
+      "properties": {
+        "station": "42374099999",
+        "name": "AYODHA",
+        "begin": 2002,
+        "end": 2025,
+        "elev_m": "+0100.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.0,
+          26.25
+        ]
+      },
+      "properties": {
+        "station": "42375099999",
+        "name": "SULTANPUR",
+        "begin": 1999,
+        "end": 2019,
+        "elev_m": "+0097.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.45,
+          26.74
+        ]
+      },
+      "properties": {
+        "station": "42379099999",
+        "name": "GORAKHPUR",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0078.9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.85,
+          26.983
+        ]
+      },
+      "properties": {
+        "station": "42382099999",
+        "name": "RAXAUL",
+        "begin": 1973,
+        "end": 2024,
+        "elev_m": "+0079.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.917,
+          26.667
+        ]
+      },
+      "properties": {
+        "station": "42383099999",
+        "name": "MOTIHARI",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0066.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.4,
+          26.117
+        ]
+      },
+      "properties": {
+        "station": "42387099999",
+        "name": "MUZAFFARPUR",
+        "begin": 1974,
+        "end": 2025,
+        "elev_m": "+0053.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.9,
+          26.167
+        ]
+      },
+      "properties": {
+        "station": "42391099999",
+        "name": "DARBHANGA",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0049.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.583,
+          26.133
+        ]
+      },
+      "properties": {
+        "station": "42393099999",
+        "name": "SUPAUL",
+        "begin": 2001,
+        "end": 2025,
+        "elev_m": "+0050.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.267,
+          26.3
+        ]
+      },
+      "properties": {
+        "station": "42395099999",
+        "name": "FORBESGANJ",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0061.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.367,
+          26.667
+        ]
+      },
+      "properties": {
+        "station": "42397099999",
+        "name": "SILIGURI",
+        "begin": 1999,
+        "end": 2023,
+        "elev_m": "+0123.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.329,
+          26.681
+        ]
+      },
+      "properties": {
+        "station": "42398099999",
+        "name": "BAGDOGRA",
+        "begin": 1957,
+        "end": 2025,
+        "elev_m": "+0125.6"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.717,
+          26.533
+        ]
+      },
+      "properties": {
+        "station": "42399099999",
+        "name": "JALPAIGURI",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0083.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          89.467,
+          26.333
+        ]
+      },
+      "properties": {
+        "station": "42403099999",
+        "name": "COOCH BEHAR",
+        "begin": 1943,
+        "end": 2025,
+        "elev_m": "+0043.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.45,
+          25.067
+        ]
+      },
+      "properties": {
+        "station": "42467099999",
+        "name": "NOWGONG",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0229.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          79.5,
+          25.983
+        ]
+      },
+      "properties": {
+        "station": "42468099999",
+        "name": "ORAI",
+        "begin": 2004,
+        "end": 2025,
+        "elev_m": "+0141.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.833,
+          25.933
+        ]
+      },
+      "properties": {
+        "station": "42471099999",
+        "name": "FATEHPUR",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0114.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.367,
+          25.467
+        ]
+      },
+      "properties": {
+        "station": "42473099999",
+        "name": "BANDA",
+        "begin": 2004,
+        "end": 2025,
+        "elev_m": "+0121.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.734,
+          25.44
+        ]
+      },
+      "properties": {
+        "station": "42475099999",
+        "name": "ALLAHABAD ARPT",
+        "begin": 1942,
+        "end": 2025,
+        "elev_m": "+0098.2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.867,
+          25.45
+        ]
+      },
+      "properties": {
+        "station": "42479099999",
+        "name": "LAL BAHADUR SHASTRI VARANASI INTL",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0081.1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.55,
+          25.4
+        ]
+      },
+      "properties": {
+        "station": "42482099999",
+        "name": "GHAZIPUR",
+        "begin": 2001,
+        "end": 2025,
+        "elev_m": "+0067.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.017,
+          25.3
+        ]
+      },
+      "properties": {
+        "station": "42483099999",
+        "name": "VARANASI",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0090.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.167,
+          25.75
+        ]
+      },
+      "properties": {
+        "station": "42484099999",
+        "name": "BALLIA",
+        "begin": 2002,
+        "end": 2024,
+        "elev_m": "+0064.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.733,
+          25.783
+        ]
+      },
+      "properties": {
+        "station": "42488099999",
+        "name": "CHAPRA",
+        "begin": 2005,
+        "end": 2025,
+        "elev_m": "+0058.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.088,
+          25.591
+        ]
+      },
+      "properties": {
+        "station": "42492099999",
+        "name": "JAI PRAKASH NARAYAN INTL PATNA",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0051.8"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.95,
+          25.233
+        ]
+      },
+      "properties": {
+        "station": "42498099999",
+        "name": "BHAGALPUR",
+        "begin": 1957,
+        "end": 2025,
+        "elev_m": "+0049.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.067,
+          25.233
+        ]
+      },
+      "properties": {
+        "station": "42499099999",
+        "name": "SABAUR",
+        "begin": 2002,
+        "end": 2024,
+        "elev_m": "+0037.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.467,
+          25.267
+        ]
+      },
+      "properties": {
+        "station": "42500099999",
+        "name": "PURNEA",
+        "begin": 1944,
+        "end": 2025,
+        "elev_m": "+0038.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.133,
+          25.033
+        ]
+      },
+      "properties": {
+        "station": "42503099999",
+        "name": "MALDA",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+0031.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.583,
+          29.3
+        ]
+      },
+      "properties": {
+        "station": "44404099999",
+        "name": "DADELDHURA",
+        "begin": 1978,
+        "end": 2025,
+        "elev_m": "+1848.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.95,
+          29.25
+        ]
+      },
+      "properties": {
+        "station": "44406099999",
+        "name": "DIPAYAL",
+        "begin": 2005,
+        "end": 2025,
+        "elev_m": "+0617.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.55,
+          28.8
+        ]
+      },
+      "properties": {
+        "station": "44409099999",
+        "name": "DHANGADHI (ATARIYA)",
+        "begin": 2005,
+        "end": 2025,
+        "elev_m": "+0187.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.617,
+          28.6
+        ]
+      },
+      "properties": {
+        "station": "44416099999",
+        "name": "SURKHET",
+        "begin": 1976,
+        "end": 2025,
+        "elev_m": "+0720.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.667,
+          28.1
+        ]
+      },
+      "properties": {
+        "station": "44418099999",
+        "name": "NEPALGUNJ AIRPORT",
+        "begin": 2005,
+        "end": 2025,
+        "elev_m": "+0165.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.167,
+          29.283
+        ]
+      },
+      "properties": {
+        "station": "44424099999",
+        "name": "JUMLA",
+        "begin": 1975,
+        "end": 2025,
+        "elev_m": "+2300.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.5,
+          28.05
+        ]
+      },
+      "properties": {
+        "station": "44429099999",
+        "name": "DANG",
+        "begin": 2005,
+        "end": 2025,
+        "elev_m": "+0634.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.981,
+          28.201
+        ]
+      },
+      "properties": {
+        "station": "44434099999",
+        "name": "POKHARA",
+        "begin": 1977,
+        "end": 2025,
+        "elev_m": "+0826.6"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.416,
+          27.506
+        ]
+      },
+      "properties": {
+        "station": "44438099999",
+        "name": "BHAIRAHAWA / GAUTAM BUDDHA",
+        "begin": 1977,
+        "end": 2025,
+        "elev_m": "+0109.1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.98,
+          27.159
+        ]
+      },
+      "properties": {
+        "station": "44449099999",
+        "name": "SIMARA",
+        "begin": 1974,
+        "end": 2025,
+        "elev_m": "+0137.2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.359,
+          27.697
+        ]
+      },
+      "properties": {
+        "station": "44454099999",
+        "name": "TRIBHUVAN INTL",
+        "begin": 1973,
+        "end": 2025,
+        "elev_m": "+1338.1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.5,
+          27.3
+        ]
+      },
+      "properties": {
+        "station": "44462099999",
+        "name": "OKHALDHUNGA",
+        "begin": 1976,
+        "end": 2025,
+        "elev_m": "+1720.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.667,
+          27.35
+        ]
+      },
+      "properties": {
+        "station": "44474099999",
+        "name": "TAPLEJUNG",
+        "begin": 1978,
+        "end": 2025,
+        "elev_m": "+1732.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.35,
+          26.983
+        ]
+      },
+      "properties": {
+        "station": "44477099999",
+        "name": "DHANKUTA",
+        "begin": 1976,
+        "end": 2025,
+        "elev_m": "+1210.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.264,
+          26.481
+        ]
+      },
+      "properties": {
+        "station": "44478099999",
+        "name": "BIRATNAGAR",
+        "begin": 1977,
+        "end": 2025,
+        "elev_m": "+0071.9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.433,
+          30.55
+        ]
+      },
+      "properties": {
+        "station": "55437099999",
+        "name": "T'U-KO-ERH-HO-KUNG",
+        "begin": 1973,
+        "end": 1997,
+        "elev_m": "+4736.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.633,
+          30.95
+        ]
+      },
+      "properties": {
+        "station": "55472099999",
+        "name": "XAINZA",
+        "begin": 1960,
+        "end": 2023,
+        "elev_m": "+4670.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.883,
+          29.25
+        ]
+      },
+      "properties": {
+        "station": "55578099999",
+        "name": "XIGAZE",
+        "begin": 1957,
+        "end": 2025,
+        "elev_m": "+3837.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.15,
+          28.383
+        ]
+      },
+      "properties": {
+        "station": "55656099999",
+        "name": "YALEP",
+        "begin": 1980,
+        "end": 2002,
+        "elev_m": "+5181.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.083,
+          28.633
+        ]
+      },
+      "properties": {
+        "station": "55664099999",
+        "name": "TINGRI",
+        "begin": 1959,
+        "end": 2025,
+        "elev_m": "+4300.0"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          89.083,
+          27.733
+        ]
+      },
+      "properties": {
+        "station": "55773099999",
+        "name": "PAGRI",
+        "begin": 1956,
+        "end": 2025,
+        "elev_m": "+4300.0"
+      }
+    }
+  ]
+}

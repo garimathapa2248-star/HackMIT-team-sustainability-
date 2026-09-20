@@ -28,6 +28,8 @@ SYNC_FILES = (
     "citizen_brief.md",
     "replication.json",
     "cities.json",
+    "rankings.json",
+    "scenarios.json",
 )
 SYNC_TREES = ("charts", "cities")
 TARGETS = ("demo_cache", "web/public/demo_cache")

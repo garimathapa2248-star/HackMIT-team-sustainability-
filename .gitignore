@@ -6,7 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
-# Distribution / packaging
+# Distribution / packaging (root-only so web/src/lib is not ignored)
 .Python
 build/
 develop-eggs/
@@ -14,8 +14,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -255,3 +255,7 @@ web/dist/
 
 # OS junk
 .DS_Store
+
+# Reference clones of FloodAdapt / CLIMADA / Rhodium-SWMM / ThinkHazard.
+# Not imported at runtime.
+vendor/

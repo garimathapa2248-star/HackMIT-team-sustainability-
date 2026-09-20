@@ -99,6 +99,7 @@ def apply(root: Path, plan: dict) -> dict | None:
         "people_exposed_baseline": round(baseline, 1),
         "people_exposed_with_plan": round(with_plan, 1),
         "reduction_pct": round(reduction, 2),
+        "flood_exceedance": (plan.get("infographic") or {}),
         "note": (
             "Counterfactual simulation: observed-flood-fraction × population, reduced by "
             "literature-based effects for the selected preventive measures. Not unique lives "

@@ -37,6 +37,8 @@ NAMES = {
     "risk_before": "risk_before.geojson",
     "risk_with_plan": "risk_with_plan.geojson",
     "replication": "replication.json",
+    "rankings": "rankings.json",
+    "scenarios": "scenarios.json",
 }
 
 
