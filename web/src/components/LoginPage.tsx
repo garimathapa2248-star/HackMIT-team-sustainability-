@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type Props = { onClose: () => void; onLogin: (name: string) => void; onRemoteLogin: (input: { email: string; password: string }) => Promise<void>; onRegister: (input: { displayName: string; email: string; password: string }) => Promise<void> };
+type Props = { onClose: () => void; onLogin: (name: string) => Promise<void>; onRemoteLogin: (input: { email: string; password: string }) => Promise<void>; onRegister: (input: { displayName: string; email: string; password: string }) => Promise<void> };
 
 const DEMO_EMAIL = 'demo@rootledger.org';
 const DEMO_PASSWORD = 'rootledger2026';
@@ -31,8 +31,10 @@ export function LoginPage({ onClose, onLogin, onRemoteLogin, onRegister }: Props
           return;
         }
         if (data.get('email') === DEMO_EMAIL && data.get('password') === DEMO_PASSWORD) {
-          onLogin('Demo planner');
-          onClose();
+          setSubmitting(true);
+          try { await onLogin('Demo planner'); onClose(); }
+          catch (reason) { setError(reason instanceof Error ? reason.message : 'Unable to open demo access.'); }
+          finally { setSubmitting(false); }
           return;
         }
         setSubmitting(true);

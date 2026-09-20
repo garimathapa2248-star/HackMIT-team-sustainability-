@@ -112,6 +112,16 @@ function App() {
   useEffect(() => {
     setSignedInUser(window.localStorage.getItem('rootledger-demo-user'));
     setGovernmentOrganization(window.localStorage.getItem('rootledger-government-organization'));
+    const storedSession = window.sessionStorage.getItem('rootledger-community-session');
+    if (storedSession) {
+      try {
+        const session = JSON.parse(storedSession) as CommunitySession;
+        if (session.accessToken && session.citizen?.displayName) {
+          setCommunitySession(session);
+          setSignedInUser(session.citizen.displayName);
+        }
+      } catch { window.sessionStorage.removeItem('rootledger-community-session'); }
+    }
   }, []);
 
   useEffect(() => {
@@ -200,21 +210,40 @@ function App() {
       setLocationState('located');
     }, () => setLocationState('unavailable'), { enableHighAccuracy: true, timeout: 10_000 });
   };
-  const signIn = (name: string) => {
+  const signIn = async (name: string) => {
+    let session: CommunitySession;
+    try {
+      session = await loginCitizen({ email: 'demo@rootledger.org', password: 'rootledger2026' });
+    } catch {
+      session = await registerCitizen({ displayName: name, email: 'demo@rootledger.org', password: 'rootledger2026' });
+    }
     window.localStorage.setItem('rootledger-demo-user', name);
+    window.sessionStorage.setItem('rootledger-community-session', JSON.stringify(session));
     setSignedInUser(name);
+    setCommunitySession(session);
   };
   const register = async (input: { displayName: string; email: string; password: string }) => {
     const session = await registerCitizen(input);
     setCommunitySession(session);
+    window.sessionStorage.setItem('rootledger-community-session', JSON.stringify(session));
     setSignedInUser(session.citizen.displayName);
     setLocationConsentOpen(true);
   };
   const signInCitizen = async (input: { email: string; password: string }) => {
     const session = await loginCitizen(input);
     setCommunitySession(session);
+    window.sessionStorage.setItem('rootledger-community-session', JSON.stringify(session));
     setSignedInUser(session.citizen.displayName);
     setLocationConsentOpen(true);
+  };
+  const openLiveSharing = async () => {
+    if (communitySession) { setLocationConsentOpen(true); return; }
+    if (signedInUser === 'Demo planner') {
+      try { await signIn('Demo planner'); setLocationConsentOpen(true); }
+      catch (error) { console.error('Demo community session failed:', error); setLoginOpen(true); }
+      return;
+    }
+    setLoginOpen(true);
   };
   const saveConsent = async (location: { longitude: number; latitude: number; accuracyM: number }, preferences: { shareWithCommunity: boolean; shareWithResponders: boolean; liveLocationSharing: boolean }) => {
     if (!communitySession) throw new Error('Please create a citizen account before sharing your location.');
@@ -233,7 +262,10 @@ function App() {
   };
   const signOut = () => {
     window.localStorage.removeItem('rootledger-demo-user');
+    window.sessionStorage.removeItem('rootledger-community-session');
     setSignedInUser(null);
+    setCommunitySession(null);
+    setLiveLocationSharing(false);
   };
   const openGovernment = () => {
     if (governmentOrganization) { setAudience('government'); return; }
@@ -299,7 +331,7 @@ function App() {
     <header className="topbar floating-topbar">
       <div className="brand-wrap"><div className="brand-mark" aria-hidden="true">R</div><div><p className="eyebrow">RootLedger</p><h1>{isGovernment ? 'Environmental investment planning.' : 'Climate action, made local.'}</h1></div></div>
       <label className="location-search"><span aria-hidden="true">⌕</span><input type="search" readOnly value={searchQuery} onClick={() => setSearchOpen(true)} onFocus={() => setSearchOpen(true)} placeholder="Search a location in Nepal" aria-label="Search a location in Nepal" /></label>
-      <div className="header-actions"><div className="audience-switch" aria-label="Choose experience"><button type="button" className={audience === 'citizen' ? 'active' : ''} onClick={() => setAudience('citizen')}><b>Citizen</b><small>Local risk & help</small></button><button type="button" className={audience === 'government' ? 'active' : ''} onClick={openGovernment}><b>Government</b><small>Plan investment</small></button></div>{isGovernment ? <div className="signed-in"><span>{governmentOrganization}</span><button type="button" onClick={leaveGovernment}>Exit</button></div> : signedInUser ? <div className="signed-in"><span>{signedInUser}</span><button type="button" onClick={signOut}>Sign out</button></div> : <button type="button" className="login-button" onClick={() => setLoginOpen(true)}>Log in</button>}</div>
+      <div className="header-actions"><div className="audience-switch" aria-label="Choose experience"><button type="button" className={audience === 'citizen' ? 'active' : ''} onClick={() => setAudience('citizen')}><b>Citizen</b><small>Local risk & help</small></button><button type="button" className={audience === 'government' ? 'active' : ''} onClick={openGovernment}><b>Government</b><small>Plan investment</small></button></div>{!isGovernment && <button type="button" className={`header-live-location ${liveLocationSharing ? 'active' : ''}`} onClick={openLiveSharing}>{liveLocationSharing ? 'Live sharing on' : 'Share live location'}</button>}{isGovernment ? <div className="signed-in"><span>{governmentOrganization}</span><button type="button" onClick={leaveGovernment}>Exit</button></div> : signedInUser ? <div className="signed-in"><span>{signedInUser}</span><button type="button" onClick={signOut}>Sign out</button></div> : <button type="button" className="login-button" onClick={() => setLoginOpen(true)}>Log in</button>}</div>
     </header>
     <nav className="scene-nav" aria-label={`${audience} experience steps`}>{sceneLabels.map((label, index) => <span key={label} className={activeScene === Math.min(index, 2) ? 'active' : ''}>{label}</span>)}</nav>
 
@@ -324,6 +356,7 @@ function App() {
       <div className="map-instrument" aria-live="polite"><span>NEPAL / SATELLITE</span><strong>{mapCoordinates}</strong><small>Move across the map to inspect coordinates</small></div>
       <div className="map-legend"><span>Vulnerability</span><div><i /><i /><i /><i /></div><small>low → critical</small></div>
       {!isGovernment && <button type="button" className="locate-control" onClick={locateUser}>{locationState === 'locating' ? 'Finding your location…' : locationState === 'located' ? 'Your local area' : 'Use my location'}</button>}
+      {!isGovernment && <button type="button" className="live-share-control" onClick={openLiveSharing}>{liveLocationSharing ? 'Manage live sharing' : 'Share live location'}</button>}
       {!isGovernment && liveLocationSharing && <span className="live-location-status"><i /> Live location sharing</span>}
       {!isGovernment && locationState !== 'located' && <p className="location-consent">Location is only used to match you with the relevant risk area and help.</p>}
       {!isGovernment && locationState === 'located' && <div className="local-network" aria-label="Relevant help around your location"><div className="network-center">YOU ARE<br />HERE</div>{['Community', 'Government', 'Emergency', 'Local organizations'].map((connection) => <button key={connection} type="button" className={`node ${connection === 'Local organizations' ? 'organizations' : connection.toLowerCase()}`} onClick={() => setActiveConnection(connection)}>{connection}</button>)}</div>}

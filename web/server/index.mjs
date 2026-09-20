@@ -17,8 +17,14 @@ const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db(process.env.MONGODB_DB || 'rootledger');
 const jwtKey = new TextEncoder().encode(process.env.JWT_SECRET);
 
+const configuredOrigin = process.env.WEB_ORIGIN || 'http://localhost:5173';
+const allowedOrigin = (origin, callback) => {
+  // Vite chooses the next free localhost port during development. Production accepts only WEB_ORIGIN.
+  if (!origin || origin === configuredOrigin || (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost:\d+$/.test(origin))) return callback(null, true);
+  return callback(new Error('Origin is not allowed by RootLedger Community API.'));
+};
 app.use(helmet());
-app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:5173', methods: ['GET', 'POST', 'DELETE'], allowedHeaders: ['Content-Type', 'Authorization'] }));
+app.use(cors({ origin: allowedOrigin, methods: ['GET', 'POST', 'DELETE'], allowedHeaders: ['Content-Type', 'Authorization'] }));
 app.use(express.json({ limit: '16kb' }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 100, standardHeaders: 'draft-8', legacyHeaders: false }));
 
